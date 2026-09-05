@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="EMEDS.Tests/EMEDS.Tests.csproj" />
+  <Project Path="EMEDS_Project/EMEDS_Project.csproj" />
+</Solution>
