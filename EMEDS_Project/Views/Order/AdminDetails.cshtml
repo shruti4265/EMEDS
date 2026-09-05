@@ -1,0 +1,119 @@
+﻿@model EMEDS_Project.Models.Order
+
+@{
+    ViewData["Title"] = "Manage Order";
+}
+
+<h1>Order Details</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<div>
+    <dl class="row">
+
+        <dt class="col-sm-3">Order ID</dt>
+        <dd class="col-sm-9">@Model.OrderId</dd>
+
+        <dt class="col-sm-3">User ID</dt>
+        <dd class="col-sm-9">@Model.UserId</dd>
+
+        <dt class="col-sm-3">Order Date</dt>
+        <dd class="col-sm-9">
+            @Model.OrderDate.ToString("dd-MM-yyyy hh:mm tt")
+        </dd>
+
+        <dt class="col-sm-3">Total Amount</dt>
+        <dd class="col-sm-9">₹@Model.TotalAmount</dd>
+
+        <dt class="col-sm-3">Delivery Address</dt>
+        <dd class="col-sm-9">@Model.DeliveryAddress</dd>
+
+        <dt class="col-sm-3">Current Status</dt>
+        <dd class="col-sm-9">@Model.OrderStatus</dd>
+
+    </dl>
+</div>
+
+<h3>Order Items</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Medicine ID</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var orderItem in Model.OrderItems)
+        {
+            <tr>
+                <td>@orderItem.MedicineId</td>
+                <td>@orderItem.Quantity</td>
+                <td>₹@orderItem.UnitPrice</td>
+                <td>₹@orderItem.Subtotal</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h3>Update Order Status</h3>
+
+<form asp-action="UpdateOrderStatus" method="post">
+
+    <input type="hidden"
+           name="orderId"
+           value="@Model.OrderId" />
+
+    <div class="mb-3">
+
+        <label for="orderStatus"
+               class="form-label">
+            Order Status
+        </label>
+
+        <select name="orderStatus"
+                id="orderStatus"
+                class="form-control">
+
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Packed">Packed</option>
+            <option value="Shipped">Shipped</option>
+            <option value="OutForDelivery">Out For Delivery</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+
+        </select>
+
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Update Status
+    </button>
+
+</form>
+
+<br />
+
+<a asp-action="ManageOrders"
+   class="btn btn-secondary">
+    Back to Manage Orders
+</a>

@@ -1,7 +1,8 @@
+using EMEDS_Project.DAL;
+using EMEDS_Project.Data;
+using EMEDS_Project.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using EMEDS_Project.Data;
-using EMEDS_Project.DAL;
 
 namespace EMEDS_Project
 
@@ -17,6 +18,10 @@ namespace EMEDS_Project
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmedDbContext>();
 
+            builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+
+            builder.Services.AddScoped<IPrescriptionRepo, PrescriptionRepo>();
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
@@ -28,7 +33,7 @@ namespace EMEDS_Project
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

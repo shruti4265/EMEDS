@@ -1,0 +1,78 @@
+﻿@model IEnumerable<EMEDS_Project.Models.Prescription>
+
+@{
+    ViewData["Title"] = "My Prescriptions";
+}
+
+<h1>My Prescriptions</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<p>
+    <a asp-action="Upload"
+       class="btn btn-primary">
+        Upload Prescription
+    </a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        You have not uploaded any prescriptions yet.
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Prescription ID</th>
+                <th>Upload Date</th>
+                <th>Status</th>
+                <th>Admin Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var prescription in Model)
+            {
+                <tr>
+                    <td>@prescription.PrescriptionId</td>
+
+                    <td>
+                        @prescription.UploadDate.ToString("dd-MM-yyyy")
+                    </td>
+
+                    <td>@prescription.Status</td>
+
+                    <td>
+                        @(string.IsNullOrEmpty(prescription.AdminRemarks)
+                            ? "No remarks"
+                            : prescription.AdminRemarks)
+                    </td>
+
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-id="@prescription.PrescriptionId"
+                           class="btn btn-primary btn-sm">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
