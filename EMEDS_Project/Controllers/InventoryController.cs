@@ -11,11 +11,16 @@ namespace EMEDS_Project.Controllers
     {
         private readonly IInventoryRepo _inventoryRepo;
         private readonly ISupplierRepo _supplierRepo;
+        private readonly IMedicineRepo _medicineRepo;
 
-        public InventoryController(IInventoryRepo inventoryRepo, ISupplierRepo supplierRepo)
+        public InventoryController(
+            IInventoryRepo inventoryRepo,
+            ISupplierRepo supplierRepo,
+            IMedicineRepo medicineRepo)
         {
             _inventoryRepo = inventoryRepo;
             _supplierRepo = supplierRepo;
+            _medicineRepo = medicineRepo;
         }
 
         public IActionResult Index()
@@ -26,7 +31,7 @@ namespace EMEDS_Project.Controllers
 
         public IActionResult Details(int id)
         {
-            var inventory = _inventoryRepo.GetById(id);
+            var inventory = _inventoryRepo.GetByIdWithSupplier(id);
 
             if (inventory == null)
             {
@@ -38,7 +43,7 @@ namespace EMEDS_Project.Controllers
 
         public IActionResult Create()
         {
-            LoadSuppliers();
+            LoadDropdowns();
             return View();
         }
 
@@ -46,11 +51,20 @@ namespace EMEDS_Project.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Inventory inventory)
         {
-            var existingInventory = _inventoryRepo.GetByMedicineId(inventory.MedicineId);
+            var medicine = _medicineRepo.GetMedicineById(inventory.MedicineId);
 
-            if (existingInventory != null)
+            if (medicine == null)
             {
-                ModelState.AddModelError("MedicineId", "Inventory already exists for this medicine.");
+                ModelState.AddModelError("MedicineId", "Selected medicine does not exist.");
+            }
+            else
+            {
+                var existingInventory = _inventoryRepo.GetByMedicineId(inventory.MedicineId);
+
+                if (existingInventory != null)
+                {
+                    ModelState.AddModelError("MedicineId", "Inventory already exists for this medicine.");
+                }
             }
 
             if (ModelState.IsValid)
@@ -61,7 +75,7 @@ namespace EMEDS_Project.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            LoadSuppliers();
+            LoadDropdowns();
             return View(inventory);
         }
 
@@ -74,7 +88,7 @@ namespace EMEDS_Project.Controllers
                 return NotFound();
             }
 
-            LoadSuppliers();
+            LoadDropdowns();
             return View(inventory);
         }
 
@@ -90,7 +104,7 @@ namespace EMEDS_Project.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            LoadSuppliers();
+            LoadDropdowns();
             return View(inventory);
         }
 
@@ -108,12 +122,17 @@ namespace EMEDS_Project.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private void LoadSuppliers()
+        private void LoadDropdowns()
         {
             ViewBag.Suppliers = new SelectList(
                 _supplierRepo.GetAll(),
                 "SupplierId",
                 "SupplierName");
+
+            ViewBag.Medicines = new SelectList(
+                _medicineRepo.GetAllMedicines(),
+                "MedicineId",
+                "MedicineName");
         }
     }
 }

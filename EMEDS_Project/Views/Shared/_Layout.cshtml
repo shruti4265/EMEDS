@@ -80,7 +80,23 @@
                             </a>
                         </li>
 
-                        <!-- Privacy -->
+                       
+                        @if (User.IsInRole("Admin"))
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Supplier" asp-action="Index">Suppliers</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Index">Inventory</a>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
+    </li>
+}
+ <!-- Privacy -->
                         <li class="nav-item">
                             <a class="nav-link text-dark"
                                asp-area=""
@@ -89,7 +105,6 @@
                                 Privacy
                             </a>
                         </li>
-
                     </ul>
 
                     <!-- Login / Register / Logout -->

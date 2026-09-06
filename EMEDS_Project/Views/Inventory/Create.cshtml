@@ -12,7 +12,9 @@
 
         <div class="mb-3">
             <label asp-for="MedicineId" class="form-label"></label>
-            <input asp-for="MedicineId" class="form-control" />
+            <select asp-for="MedicineId" asp-items="ViewBag.Medicines" class="form-select">
+                <option value="">-- Select Medicine --</option>
+            </select>
             <span asp-validation-for="MedicineId" class="text-danger"></span>
         </div>
 

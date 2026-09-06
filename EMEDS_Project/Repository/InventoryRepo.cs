@@ -16,6 +16,12 @@ namespace EMEDS_Project.Repository
                 .Include(i => i.Supplier)
                 .ToList();
         }
+        public Inventory? GetByIdWithSupplier(int inventoryId)
+        {
+            return _context.Inventories
+                .Include(i => i.Supplier)
+                .FirstOrDefault(i => i.InventoryId == inventoryId);
+        }
 
         public IEnumerable<Inventory> GetLowStock()
         {

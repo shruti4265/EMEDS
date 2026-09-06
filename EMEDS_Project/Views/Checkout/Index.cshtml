@@ -1,0 +1,94 @@
+﻿@model EMEDS_Project.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container mt-4">
+    <h2>Checkout</h2>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <form asp-action="PlaceOrder" method="post">
+
+                <div class="mb-3">
+                    <label asp-for="CustomerName" class="form-label"></label>
+                    <input asp-for="CustomerName" class="form-control" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Address" class="form-label"></label>
+                    <textarea asp-for="Address" class="form-control" rows="2"></textarea>
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="City" class="form-label"></label>
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PostalCode" class="form-label"></label>
+                        <input asp-for="PostalCode" class="form-control" />
+                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PaymentMethod" class="form-label"></label>
+                    <select asp-for="PaymentMethod" class="form-select">
+                        <option value="">-- Select Payment Method --</option>
+                        <option value="Cash on Delivery">Cash on Delivery</option>
+                        <option value="Card">Card</option>
+                        <option value="UPI">UPI</option>
+                    </select>
+                    <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+                </div>
+
+                @for (int i = 0; i < Model.CartItems.Count; i++)
+                {
+                    <input type="hidden" name="CartItems[@i].MedicineId" value="@Model.CartItems[i].MedicineId" />
+                    <input type="hidden" name="CartItems[@i].MedicineName" value="@Model.CartItems[i].MedicineName" />
+                    <input type="hidden" name="CartItems[@i].UnitPrice" value="@Model.CartItems[i].UnitPrice" />
+                    <input type="hidden" name="CartItems[@i].Quantity" value="@Model.CartItems[i].Quantity" />
+                }
+
+                <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+            </form>
+        </div>
+
+        <div class="col-md-5">
+            <h4>Order Summary</h4>
+            <ul class="list-group mb-3">
+                @foreach (var item in Model.CartItems)
+                {
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>@item.MedicineName x @item.Quantity</span>
+                        <span>@item.TotalPrice.ToString("C")</span>
+                    </li>
+                }
+            </ul>
+            <h5>Total: @Model.TotalAmount.ToString("C")</h5>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
