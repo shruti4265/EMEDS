@@ -1,0 +1,90 @@
+@model IEnumerable<EMEDS_Project.Models.Medicine>
+
+@{
+    ViewData["Title"] = "Medicines";
+}
+
+<h1>Medicines</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-primary">
+            Add Medicine
+        </a>
+    </p>
+}
+
+<form asp-action="Search" method="get" class="mb-3">
+    <div class="input-group">
+        <input type="text"
+               name="searchTerm"
+               class="form-control"
+               placeholder="Search medicine by name..." />
+
+        <button type="submit" class="btn btn-secondary">
+            Search
+        </button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No medicines found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category Id</th>
+                <th>Supplier Id</th>
+                <th>Prescription Required</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var medicine in Model)
+            {
+                <tr>
+                    <td>@medicine.MedicineName</td>
+                    <td>@medicine.Description</td>
+                    <td>@medicine.Price</td>
+                    <td>@medicine.CategoryId</td>
+                    <td>@medicine.SupplierId</td>
+                    <td>
+                        @(medicine.RequiresPrescription ? "Yes" : "No")
+                    </td>
+                    <td>
+                        <a asp-action="Details"
+                           asp-route-id="@medicine.MedicineId"
+                           class="btn btn-info btn-sm">
+                            Details
+                        </a>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit"
+                               asp-route-id="@medicine.MedicineId"
+                               class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@medicine.MedicineId"
+                               class="btn btn-danger btn-sm">
+                                Delete
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

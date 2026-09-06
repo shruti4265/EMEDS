@@ -2,11 +2,17 @@
 using EMEDS_Project.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
+=======
+using EMEDS_Project.Data;
+using EMEDS_Project.Models;
+>>>>>>> origin/feature/chhaya-auth-medicine-category
 
 namespace EMEDS_Project.DAL
 {
     public class EmedDbContext : IdentityDbContext<ApplicationUser>
     {
+<<<<<<< HEAD
         public EmedDbContext(DbContextOptions<EmedDbContext> options)
             : base(options)
         {
@@ -32,5 +38,21 @@ namespace EMEDS_Project.DAL
     .HasForeignKey<Payment>(p => p.OrderId);
         }
 
+=======
+        public DbSet<Medicine> Medicines { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Medicine>()
+                .HasOne(m => m.Category)
+                .WithMany()
+                .HasForeignKey(m => m.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+>>>>>>> origin/feature/chhaya-auth-medicine-category
     }
 }
