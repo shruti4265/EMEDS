@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EMEDS_Project.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class SupplierController : Controller
     {
         private readonly ISupplierRepo _supplierRepo;

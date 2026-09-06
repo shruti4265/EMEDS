@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EMEDS_Project.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class InventoryController : Controller
     {
         private readonly IInventoryRepo _inventoryRepo;

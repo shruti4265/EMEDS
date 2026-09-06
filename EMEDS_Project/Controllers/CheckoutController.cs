@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EMEDS_Project.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class CheckoutController : Controller
     {
         private readonly IOrderRepo _orderRepo;
