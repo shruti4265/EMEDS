@@ -1,0 +1,46 @@
+﻿@model IEnumerable<EMEDS_Project.Models.Inventory>
+
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Inventory</h2>
+        <div>
+            <a asp-action="LowStock" class="btn btn-outline-danger">Low Stock</a>
+            <a asp-action="Create" class="btn btn-primary">Add Inventory</a>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Inventory ID</th>
+                <th>Medicine ID</th>
+                <th>Supplier</th>
+                <th>Stock Quantity</th>
+                <th>Reorder Level</th>
+                <th>Last Updated</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.InventoryId</td>
+                    <td>@item.MedicineId</td>
+                    <td>@(item.Supplier?.SupplierName ?? "-")</td>
+                    <td>@item.StockQuantity</td>
+                    <td>@item.ReorderLevel</td>
+                    <td>@item.LastUpdated.ToString("g")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.InventoryId" class="btn btn-outline-primary btn-sm">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.InventoryId" class="btn btn-warning btn-sm">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

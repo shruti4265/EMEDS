@@ -1,7 +1,8 @@
+using EMEDS_Project.DAL;
+using EMEDS_Project.Data;
+using EMEDS_Project.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using EMEDS_Project.Data;
-using EMEDS_Project.DAL;
 
 namespace EMEDS_Project
 
@@ -12,24 +13,28 @@ namespace EMEDS_Project
         {
             var builder = WebApplication.CreateBuilder(args);
             var connectionString = builder.Configuration.GetConnectionString("EmedDbContext") ?? throw new InvalidOperationException("Connection string 'EmedDbContext' not found.");
-
+            builder.Services.AddSession();
             builder.Services.AddDbContext<EmedDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<EmedDbContext>();
-
+            builder.Services.AddTransient<ISupplierRepo, SupplierRepo>();
+            builder.Services.AddTransient<IInventoryRepo, InventoryRepo>();
+            builder.Services.AddTransient<IOrderRepo, OrderRepo>();
+            builder.Services.AddTransient<IPaymentRepo, PaymentRepo>();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            
             var app = builder.Build();
-
+            app.UseSession();
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
+            
 
             app.MapStaticAssets();
             app.MapControllerRoute(
