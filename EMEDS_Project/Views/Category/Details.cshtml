@@ -1,0 +1,32 @@
+﻿@model EMEDS_Project.Models.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+}
+
+<h1>Category Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h4 class="card-title">@Model.CategoryName</h4>
+
+        <dl class="row">
+            <dt class="col-sm-3">Category Name</dt>
+            <dd class="col-sm-9">@Model.CategoryName</dd>
+
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+        </dl>
+
+        <a asp-action="Edit"
+           asp-route-id="@Model.CategoryId"
+           class="btn btn-warning">
+            Edit
+        </a>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back to List
+        </a>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿@model EMEDS_Project.Models.Prescription
+
+@{
+    ViewData["Title"] = "Review Prescription";
+}
+
+<h1>Review Prescription</h1>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Prescription ID</dt>
+        <dd class="col-sm-9">@Model.PrescriptionId</dd>
+
+        <dt class="col-sm-3">User ID</dt>
+        <dd class="col-sm-9">@Model.UserId</dd>
+
+        <dt class="col-sm-3">Upload Date</dt>
+        <dd class="col-sm-9">@Model.UploadDate</dd>
+
+        <dt class="col-sm-3">Current Status</dt>
+        <dd class="col-sm-9">@Model.Status</dd>
+
+        <dt class="col-sm-3">Prescription File</dt>
+        <dd class="col-sm-9">
+            <a href="@Model.FilePath"
+               target="_blank"
+               class="btn btn-primary">
+                View Prescription
+            </a>
+        </dd>
+    </dl>
+</div>
+
+<hr />
+
+<form asp-action="Approve" method="post">
+    <input type="hidden" name="id" value="@Model.PrescriptionId" />
+
+    <div class="mb-3">
+        <label for="approveRemarks" class="form-label">
+            Admin Remarks
+        </label>
+
+        <textarea name="adminRemarks"
+                  id="approveRemarks"
+                  class="form-control"
+                  rows="3">@Model.AdminRemarks</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Approve
+    </button>
+</form>
+
+<br />
+
+<form asp-action="Reject" method="post">
+    <input type="hidden" name="id" value="@Model.PrescriptionId" />
+
+    <div class="mb-3">
+        <label for="rejectRemarks" class="form-label">
+            Rejection Remarks
+        </label>
+
+        <textarea name="adminRemarks"
+                  id="rejectRemarks"
+                  class="form-control"
+                  rows="3">@Model.AdminRemarks</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-danger">
+        Reject
+    </button>
+</form>

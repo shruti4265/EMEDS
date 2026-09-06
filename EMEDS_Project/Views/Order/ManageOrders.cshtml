@@ -1,0 +1,73 @@
+﻿@model IEnumerable<EMEDS_Project.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
+
+<h1>Manage Orders</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No orders are available.
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>User ID</th>
+                <th>Order Date</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Delivery Address</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+
+                    <td>@order.UserId</td>
+
+                    <td>
+                        @order.OrderDate.ToString("dd-MM-yyyy")
+                    </td>
+
+                    <td>₹@order.TotalAmount</td>
+
+                    <td>@order.OrderStatus</td>
+
+                    <td>@order.DeliveryAddress</td>
+
+                    <td>
+                        <a asp-action="AdminDetails"
+                           asp-route-id="@order.OrderId"
+                           class="btn btn-primary btn-sm">
+                            Manage
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

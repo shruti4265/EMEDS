@@ -1,0 +1,81 @@
+@model EMEDS_Project.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>Order Details</h1>
+
+<div>
+    <dl class="row">
+
+        <dt class="col-sm-3">Order ID</dt>
+        <dd class="col-sm-9">@Model.OrderId</dd>
+
+        <dt class="col-sm-3">Order Date</dt>
+        <dd class="col-sm-9">
+            @Model.OrderDate.ToString("dd-MM-yyyy hh:mm tt")
+        </dd>
+
+        <dt class="col-sm-3">Total Amount</dt>
+        <dd class="col-sm-9">₹@Model.TotalAmount</dd>
+
+        <dt class="col-sm-3">Order Status</dt>
+        <dd class="col-sm-9">@Model.OrderStatus</dd>
+
+        <dt class="col-sm-3">Delivery Address</dt>
+        <dd class="col-sm-9">@Model.DeliveryAddress</dd>
+
+    </dl>
+</div>
+
+<h3>Order Items</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Medicine ID</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var orderItem in Model.OrderItems)
+        {
+            <tr>
+                <td>@orderItem.MedicineId</td>
+                <td>@orderItem.Quantity</td>
+                <td>₹@orderItem.UnitPrice</td>
+                <td>₹@orderItem.Subtotal</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@if (Model.OrderStatus != "Delivered" &&
+     Model.OrderStatus != "Cancelled")
+{
+    <form asp-action="CancelOrder" method="post">
+
+        <input type="hidden"
+               name="orderId"
+               value="@Model.OrderId" />
+
+        <button type="submit"
+                class="btn btn-danger"
+                onclick="return confirm('Are you sure you want to cancel this order?');">
+            Cancel Order
+        </button>
+
+    </form>
+}
+
+<br />
+
+<a asp-action="MyOrders"
+   class="btn btn-secondary">
+    Back to My Orders
+</a>

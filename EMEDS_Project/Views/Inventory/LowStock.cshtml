@@ -1,0 +1,33 @@
+﻿@model IEnumerable<EMEDS_Project.Models.Inventory>
+
+@{
+    ViewData["Title"] = "Low Stock";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger">Low Stock Items</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Medicine ID</th>
+                <th>Stock Quantity</th>
+                <th>Reorder Level</th>
+                <th>Last Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="table-danger">
+                    <td>@item.MedicineId</td>
+                    <td>@item.StockQuantity</td>
+                    <td>@item.ReorderLevel</td>
+                    <td>@item.LastUpdated.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Index" class="btn btn-secondary">Back to Inventory</a>
+</div>
