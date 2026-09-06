@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Views\Medicine\" />
     <Folder Include="Views\Category\" />
     <Folder Include="Views\Prescription\" />
