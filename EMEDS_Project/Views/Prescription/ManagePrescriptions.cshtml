@@ -1,0 +1,83 @@
+﻿@model IEnumerable<EMEDS_Project.Models.Prescription>
+
+@{
+    ViewData["Title"] = "Manage Prescriptions";
+}
+
+<h1>Manage Prescriptions</h1>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No prescriptions are available.
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Prescription ID</th>
+                <th>User ID</th>
+                <th>Upload Date</th>
+                <th>Status</th>
+                <th>Admin Remarks</th>
+                <th>Prescription</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var prescription in Model)
+            {
+                <tr>
+                    <td>@prescription.PrescriptionId</td>
+
+                    <td>@prescription.UserId</td>
+
+                    <td>
+                        @prescription.UploadDate.ToString("dd-MM-yyyy")
+                    </td>
+
+                    <td>@prescription.Status</td>
+
+                    <td>
+                        @(string.IsNullOrEmpty(prescription.AdminRemarks)
+                            ? "No remarks"
+                            : prescription.AdminRemarks)
+                    </td>
+
+                    <td>
+                        <a href="@prescription.FilePath"
+                           target="_blank"
+                           class="btn btn-secondary btn-sm">
+                            View File
+                        </a>
+                    </td>
+
+                    <td>
+                        <a asp-action="Review"
+                           asp-route-id="@prescription.PrescriptionId"
+                           class="btn btn-primary btn-sm">
+                            Review
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

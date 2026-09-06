@@ -38,6 +38,7 @@ namespace EMEDS_Project
             builder.Services.AddTransient<IInventoryRepo, InventoryRepo>();
             builder.Services.AddTransient<IOrderRepo, OrderRepo>();
             builder.Services.AddTransient<IPaymentRepo, PaymentRepo>();
+            builder.Services.AddScoped<IPrescriptionRepo, PrescriptionRepo>();
 
             // Add MVC services
             builder.Services.AddControllersWithViews();

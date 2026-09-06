@@ -87,6 +87,29 @@ namespace EMEDS_Project.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("EMEDS_Project.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("EMEDS_Project.Models.Inventory", b =>
                 {
                     b.Property<int>("InventoryId")
@@ -115,6 +138,47 @@ namespace EMEDS_Project.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("EMEDS_Project.Models.Medicine", b =>
+                {
+                    b.Property<int>("MedicineId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicineId"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicineName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("RequiresPrescription")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MedicineId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Medicines");
                 });
 
             modelBuilder.Entity("EMEDS_Project.Models.Order", b =>
@@ -399,6 +463,17 @@ namespace EMEDS_Project.Migrations
                         .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("EMEDS_Project.Models.Medicine", b =>
+                {
+                    b.HasOne("EMEDS_Project.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("EMEDS_Project.Models.Order", b =>
