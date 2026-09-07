@@ -1,8 +1,11 @@
 using EMEDS_Project.DAL;
 using EMEDS_Project.Data;
+using EMEDS_Project.Mapping;
 using EMEDS_Project.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using EMEDS_Project.Mapping;
 
 namespace EMEDS_Project
 {
@@ -41,9 +44,16 @@ namespace EMEDS_Project
             builder.Services.AddScoped<IPrescriptionRepo, PrescriptionRepo>();
 
             // Add MVC services
+            // Add MVC services
+            // Add MVC services
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
             var app = builder.Build();
 
             app.UseSession();

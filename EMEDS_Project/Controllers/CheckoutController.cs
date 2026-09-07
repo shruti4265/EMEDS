@@ -5,6 +5,7 @@ using EMEDS_Project.Repository;
 using EMEDS_Project.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AutoMapper;
 
 namespace EMEDS_Project.Controllers
 {
@@ -16,10 +17,16 @@ namespace EMEDS_Project.Controllers
         private const string CartSessionKey = "Cart";
 
 
-        public CheckoutController(IOrderRepo orderRepo, IPaymentRepo paymentRepo)
+        private readonly IMapper _mapper;
+
+        public CheckoutController(
+            IOrderRepo orderRepo,
+            IPaymentRepo paymentRepo,
+            IMapper mapper)
         {
             _orderRepo = orderRepo;
             _paymentRepo = paymentRepo;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -72,13 +79,7 @@ namespace EMEDS_Project.Controllers
                 TotalAmount = cartItems.Sum(c => c.TotalPrice),
                 DeliveryAddress = $"{model.Address}, {model.City}, {model.PostalCode}",
                 OrderStatus = "Pending",
-                OrderItems = cartItems.Select(c => new OrderItem
-                {
-                    MedicineId = c.MedicineId,
-                    Quantity = c.Quantity,
-                    UnitPrice = c.UnitPrice,
-                    Subtotal = c.TotalPrice
-                }).ToList()
+                OrderItems = _mapper.Map<List<OrderItem>>(cartItems)
             };
 
             _orderRepo.AddOrder(order);

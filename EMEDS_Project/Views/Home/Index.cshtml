@@ -1,500 +1,763 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Home";
 }
 
-<!-- =========================
-     HERO SECTION
-     ========================= -->
+@if (User.IsInRole("Admin"))
+{
+    <!-- =========================
+         ADMIN DASHBOARD
+         ========================= -->
 
-<section class="home-hero">
+    <div class="admin-dashboard">
 
-    <div class="row align-items-center g-5">
+        <section class="admin-header">
+            <div>
+                <span class="admin-eyebrow">E-MEDS ADMINISTRATION</span>
+                <h1>Admin Dashboard</h1>
+                <p>
+                    Monitor medicines, inventory, orders and prescriptions
+                    from one central workspace.
+                </p>
+            </div>
 
-        <div class="col-lg-7">
+            <div class="admin-header-badge">
+                <span>🛡️</span>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Full system access</small>
+                </div>
+            </div>
+        </section>
 
-            <span class="hero-label">
-                Your everyday healthcare companion
-            </span>
+        <section class="admin-section">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-eyebrow">SYSTEM OVERVIEW</span>
+                    <h2>Today's overview</h2>
+                </div>
+            </div>
 
-            <h1 class="hero-title">
-                Healthcare essentials,
-                <span>made simpler.</span>
-            </h1>
+            <div class="row g-4">
 
-            <p class="hero-description">
-                Browse medicines, manage prescriptions,
-                place orders and keep track of everything
-                from one convenient platform.
-            </p>
+                <div class="col-md-6 col-xl-3">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">💊</div>
+                        <div class="admin-stat-content">
+                            <span>Total Medicines</span>
+                            <strong>@ViewBag.TotalMedicines</strong>
+                            <small>Products in catalogue</small>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="hero-actions">
+                <div class="col-md-6 col-xl-3">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">🗂️</div>
+                        <div class="admin-stat-content">
+                            <span>Categories</span>
+                            <strong>@ViewBag.TotalCategories</strong>
+                            <small>Medicine categories</small>
+                        </div>
+                    </div>
+                </div>
 
-                <a asp-controller="Medicine"
-                   asp-action="Index"
-                   class="btn btn-primary btn-lg">
-                    Browse Medicines
-                </a>
+                <div class="col-md-6 col-xl-3">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">🏭</div>
+                        <div class="admin-stat-content">
+                            <span>Suppliers</span>
+                            <strong>@ViewBag.TotalSuppliers</strong>
+                            <small>Registered suppliers</small>
+                        </div>
+                    </div>
+                </div>
 
-                @if (User.Identity != null &&
-                     User.Identity.IsAuthenticated &&
-                     !User.IsInRole("Admin"))
-                {
-                    <a asp-controller="Order"
-                       asp-action="MyOrders"
-                       class="btn btn-outline-primary btn-lg">
-                        My Orders
+                <div class="col-md-6 col-xl-3">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">📦</div>
+                        <div class="admin-stat-content">
+                            <span>Total Orders</span>
+                            <strong>@ViewBag.TotalOrders</strong>
+                            <small>Customer orders</small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-eyebrow">ATTENTION REQUIRED</span>
+                    <h2>Items that need action</h2>
+                </div>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-lg-6">
+                    <div class="admin-alert-card admin-alert-warning">
+                        <div class="admin-alert-icon">⚠️</div>
+                        <div class="admin-alert-content">
+                            <strong>Low Stock Medicines</strong>
+                            <p>
+                                @ViewBag.LowStockItems medicine(s) are currently
+                                below their reorder level.
+                            </p>
+                            <a asp-controller="Inventory" asp-action="Index">
+                                Review Inventory →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="admin-alert-card admin-alert-prescription">
+                        <div class="admin-alert-icon">🧾</div>
+                        <div class="admin-alert-content">
+                            <strong>Pending Prescriptions</strong>
+                            <p>
+                                @ViewBag.PendingPrescriptions prescription(s)
+                                are waiting for verification.
+                            </p>
+                            <a asp-controller="Prescription"
+                               asp-action="ManagePrescriptions">
+                                Review Prescriptions →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="admin-section">
+            <div class="admin-section-heading">
+                <div>
+                    <span class="admin-eyebrow">MANAGEMENT</span>
+                    <h2>Manage E-MEDS</h2>
+                    <p>
+                        Quickly access the areas you manage as an administrator.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-4">
+                    <a asp-controller="Medicine"
+                       asp-action="Index"
+                       class="admin-management-card">
+                        <div class="admin-management-icon">💊</div>
+                        <div>
+                            <h3>Medicines</h3>
+                            <p>
+                                Add, edit, remove and manage medicines
+                                available in the catalogue.
+                            </p>
+                            <span>Manage Medicines →</span>
+                        </div>
                     </a>
-                }
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <a asp-controller="Category"
+                       asp-action="Index"
+                       class="admin-management-card">
+                        <div class="admin-management-icon">🗂️</div>
+                        <div>
+                            <h3>Categories</h3>
+                            <p>
+                                Organize medicines into meaningful
+                                product categories.
+                            </p>
+                            <span>Manage Categories →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <a asp-controller="Supplier"
+                       asp-action="Index"
+                       class="admin-management-card">
+                        <div class="admin-management-icon">🏭</div>
+                        <div>
+                            <h3>Suppliers</h3>
+                            <p>
+                                Manage supplier information and
+                                supplier relationships.
+                            </p>
+                            <span>Manage Suppliers →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <a asp-controller="Inventory"
+                       asp-action="Index"
+                       class="admin-management-card">
+                        <div class="admin-management-icon">📊</div>
+                        <div>
+                            <h3>Inventory</h3>
+                            <p>
+                                Monitor stock levels and identify
+                                medicines that need replenishment.
+                            </p>
+                            <span>Manage Inventory →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <a asp-controller="Order"
+                       asp-action="ManageOrders"
+                       class="admin-management-card">
+                        <div class="admin-management-icon">📦</div>
+                        <div>
+                            <h3>Orders</h3>
+                            <p>
+                                Review customer orders and update
+                                their delivery status.
+                            </p>
+                            <span>Manage Orders →</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <a asp-controller="Prescription"
+                       asp-action="ManagePrescriptions"
+                       class="admin-management-card">
+                        <div class="admin-management-icon">🧾</div>
+                        <div>
+                            <h3>Prescriptions</h3>
+                            <p>
+                                Review submitted prescriptions and
+                                approve or reject them.
+                            </p>
+                            <span>Review Prescriptions →</span>
+                        </div>
+                    </a>
+                </div>
 
             </div>
+        </section>
 
-            <div class="hero-trust-row">
-
-                <div class="trust-item">
-                    <span class="trust-check">✓</span>
-                    Easy ordering
-                </div>
-
-                <div class="trust-item">
-                    <span class="trust-check">✓</span>
-                    Prescription support
-                </div>
-
-                <div class="trust-item">
-                    <span class="trust-check">✓</span>
-                    Order tracking
-                </div>
-
+        <section class="admin-bottom-panel">
+            <div>
+                <span class="admin-eyebrow">ADMIN WORKSPACE</span>
+                <h3>Keep the E-MEDS system running smoothly.</h3>
+                <p>
+                    Monitor inventory, process customer orders and verify
+                    prescriptions from the management sections above.
+                </p>
             </div>
-
-        </div>
-
-
-        <!-- RIGHT SIDE VISUAL -->
-
-        <div class="col-lg-5">
-
-            <div class="hero-visual">
-
-                <div class="hero-visual-icon">
-                    +
-                </div>
-
-                <h3>Everything you need,<br />in one place.</h3>
-
-                <div class="hero-mini-grid">
-
-                    <div class="hero-mini-card">
-                        <span>Rx</span>
-                        <small>Prescriptions</small>
-                    </div>
-
-                    <div class="hero-mini-card">
-                        <span>+</span>
-                        <small>Medicines</small>
-                    </div>
-
-                    <div class="hero-mini-card">
-                        <span>✓</span>
-                        <small>Easy Orders</small>
-                    </div>
-
-                    <div class="hero-mini-card">
-                        <span>→</span>
-                        <small>Track Status</small>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     QUICK ACTIONS
-     ========================= -->
-
-<section class="home-section">
-
-    <div class="section-heading">
-
-        <div>
-            <span class="section-eyebrow">EXPLORE E-MEDS</span>
-
-            <h2>What would you like to do?</h2>
-
-            <p>
-                Access the most frequently used E-MEDS
-                features from here.
-            </p>
-        </div>
-
-    </div>
-
-
-    <div class="row g-4">
-
-        <!-- Medicines -->
-
-        <div class="col-md-6 col-lg-4">
 
             <a asp-controller="Medicine"
                asp-action="Index"
-               class="home-feature-card">
-
-                <div class="feature-icon">
-                    M
-                </div>
-
-                <div>
-                    <h4>Browse Medicines</h4>
-
-                    <p>
-                        Explore the medicines available
-                        through E-MEDS.
-                    </p>
-
-                    <span class="feature-link">
-                        Explore medicines →
-                    </span>
-                </div>
-
+               class="btn btn-primary">
+                Manage Catalogue
             </a>
+        </section>
+
+    </div>
+}
+else
+{
+    <!-- =========================
+     HERO SECTION
+     ========================= -->
+
+    <section class="home-hero">
+
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-7">
+
+                <span class="hero-label">
+                    Your everyday healthcare companion
+                </span>
+
+                <h1 class="hero-title">
+                    Healthcare essentials,
+                    <span>made simpler.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Browse medicines, manage prescriptions,
+                    place orders and keep track of everything
+                    from one convenient platform.
+                </p>
+
+                <div class="hero-actions">
+
+                    <a asp-controller="Medicine"
+                       asp-action="Index"
+                       class="btn btn-primary btn-lg">
+                        Browse Medicines
+                    </a>
+
+                    @if (User.Identity != null &&
+                         User.Identity.IsAuthenticated &&
+                         !User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Order"
+                           asp-action="MyOrders"
+                           class="btn btn-outline-primary btn-lg">
+                            My Orders
+                        </a>
+                    }
+
+                </div>
+
+                <div class="hero-trust-row">
+
+                    <div class="trust-item">
+                        <span class="trust-check">✓</span>
+                        Easy ordering
+                    </div>
+
+                    <div class="trust-item">
+                        <span class="trust-check">✓</span>
+                        Prescription support
+                    </div>
+
+                    <div class="trust-item">
+                        <span class="trust-check">✓</span>
+                        Order tracking
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT SIDE VISUAL -->
+
+            <div class="col-lg-5">
+
+                <div class="hero-visual">
+
+                    <div class="hero-visual-icon">
+                        +
+                    </div>
+
+                    <h3>Everything you need,<br />in one place.</h3>
+
+                    <div class="hero-mini-grid">
+
+                        <div class="hero-mini-card">
+                            <span>Rx</span>
+                            <small>Prescriptions</small>
+                        </div>
+
+                        <div class="hero-mini-card">
+                            <span>+</span>
+                            <small>Medicines</small>
+                        </div>
+
+                        <div class="hero-mini-card">
+                            <span>✓</span>
+                            <small>Easy Orders</small>
+                        </div>
+
+                        <div class="hero-mini-card">
+                            <span>→</span>
+                            <small>Track Status</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
+    </section>
 
-        @if (User.Identity != null &&
-             User.Identity.IsAuthenticated &&
-             !User.IsInRole("Admin"))
-        {
 
-            <!-- Cart -->
-
-            <div class="col-md-6 col-lg-4">
-
-                <a asp-controller="Cart"
-                   asp-action="Index"
-                   class="home-feature-card">
-
-                    <div class="feature-icon">
-                        C
-                    </div>
-
-                    <div>
-                        <h4>My Cart</h4>
-
-                        <p>
-                            Review medicines you've selected
-                            before checkout.
-                        </p>
-
-                        <span class="feature-link">
-                            Open cart →
-                        </span>
-                    </div>
-
-                </a>
-
-            </div>
-
-
-            <!-- Prescription -->
-
-            <div class="col-md-6 col-lg-4">
-
-                <a asp-controller="Prescription"
-                   asp-action="Index"
-                   class="home-feature-card">
-
-                    <div class="feature-icon">
-                        Rx
-                    </div>
-
-                    <div>
-                        <h4>Prescriptions</h4>
-
-                        <p>
-                            Upload and manage your
-                            prescriptions securely.
-                        </p>
-
-                        <span class="feature-link">
-                            View prescriptions →
-                        </span>
-                    </div>
-
-                </a>
-
-            </div>
-
-
-            <!-- Orders -->
-
-            <div class="col-md-6 col-lg-4">
-
-                <a asp-controller="Order"
-                   asp-action="MyOrders"
-                   class="home-feature-card">
-
-                    <div class="feature-icon">
-                        O
-                    </div>
-
-                    <div>
-                        <h4>My Orders</h4>
-
-                        <p>
-                            View your previous orders and
-                            follow their current status.
-                        </p>
-
-                        <span class="feature-link">
-                            View orders →
-                        </span>
-                    </div>
-
-                </a>
-
-            </div>
-
-        }
-
-
-        @if (User.IsInRole("Admin"))
-        {
-
-            <!-- Inventory -->
-
-            <div class="col-md-6 col-lg-4">
-
-                <a asp-controller="Inventory"
-                   asp-action="Index"
-                   class="home-feature-card">
-
-                    <div class="feature-icon">
-                        I
-                    </div>
-
-                    <div>
-                        <h4>Inventory</h4>
-
-                        <p>
-                            Review and manage medicine
-                            inventory information.
-                        </p>
-
-                        <span class="feature-link">
-                            Manage inventory →
-                        </span>
-                    </div>
-
-                </a>
-
-            </div>
-
-
-            <!-- Admin Orders -->
-
-            <div class="col-md-6 col-lg-4">
-
-                <a asp-controller="Order"
-                   asp-action="ManageOrders"
-                   class="home-feature-card">
-
-                    <div class="feature-icon">
-                        O
-                    </div>
-
-                    <div>
-                        <h4>Manage Orders</h4>
-
-                        <p>
-                            Review customer orders and
-                            update their status.
-                        </p>
-
-                        <span class="feature-link">
-                            Manage orders →
-                        </span>
-                    </div>
-
-                </a>
-
-            </div>
-
-
-            <!-- Admin Prescriptions -->
-
-            <div class="col-md-6 col-lg-4">
-
-                <a asp-controller="Prescription"
-                   asp-action="ManagePrescriptions"
-                   class="home-feature-card">
-
-                    <div class="feature-icon">
-                        Rx
-                    </div>
-
-                    <div>
-                        <h4>Review Prescriptions</h4>
-
-                        <p>
-                            Review customer prescriptions
-                            and approve or reject them.
-                        </p>
-
-                        <span class="feature-link">
-                            Review prescriptions →
-                        </span>
-                    </div>
-
-                </a>
-
-            </div>
-
-        }
-
-    </div>
-
-</section>
-
-
-<!-- =========================
-     HOW IT WORKS
-     Customer / Guest only
+    <!-- =========================
+     QUICK ACTIONS
      ========================= -->
-@if (!User.IsInRole("Admin"))
-{
+
     <section class="home-section">
 
-        <div class="section-heading text-center">
+        <div class="section-heading">
 
-            <span class="section-eyebrow">
-                SIMPLE PROCESS
-            </span>
+            <div>
+                <span class="section-eyebrow">EXPLORE E-MEDS</span>
 
-            <h2>How E-MEDS works</h2>
+                <h2>What would you like to do?</h2>
 
-            <p>
-                A simple process from finding medicines
-                to managing your order.
-            </p>
+                <p>
+                    Access the most frequently used E-MEDS
+                    features from here.
+                </p>
+            </div>
 
         </div>
 
 
         <div class="row g-4">
 
-            <div class="col-md-4">
+            <!-- Medicines -->
 
-                <div class="process-card">
+            <div class="col-md-6 col-lg-4">
 
-                    <span class="process-number">
-                        01
-                    </span>
+                <a asp-controller="Medicine"
+                   asp-action="Index"
+                   class="home-feature-card">
 
-                    <h4>Browse</h4>
+                    <div class="feature-icon">
+                        M
+                    </div>
 
-                    <p>
-                        Find the medicines you need from
-                        the available catalogue.
-                    </p>
+                    <div>
+                        <h4>Browse Medicines</h4>
 
-                </div>
+                        <p>
+                            Explore the medicines available
+                            through E-MEDS.
+                        </p>
 
-            </div>
+                        <span class="feature-link">
+                            Explore medicines →
+                        </span>
+                    </div>
 
-
-            <div class="col-md-4">
-
-                <div class="process-card">
-
-                    <span class="process-number">
-                        02
-                    </span>
-
-                    <h4>Order</h4>
-
-                    <p>
-                        Add medicines to your cart and
-                        complete the checkout process.
-                    </p>
-
-                </div>
+                </a>
 
             </div>
 
 
-            <div class="col-md-4">
+            @if (User.Identity != null &&
+                 User.Identity.IsAuthenticated &&
+                 !User.IsInRole("Admin"))
+            {
 
-                <div class="process-card">
+                <!-- Cart -->
 
-                    <span class="process-number">
-                        03
-                    </span>
+                <div class="col-md-6 col-lg-4">
 
-                    <h4>Track</h4>
+                    <a asp-controller="Cart"
+                       asp-action="Index"
+                       class="home-feature-card">
 
-                    <p>
-                        View your order history and follow
-                        the current order status.
-                    </p>
+                        <div class="feature-icon">
+                            C
+                        </div>
+
+                        <div>
+                            <h4>My Cart</h4>
+
+                            <p>
+                                Review medicines you've selected
+                                before checkout.
+                            </p>
+
+                            <span class="feature-link">
+                                Open cart →
+                            </span>
+                        </div>
+
+                    </a>
 
                 </div>
 
-            </div>
+
+                <!-- Prescription -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <a asp-controller="Prescription"
+                       asp-action="Index"
+                       class="home-feature-card">
+
+                        <div class="feature-icon">
+                            Rx
+                        </div>
+
+                        <div>
+                            <h4>Prescriptions</h4>
+
+                            <p>
+                                Upload and manage your
+                                prescriptions securely.
+                            </p>
+
+                            <span class="feature-link">
+                                View prescriptions →
+                            </span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- Orders -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <a asp-controller="Order"
+                       asp-action="MyOrders"
+                       class="home-feature-card">
+
+                        <div class="feature-icon">
+                            O
+                        </div>
+
+                        <div>
+                            <h4>My Orders</h4>
+
+                            <p>
+                                View your previous orders and
+                                follow their current status.
+                            </p>
+
+                            <span class="feature-link">
+                                View orders →
+                            </span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            }
+
+
+            @if (User.IsInRole("Admin"))
+            {
+
+                <!-- Inventory -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <a asp-controller="Inventory"
+                       asp-action="Index"
+                       class="home-feature-card">
+
+                        <div class="feature-icon">
+                            I
+                        </div>
+
+                        <div>
+                            <h4>Inventory</h4>
+
+                            <p>
+                                Review and manage medicine
+                                inventory information.
+                            </p>
+
+                            <span class="feature-link">
+                                Manage inventory →
+                            </span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- Admin Orders -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <a asp-controller="Order"
+                       asp-action="ManageOrders"
+                       class="home-feature-card">
+
+                        <div class="feature-icon">
+                            O
+                        </div>
+
+                        <div>
+                            <h4>Manage Orders</h4>
+
+                            <p>
+                                Review customer orders and
+                                update their status.
+                            </p>
+
+                            <span class="feature-link">
+                                Manage orders →
+                            </span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <!-- Admin Prescriptions -->
+
+                <div class="col-md-6 col-lg-4">
+
+                    <a asp-controller="Prescription"
+                       asp-action="ManagePrescriptions"
+                       class="home-feature-card">
+
+                        <div class="feature-icon">
+                            Rx
+                        </div>
+
+                        <div>
+                            <h4>Review Prescriptions</h4>
+
+                            <p>
+                                Review customer prescriptions
+                                and approve or reject them.
+                            </p>
+
+                            <span class="feature-link">
+                                Review prescriptions →
+                            </span>
+                        </div>
+
+                    </a>
+
+                </div>
+
+            }
 
         </div>
 
     </section>
-}
 
 
-<!-- =========================
+    <!-- =========================
+     HOW IT WORKS
+     Customer / Guest only
+     ========================= -->
+    @if (!User.IsInRole("Admin"))
+    {
+        <section class="home-section">
+
+            <div class="section-heading text-center">
+
+                <span class="section-eyebrow">
+                    SIMPLE PROCESS
+                </span>
+
+                <h2>How E-MEDS works</h2>
+
+                <p>
+                    A simple process from finding medicines
+                    to managing your order.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-md-4">
+
+                    <div class="process-card">
+
+                        <span class="process-number">
+                            01
+                        </span>
+
+                        <h4>Browse</h4>
+
+                        <p>
+                            Find the medicines you need from
+                            the available catalogue.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="process-card">
+
+                        <span class="process-number">
+                            02
+                        </span>
+
+                        <h4>Order</h4>
+
+                        <p>
+                            Add medicines to your cart and
+                            complete the checkout process.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="process-card">
+
+                        <span class="process-number">
+                            03
+                        </span>
+
+                        <h4>Track</h4>
+
+                        <p>
+                            View your order history and follow
+                            the current order status.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+    }
+
+
+    <!-- =========================
      CTA
      ========================= -->
-@if (User.Identity == null ||
-     !User.Identity.IsAuthenticated)
-{
-    <section class="home-cta">
+    @if (User.Identity == null ||
+         !User.Identity.IsAuthenticated)
+    {
+        <section class="home-cta">
 
-        <div>
+            <div>
 
-            <span class="section-eyebrow">
-                GET STARTED
-            </span>
+                <span class="section-eyebrow">
+                    GET STARTED
+                </span>
 
-            <h2>Ready to use E-MEDS?</h2>
+                <h2>Ready to use E-MEDS?</h2>
 
-            <p>
-                Create an account to manage your medicines,
-                prescriptions and orders.
-            </p>
+                <p>
+                    Create an account to manage your medicines,
+                    prescriptions and orders.
+                </p>
 
-        </div>
+            </div>
 
-        <div class="home-cta-actions">
+            <div class="home-cta-actions">
 
-            <a asp-area="Identity"
-               asp-page="/Account/Register"
-               class="btn btn-light">
-                Create Account
-            </a>
+                <a asp-area="Identity"
+                   asp-page="/Account/Register"
+                   class="btn btn-light">
+                    Create Account
+                </a>
 
-            <a asp-area="Identity"
-               asp-page="/Account/Login"
-               class="btn btn-outline-light">
-                Login
-            </a>
+                <a asp-area="Identity"
+                   asp-page="/Account/Login"
+                   class="btn btn-outline-light">
+                    Login
+                </a>
 
-        </div>
+            </div>
 
-    </section>
+        </section>
+    }
 }

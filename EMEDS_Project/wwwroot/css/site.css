@@ -4564,4 +4564,1812 @@ html[data-theme="dark"] .emeds-main {
     background-color: #111719 !important;
 }
 
+/* =========================================================
+   ADMIN DASHBOARD
+   Matches the existing E-MEDS UI theme
+   ========================================================= */
 
+.admin-dashboard {
+    padding: 3.5rem 0 5rem;
+}
+
+
+/* =========================
+   ADMIN HEADER
+   ========================= */
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+    .admin-header h1 {
+        margin: 0.45rem 0 0.8rem;
+        font-size: 2.7rem;
+        font-weight: 700;
+        color: var(--emeds-text);
+    }
+
+    .admin-header p {
+        margin: 0;
+        max-width: 700px;
+        color: var(--emeds-muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+.admin-eyebrow {
+    display: inline-block;
+    color: var(--emeds-primary);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+
+/* Admin badge */
+
+.admin-header-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 190px;
+    padding: 1rem 1.25rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+}
+
+    .admin-header-badge > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: var(--emeds-primary-soft);
+        font-size: 1.25rem;
+    }
+
+    .admin-header-badge strong {
+        display: block;
+        color: var(--emeds-text);
+        font-size: 0.95rem;
+    }
+
+    .admin-header-badge small {
+        display: block;
+        margin-top: 0.2rem;
+        color: var(--emeds-muted);
+    }
+
+
+/* =========================
+   ADMIN SECTIONS
+   ========================= */
+
+.admin-section {
+    margin-bottom: 4rem;
+}
+
+.admin-section-heading {
+    margin-bottom: 1.75rem;
+}
+
+    .admin-section-heading h2 {
+        margin: 0.35rem 0 0.45rem;
+        color: var(--emeds-text);
+        font-size: 1.65rem;
+        font-weight: 700;
+    }
+
+    .admin-section-heading p {
+        margin: 0;
+        color: var(--emeds-muted);
+    }
+
+
+/* =========================
+   STAT CARDS
+   ========================= */
+
+.admin-stat-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    height: 100%;
+    min-height: 155px;
+    padding: 1.6rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+    .admin-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 28px rgba(37, 50, 56, 0.11);
+        border-color: var(--emeds-primary);
+    }
+
+.admin-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    background: var(--emeds-primary-soft);
+    font-size: 1.35rem;
+}
+
+.admin-stat-content {
+    min-width: 0;
+}
+
+    .admin-stat-content span {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--emeds-muted);
+        font-size: 0.9rem;
+    }
+
+    .admin-stat-content strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--emeds-text);
+        font-size: 2rem;
+        line-height: 1;
+    }
+
+    .admin-stat-content small {
+        color: var(--emeds-muted);
+        font-size: 0.78rem;
+    }
+
+
+/* =========================
+   ATTENTION CARDS
+   ========================= */
+
+.admin-alert-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    height: 100%;
+    min-height: 155px;
+    padding: 1.6rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+}
+
+.admin-alert-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    font-size: 1.3rem;
+}
+
+.admin-alert-warning .admin-alert-icon {
+    background: rgba(199, 146, 62, 0.13);
+}
+
+.admin-alert-prescription .admin-alert-icon {
+    background: var(--emeds-primary-soft);
+}
+
+.admin-alert-content strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--emeds-text);
+    font-size: 1.05rem;
+}
+
+.admin-alert-content p {
+    margin: 0 0 0.9rem;
+    color: var(--emeds-muted);
+    line-height: 1.6;
+}
+
+.admin-alert-content a {
+    color: var(--emeds-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .admin-alert-content a:hover {
+        color: var(--emeds-primary-dark);
+        text-decoration: underline;
+    }
+
+
+/* =========================
+   MANAGEMENT CARDS
+   ========================= */
+
+.admin-management-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    height: 100%;
+    min-height: 190px;
+    padding: 1.7rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+    .admin-management-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--emeds-primary);
+        box-shadow: 0 12px 30px rgba(37, 50, 56, 0.12);
+        color: inherit;
+    }
+
+.admin-management-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--emeds-primary-soft);
+    font-size: 1.4rem;
+}
+
+.admin-management-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--emeds-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.admin-management-card p {
+    margin: 0 0 1rem;
+    color: var(--emeds-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+.admin-management-card span {
+    color: var(--emeds-primary);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+
+/* =========================
+   BOTTOM ADMIN PANEL
+   ========================= */
+
+.admin-bottom-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 2.25rem;
+    background: var(--emeds-primary-soft);
+    border: 1px solid var(--emeds-primary-light);
+    border-radius: var(--emeds-radius);
+}
+
+    .admin-bottom-panel h3 {
+        margin: 0.35rem 0 0.45rem;
+        color: var(--emeds-text);
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .admin-bottom-panel p {
+        margin: 0;
+        max-width: 700px;
+        color: var(--emeds-muted);
+        line-height: 1.6;
+    }
+
+
+/* =========================
+   DARK MODE
+   ========================= */
+
+html[data-theme="dark"] .admin-stat-card:hover,
+html[data-theme="dark"] .admin-management-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .admin-bottom-panel {
+    background: var(--emeds-surface-soft);
+    border-color: var(--emeds-border);
+}
+
+html[data-theme="dark"] .admin-header-badge > span,
+html[data-theme="dark"] .admin-stat-icon,
+html[data-theme="dark"] .admin-management-icon {
+    background: var(--emeds-surface-soft);
+}
+
+html[data-theme="dark"] .admin-alert-warning .admin-alert-icon {
+    background: rgba(199, 146, 62, 0.18);
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 991.98px) {
+
+    .admin-dashboard {
+        padding-top: 2.5rem;
+    }
+
+    .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 3rem;
+    }
+
+    .admin-header-badge {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .admin-dashboard {
+        padding-top: 2rem;
+    }
+
+    .admin-header h1 {
+        font-size: 2.15rem;
+    }
+
+    .admin-section {
+        margin-bottom: 3rem;
+    }
+
+    .admin-stat-card,
+    .admin-alert-card,
+    .admin-management-card {
+        padding: 1.35rem;
+    }
+
+    .admin-bottom-panel {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+        .admin-bottom-panel .btn {
+            width: 100%;
+        }
+}
+/* =========================================================
+   ADMIN DASHBOARD
+   Matches the existing E-MEDS UI theme
+   ========================================================= */
+
+.admin-dashboard {
+    padding: 3.5rem 0 5rem;
+}
+
+
+/* =========================
+   ADMIN HEADER
+   ========================= */
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+    .admin-header h1 {
+        margin: 0.45rem 0 0.8rem;
+        font-size: 2.7rem;
+        font-weight: 700;
+        color: var(--emeds-text);
+    }
+
+    .admin-header p {
+        margin: 0;
+        max-width: 700px;
+        color: var(--emeds-muted);
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+.admin-eyebrow {
+    display: inline-block;
+    color: var(--emeds-primary);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+}
+
+
+/* Admin badge */
+
+.admin-header-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 190px;
+    padding: 1rem 1.25rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+}
+
+    .admin-header-badge > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        background: var(--emeds-primary-soft);
+        font-size: 1.25rem;
+    }
+
+    .admin-header-badge strong {
+        display: block;
+        color: var(--emeds-text);
+        font-size: 0.95rem;
+    }
+
+    .admin-header-badge small {
+        display: block;
+        margin-top: 0.2rem;
+        color: var(--emeds-muted);
+    }
+
+
+/* =========================
+   ADMIN SECTIONS
+   ========================= */
+
+.admin-section {
+    margin-bottom: 4rem;
+}
+
+.admin-section-heading {
+    margin-bottom: 1.75rem;
+}
+
+    .admin-section-heading h2 {
+        margin: 0.35rem 0 0.45rem;
+        color: var(--emeds-text);
+        font-size: 1.65rem;
+        font-weight: 700;
+    }
+
+    .admin-section-heading p {
+        margin: 0;
+        color: var(--emeds-muted);
+    }
+
+
+/* =========================
+   STAT CARDS
+   ========================= */
+
+.admin-stat-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    height: 100%;
+    min-height: 155px;
+    padding: 1.6rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+    .admin-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 28px rgba(37, 50, 56, 0.11);
+        border-color: var(--emeds-primary);
+    }
+
+.admin-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    background: var(--emeds-primary-soft);
+    font-size: 1.35rem;
+}
+
+.admin-stat-content {
+    min-width: 0;
+}
+
+    .admin-stat-content span {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--emeds-muted);
+        font-size: 0.9rem;
+    }
+
+    .admin-stat-content strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--emeds-text);
+        font-size: 2rem;
+        line-height: 1;
+    }
+
+    .admin-stat-content small {
+        color: var(--emeds-muted);
+        font-size: 0.78rem;
+    }
+
+
+/* =========================
+   ATTENTION CARDS
+   ========================= */
+
+.admin-alert-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    height: 100%;
+    min-height: 155px;
+    padding: 1.6rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+}
+
+.admin-alert-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 13px;
+    font-size: 1.3rem;
+}
+
+.admin-alert-warning .admin-alert-icon {
+    background: rgba(199, 146, 62, 0.13);
+}
+
+.admin-alert-prescription .admin-alert-icon {
+    background: var(--emeds-primary-soft);
+}
+
+.admin-alert-content strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--emeds-text);
+    font-size: 1.05rem;
+}
+
+.admin-alert-content p {
+    margin: 0 0 0.9rem;
+    color: var(--emeds-muted);
+    line-height: 1.6;
+}
+
+.admin-alert-content a {
+    color: var(--emeds-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+    .admin-alert-content a:hover {
+        color: var(--emeds-primary-dark);
+        text-decoration: underline;
+    }
+
+
+/* =========================
+   MANAGEMENT CARDS
+   ========================= */
+
+.admin-management-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    height: 100%;
+    min-height: 190px;
+    padding: 1.7rem;
+    background: var(--emeds-surface);
+    border: 1px solid var(--emeds-border);
+    border-radius: var(--emeds-radius);
+    box-shadow: var(--emeds-shadow);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+    .admin-management-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--emeds-primary);
+        box-shadow: 0 12px 30px rgba(37, 50, 56, 0.12);
+        color: inherit;
+    }
+
+.admin-management-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--emeds-primary-soft);
+    font-size: 1.4rem;
+}
+
+.admin-management-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--emeds-text);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.admin-management-card p {
+    margin: 0 0 1rem;
+    color: var(--emeds-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+.admin-management-card span {
+    color: var(--emeds-primary);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+
+/* =========================
+   BOTTOM ADMIN PANEL
+   ========================= */
+
+.admin-bottom-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: 2rem 2.25rem;
+    background: var(--emeds-primary-soft);
+    border: 1px solid var(--emeds-primary-light);
+    border-radius: var(--emeds-radius);
+}
+
+    .admin-bottom-panel h3 {
+        margin: 0.35rem 0 0.45rem;
+        color: var(--emeds-text);
+        font-size: 1.25rem;
+        font-weight: 700;
+    }
+
+    .admin-bottom-panel p {
+        margin: 0;
+        max-width: 700px;
+        color: var(--emeds-muted);
+        line-height: 1.6;
+    }
+
+
+/* =========================
+   DARK MODE
+   ========================= */
+
+html[data-theme="dark"] .admin-stat-card:hover,
+html[data-theme="dark"] .admin-management-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .admin-bottom-panel {
+    background: var(--emeds-surface-soft);
+    border-color: var(--emeds-border);
+}
+
+html[data-theme="dark"] .admin-header-badge > span,
+html[data-theme="dark"] .admin-stat-icon,
+html[data-theme="dark"] .admin-management-icon {
+    background: var(--emeds-surface-soft);
+}
+
+html[data-theme="dark"] .admin-alert-warning .admin-alert-icon {
+    background: rgba(199, 146, 62, 0.18);
+}
+
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 991.98px) {
+
+    .admin-dashboard {
+        padding-top: 2.5rem;
+    }
+
+    .admin-header {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 3rem;
+    }
+
+    .admin-header-badge {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .admin-dashboard {
+        padding-top: 2rem;
+    }
+
+    .admin-header h1 {
+        font-size: 2.15rem;
+    }
+
+    .admin-section {
+        margin-bottom: 3rem;
+    }
+
+    .admin-stat-card,
+    .admin-alert-card,
+    .admin-management-card {
+        padding: 1.35rem;
+    }
+
+    .admin-bottom-panel {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 1.5rem;
+    }
+
+        .admin-bottom-panel .btn {
+            width: 100%;
+        }
+}
+
+/* =========================================================
+   E-MEDS NAVBAR
+   Refined styling using the existing E-MEDS theme
+   ========================================================= */
+
+.navbar {
+    min-height: 76px;
+    background: var(--emeds-surface, #ffffff) !important;
+    border-bottom: 1px solid var(--emeds-border);
+    box-shadow: 0 2px 12px rgba(37, 50, 56, 0.04);
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+}
+
+
+/* =========================
+   BRAND
+   ========================= */
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-right: 2rem;
+    color: var(--emeds-text) !important;
+    font-size: 1.2rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+}
+
+    .navbar-brand:hover {
+        color: var(--emeds-primary) !important;
+    }
+
+    .navbar-brand::first-letter {
+        color: var(--emeds-primary);
+    }
+
+
+/* =========================
+   NAVIGATION LINKS
+   ========================= */
+
+.navbar-nav {
+    align-items: center;
+    gap: 0.25rem;
+}
+
+    .navbar-nav .nav-link {
+        position: relative;
+        padding: 0.6rem 0.8rem !important;
+        border-radius: 9px;
+        color: var(--emeds-text) !important;
+        font-size: 0.93rem;
+        font-weight: 500;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+        .navbar-nav .nav-link:hover {
+            background: var(--emeds-primary-soft);
+            color: var(--emeds-primary) !important;
+        }
+
+        .navbar-nav .nav-link.active {
+            background: var(--emeds-primary-soft);
+            color: var(--emeds-primary) !important;
+            font-weight: 650;
+        }
+
+
+        /* =========================
+   ADMIN NAVIGATION
+   ========================= */
+
+        /*
+   Admin links are intentionally kept within
+   the same E-MEDS visual language.
+*/
+
+        .navbar-nav .nav-link[href*="ManageOrders"],
+        .navbar-nav .nav-link[href*="ManagePrescriptions"] {
+            font-weight: 600;
+        }
+
+
+/* =========================
+   ACCOUNT AREA
+   ========================= */
+
+.navbar .navbar-text {
+    color: var(--emeds-text);
+}
+
+    .navbar .navbar-text small {
+        color: var(--emeds-muted);
+    }
+
+    .navbar .navbar-text strong {
+        color: var(--emeds-text);
+    }
+
+
+/* =========================
+   LOGIN / LOGOUT
+   ========================= */
+
+.navbar a[href*="Logout"] {
+    color: var(--emeds-text) !important;
+    font-weight: 550;
+    text-decoration: none;
+}
+
+    .navbar a[href*="Logout"]:hover {
+        color: var(--emeds-primary) !important;
+    }
+
+
+/* =========================
+   THEME TOGGLE
+   ========================= */
+
+#themeToggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    margin-left: 0.65rem;
+    padding: 0;
+    border: 1px solid var(--emeds-border);
+    border-radius: 50%;
+    background: var(--emeds-surface);
+    color: var(--emeds-text);
+    box-shadow: none;
+    font-size: 1.05rem;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+    #themeToggle:hover {
+        background: var(--emeds-primary-soft);
+        border-color: var(--emeds-primary-light);
+        color: var(--emeds-primary);
+        transform: rotate(-8deg);
+    }
+
+
+/* =========================
+   MOBILE NAVBAR
+   ========================= */
+
+@media (max-width: 991.98px) {
+
+    .navbar {
+        min-height: 68px;
+    }
+
+    .navbar-brand {
+        margin-right: 0;
+    }
+
+    .navbar-nav {
+        align-items: stretch;
+        gap: 0.15rem;
+        padding-top: 0.75rem;
+    }
+
+        .navbar-nav .nav-link {
+            padding: 0.7rem 0.8rem !important;
+        }
+
+    #themeToggle {
+        margin: 0.75rem 0 0.5rem;
+    }
+}
+
+
+/* =========================
+   DARK MODE
+   ========================= */
+
+html[data-theme="dark"] .navbar {
+    background: var(--emeds-surface) !important;
+    border-bottom-color: var(--emeds-border);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.18);
+}
+
+html[data-theme="dark"] .navbar-nav .nav-link {
+    color: var(--emeds-text) !important;
+}
+
+    html[data-theme="dark"] .navbar-nav .nav-link:hover,
+    html[data-theme="dark"] .navbar-nav .nav-link.active {
+        background: var(--emeds-surface-soft);
+        color: var(--emeds-primary) !important;
+    }
+
+html[data-theme="dark"] #themeToggle {
+    background: var(--emeds-surface);
+    border-color: var(--emeds-border);
+    color: var(--emeds-text);
+}
+
+    html[data-theme="dark"] #themeToggle:hover {
+        background: var(--emeds-surface-soft);
+        border-color: var(--emeds-primary);
+        color: var(--emeds-primary);
+    }
+
+/* =========================================================
+   NAVBAR POLISH
+   ========================================================= */
+
+.emeds-navbar {
+    min-height: 76px;
+    padding: 0.75rem 0;
+    background: var(--emeds-surface, #ffffff) !important;
+    border-bottom: 1px solid var(--emeds-border);
+    box-shadow: 0 2px 14px rgba(37, 50, 56, 0.05);
+}
+
+
+/* =========================
+   BRAND
+   ========================= */
+
+.emeds-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-right: 2rem;
+    color: var(--emeds-text) !important;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+}
+
+    .emeds-brand:hover {
+        color: var(--emeds-primary) !important;
+    }
+
+.emeds-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--emeds-primary);
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    transition: transform 0.2s ease;
+}
+
+.emeds-brand:hover .emeds-brand-mark {
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   NAVIGATION
+   ========================= */
+
+.emeds-navbar .navbar-nav {
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.emeds-navbar .nav-link {
+    padding: 0.6rem 0.75rem !important;
+    border-radius: 9px;
+    color: var(--emeds-text) !important;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .emeds-navbar .nav-link:hover {
+        background: var(--emeds-primary-soft);
+        color: var(--emeds-primary) !important;
+    }
+
+
+    /* Active navigation */
+
+    .emeds-navbar .nav-link.active {
+        background: var(--emeds-primary-soft);
+        color: var(--emeds-primary) !important;
+        font-weight: 650;
+    }
+
+
+/* =========================
+   RIGHT SIDE
+   ========================= */
+
+.emeds-navbar .d-flex.align-items-center {
+    gap: 0.65rem !important;
+}
+
+
+/* =========================
+   THEME BUTTON
+   ========================= */
+
+.emeds-navbar .theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid var(--emeds-border);
+    border-radius: 50%;
+    background: var(--emeds-surface);
+    color: var(--emeds-text);
+    box-shadow: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+    .emeds-navbar .theme-toggle-btn:hover {
+        background: var(--emeds-primary-soft);
+        border-color: var(--emeds-primary-light);
+        color: var(--emeds-primary);
+        transform: rotate(-8deg);
+    }
+
+
+/* =========================
+   LOGIN PARTIAL
+   ========================= */
+
+.emeds-navbar .navbar-text {
+    color: var(--emeds-text);
+    line-height: 1.25;
+}
+
+    .emeds-navbar .navbar-text small {
+        color: var(--emeds-muted);
+    }
+
+
+/* Logout */
+
+.emeds-navbar form button,
+.emeds-navbar a[href*="Logout"] {
+    color: var(--emeds-text) !important;
+    font-weight: 550;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    .emeds-navbar form button:hover,
+    .emeds-navbar a[href*="Logout"]:hover {
+        color: var(--emeds-primary) !important;
+    }
+
+
+/* =========================
+   DARK MODE
+   ========================= */
+
+html[data-theme="dark"] .emeds-navbar {
+    background: var(--emeds-surface) !important;
+    border-bottom-color: var(--emeds-border);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+}
+
+html[data-theme="dark"] .emeds-brand {
+    color: var(--emeds-text) !important;
+}
+
+html[data-theme="dark"] .emeds-navbar .nav-link {
+    color: var(--emeds-text) !important;
+}
+
+    html[data-theme="dark"] .emeds-navbar .nav-link:hover,
+    html[data-theme="dark"] .emeds-navbar .nav-link.active {
+        background: var(--emeds-surface-soft);
+        color: var(--emeds-primary) !important;
+    }
+
+html[data-theme="dark"] .emeds-navbar .theme-toggle-btn {
+    background: var(--emeds-surface);
+    border-color: var(--emeds-border);
+    color: var(--emeds-text);
+}
+
+    html[data-theme="dark"] .emeds-navbar .theme-toggle-btn:hover {
+        background: var(--emeds-surface-soft);
+        border-color: var(--emeds-primary);
+        color: var(--emeds-primary);
+    }
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 991.98px) {
+
+    .emeds-navbar {
+        min-height: 68px;
+    }
+
+    .emeds-brand {
+        margin-right: 0;
+    }
+
+    .emeds-navbar .navbar-nav {
+        align-items: stretch;
+        padding-top: 0.75rem;
+    }
+
+    .emeds-navbar .nav-link {
+        padding: 0.7rem 0.8rem !important;
+    }
+
+    .emeds-navbar .d-flex.align-items-center {
+        align-items: flex-start !important;
+        flex-direction: column;
+        padding-top: 0.75rem;
+    }
+
+    .emeds-navbar .theme-toggle-btn {
+        margin: 0.25rem 0;
+    }
+}
+
+
+/* =========================================================
+   FINAL E-MEDS UI OVERRIDES
+   Navbar hierarchy + complete dark-mode correction
+   ========================================================= */
+
+
+/* =========================================================
+   NAVBAR — CLEAR VISUAL HIERARCHY
+   Brand → Navigation → Account / Utilities
+   ========================================================= */
+
+.emeds-navbar {
+    min-height: 78px;
+    padding: 0.7rem 0;
+    background: var(--emeds-surface, #FFFFFF) !important;
+    border-bottom: 1px solid var(--emeds-border);
+    box-shadow: 0 2px 14px rgba(37, 50, 56, 0.05);
+}
+
+    .emeds-navbar .container {
+        display: flex;
+        align-items: center;
+    }
+
+
+/* ---------- BRAND ---------- */
+
+.emeds-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-right: 2.4rem;
+    color: var(--emeds-dark) !important;
+    font-size: 1.2rem;
+    font-weight: 750;
+    letter-spacing: -0.35px;
+    white-space: nowrap;
+}
+
+.emeds-brand-mark {
+    width: 39px;
+    height: 39px;
+    border-radius: 11px;
+    background: var(--emeds-primary);
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 700;
+    transition: transform 0.2s ease;
+}
+
+.emeds-brand:hover {
+    color: var(--emeds-primary-dark) !important;
+}
+
+    .emeds-brand:hover .emeds-brand-mark {
+        transform: translateY(-1px);
+    }
+
+
+/* ---------- MAIN NAVIGATION ---------- */
+
+.emeds-navbar .navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.18rem;
+}
+
+.emeds-navbar .nav-link {
+    padding: 0.62rem 0.78rem !important;
+    border-radius: 9px;
+    color: var(--emeds-text) !important;
+    font-size: 0.91rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+    .emeds-navbar .nav-link:hover {
+        color: var(--emeds-primary-dark) !important;
+        background: var(--emeds-primary-soft);
+    }
+
+    .emeds-navbar .nav-link.active {
+        color: var(--emeds-primary-dark) !important;
+        background: var(--emeds-primary-soft);
+        font-weight: 650;
+    }
+
+
+/* ---------- RIGHT SIDE ---------- */
+
+.emeds-navbar .navbar-collapse > .d-flex {
+    margin-left: auto;
+    padding-left: 1.35rem;
+    border-left: 1px solid var(--emeds-border);
+    gap: 0.8rem !important;
+}
+
+
+/* ---------- THEME BUTTON ---------- */
+
+.emeds-navbar .theme-toggle-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--emeds-border);
+    border-radius: 50%;
+    background: var(--emeds-surface);
+    color: var(--emeds-text);
+    box-shadow: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+    .emeds-navbar .theme-toggle-btn:hover {
+        background: var(--emeds-primary-soft);
+        border-color: var(--emeds-primary-light);
+        color: var(--emeds-primary-dark);
+        transform: rotate(-8deg);
+    }
+
+
+/* ---------- LOGIN INFORMATION ---------- */
+
+.emeds-navbar .navbar-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 155px;
+    margin: 0;
+    padding: 0;
+    color: var(--emeds-text);
+    line-height: 1.25;
+}
+
+    .emeds-navbar .navbar-text small {
+        color: var(--emeds-muted);
+        font-size: 0.78rem;
+    }
+
+    .emeds-navbar .navbar-text strong {
+        color: var(--emeds-text);
+    }
+
+
+/* ---------- LOGOUT ---------- */
+
+.emeds-navbar form,
+.emeds-navbar a[href*="Logout"] {
+    margin: 0;
+}
+
+    .emeds-navbar form button,
+    .emeds-navbar a[href*="Logout"] {
+        color: var(--emeds-text) !important;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+        .emeds-navbar form button:hover,
+        .emeds-navbar a[href*="Logout"]:hover {
+            color: var(--emeds-primary-dark) !important;
+        }
+
+
+/* =========================================================
+   GLOBAL DARK MODE CORRECTION
+   Existing CSS contains several hard-coded white/light
+   backgrounds. These overrides make those surfaces follow
+   the E-MEDS dark theme variables.
+   ========================================================= */
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+}
+
+    html[data-theme="dark"] body {
+        background-color: var(--emeds-bg) !important;
+        color: var(--emeds-text) !important;
+    }
+
+    html[data-theme="dark"] main,
+    html[data-theme="dark"] .emeds-main {
+        background-color: var(--emeds-bg) !important;
+        color: var(--emeds-text) !important;
+    }
+
+
+    /* ---------- NAVBAR ---------- */
+
+    html[data-theme="dark"] .emeds-navbar {
+        background: var(--emeds-surface) !important;
+        border-bottom-color: var(--emeds-border) !important;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.22);
+    }
+
+    html[data-theme="dark"] .emeds-brand {
+        color: var(--emeds-text) !important;
+    }
+
+    html[data-theme="dark"] .emeds-navbar .nav-link {
+        color: var(--emeds-text) !important;
+    }
+
+        html[data-theme="dark"] .emeds-navbar .nav-link:hover,
+        html[data-theme="dark"] .emeds-navbar .nav-link.active {
+            background: var(--emeds-surface-soft);
+            color: var(--emeds-primary) !important;
+        }
+
+    html[data-theme="dark"] .emeds-navbar .navbar-collapse > .d-flex {
+        border-left-color: var(--emeds-border);
+    }
+
+    html[data-theme="dark"] .emeds-navbar .navbar-text,
+    html[data-theme="dark"] .emeds-navbar .navbar-text strong {
+        color: var(--emeds-text) !important;
+    }
+
+        html[data-theme="dark"] .emeds-navbar .navbar-text small {
+            color: var(--emeds-muted) !important;
+        }
+
+    html[data-theme="dark"] .emeds-navbar form button,
+    html[data-theme="dark"] .emeds-navbar a[href*="Logout"] {
+        color: var(--emeds-text) !important;
+    }
+
+        html[data-theme="dark"] .emeds-navbar form button:hover,
+        html[data-theme="dark"] .emeds-navbar a[href*="Logout"]:hover {
+            color: var(--emeds-primary) !important;
+        }
+
+    html[data-theme="dark"] .emeds-navbar .theme-toggle-btn {
+        background: var(--emeds-surface);
+        border-color: var(--emeds-border);
+        color: var(--emeds-text);
+    }
+
+        html[data-theme="dark"] .emeds-navbar .theme-toggle-btn:hover {
+            background: var(--emeds-surface-soft);
+            border-color: var(--emeds-primary);
+            color: var(--emeds-primary);
+        }
+
+
+    /* ---------- COMMON WHITE SURFACES ---------- */
+
+    html[data-theme="dark"] .card,
+    html[data-theme="dark"] .emeds-card,
+    html[data-theme="dark"] .emeds-form-card,
+    html[data-theme="dark"] .medicine-card,
+    html[data-theme="dark"] .medicine-details-card,
+    html[data-theme="dark"] .category-card,
+    html[data-theme="dark"] .simple-details-card,
+    html[data-theme="dark"] .delete-card,
+    html[data-theme="dark"] .cart-panel,
+    html[data-theme="dark"] .cart-summary,
+    html[data-theme="dark"] .checkout-card,
+    html[data-theme="dark"] .checkout-summary,
+    html[data-theme="dark"] .confirmation-card,
+    html[data-theme="dark"] .home-feature-card,
+    html[data-theme="dark"] .process-card {
+        background: var(--emeds-surface) !important;
+        color: var(--emeds-text) !important;
+        border-color: var(--emeds-border) !important;
+    }
+
+
+    /* ---------- CARD HEADERS / LIGHT PANELS ---------- */
+
+    html[data-theme="dark"] .card-header,
+    html[data-theme="dark"] .card-footer,
+    html[data-theme="dark"] .confirmation-card-header,
+    html[data-theme="dark"] .delete-summary,
+    html[data-theme="dark"] .medicine-search-panel,
+    html[data-theme="dark"] .cart-empty-state,
+    html[data-theme="dark"] .emeds-empty-state {
+        background: var(--emeds-surface-soft) !important;
+        color: var(--emeds-text) !important;
+        border-color: var(--emeds-border) !important;
+    }
+
+
+    /* ---------- TABLES ---------- */
+
+    html[data-theme="dark"] .table {
+        --bs-table-bg: var(--emeds-surface);
+        --bs-table-color: var(--emeds-text);
+        --bs-table-border-color: var(--emeds-border);
+        --bs-table-striped-bg: var(--emeds-surface-soft);
+        --bs-table-striped-color: var(--emeds-text);
+        --bs-table-hover-bg: #263437;
+        --bs-table-hover-color: var(--emeds-text);
+        background: var(--emeds-surface) !important;
+        color: var(--emeds-text) !important;
+    }
+
+        html[data-theme="dark"] .table thead th {
+            background: var(--emeds-surface-soft) !important;
+            color: var(--emeds-text) !important;
+            border-color: var(--emeds-border) !important;
+        }
+
+        html[data-theme="dark"] .table tbody td {
+            color: var(--emeds-text);
+            border-color: var(--emeds-border) !important;
+        }
+
+        html[data-theme="dark"] .table tbody tr:hover {
+            background: var(--emeds-surface-soft) !important;
+        }
+
+
+    /* ---------- FORMS ---------- */
+
+    html[data-theme="dark"] .form-control,
+    html[data-theme="dark"] .form-select {
+        background-color: #131B1D !important;
+        color: var(--emeds-text) !important;
+        border-color: var(--emeds-border) !important;
+    }
+
+        html[data-theme="dark"] .form-control:focus,
+        html[data-theme="dark"] .form-select:focus {
+            background-color: #131B1D !important;
+            color: var(--emeds-text) !important;
+            border-color: var(--emeds-primary) !important;
+        }
+
+        html[data-theme="dark"] .form-control::placeholder {
+            color: #75878A !important;
+        }
+
+    html[data-theme="dark"] .form-label,
+    html[data-theme="dark"] .form-check-label {
+        color: var(--emeds-text) !important;
+    }
+
+    html[data-theme="dark"] .input-group-text {
+        background-color: var(--emeds-surface-soft) !important;
+        color: var(--emeds-text) !important;
+        border-color: var(--emeds-border) !important;
+    }
+
+
+    /* ---------- HOME PAGE ---------- */
+
+    html[data-theme="dark"] .home-hero {
+        background: linear-gradient( 120deg, var(--emeds-surface) 0%, var(--emeds-surface) 52%, var(--emeds-surface-soft) 100% ) !important;
+        border-color: var(--emeds-border);
+    }
+
+    html[data-theme="dark"] .home-feature-card,
+    html[data-theme="dark"] .process-card {
+        background: var(--emeds-surface) !important;
+    }
+
+    html[data-theme="dark"] .medicine-image-area,
+    html[data-theme="dark"] .medicine-details-visual {
+        background: var(--emeds-surface-soft) !important;
+    }
+
+
+    /* ---------- MEDICINE / CATEGORY ---------- */
+
+    html[data-theme="dark"] .medicine-card-body,
+    html[data-theme="dark"] .category-content {
+        color: var(--emeds-text);
+    }
+
+    html[data-theme="dark"] .medicine-info-row {
+        border-color: var(--emeds-border);
+    }
+
+        html[data-theme="dark"] .medicine-name,
+        html[data-theme="dark"] .medicine-info-row strong,
+        html[data-theme="dark"] .category-content h3,
+        html[data-theme="dark"] .medicine-details-content h1 {
+            color: var(--emeds-text) !important;
+        }
+
+
+    /* ---------- CART / CHECKOUT ---------- */
+
+    html[data-theme="dark"] .cart-item {
+        border-color: var(--emeds-border);
+    }
+
+    html[data-theme="dark"] .summary-total,
+    html[data-theme="dark"] .checkout-divider,
+    html[data-theme="dark"] .checkout-products,
+    html[data-theme="dark"] .checkout-product {
+        border-color: var(--emeds-border);
+    }
+
+    html[data-theme="dark"] .cod-information,
+    html[data-theme="dark"] .summary-note {
+        background: var(--emeds-surface-soft) !important;
+        border-color: var(--emeds-border) !important;
+    }
+
+    html[data-theme="dark"] .cod-icon {
+        background: var(--emeds-surface) !important;
+        color: var(--emeds-primary) !important;
+    }
+
+
+    /* ---------- BADGES / ALERTS ---------- */
+
+    html[data-theme="dark"] .badge-pending {
+        background: #4A3920;
+        color: #E5B967;
+    }
+
+    html[data-theme="dark"] .badge-approved,
+    html[data-theme="dark"] .badge-delivered {
+        background: #23402E;
+        color: #8AC49C;
+    }
+
+    html[data-theme="dark"] .badge-rejected,
+    html[data-theme="dark"] .badge-cancelled {
+        background: #45282A;
+        color: #E68A8A;
+    }
+
+    html[data-theme="dark"] .badge-confirmed,
+    html[data-theme="dark"] .badge-shipped,
+    html[data-theme="dark"] .badge-outfordelivery {
+        background: var(--emeds-primary-soft);
+        color: var(--emeds-primary);
+    }
+
+    html[data-theme="dark"] .badge-packed {
+        background: #303746;
+        color: #AAB8D2;
+    }
+
+    html[data-theme="dark"] .alert-success {
+        background: #203B2B !important;
+        color: #8AC49C !important;
+    }
+
+    html[data-theme="dark"] .alert-danger {
+        background: #432628 !important;
+        color: #E68A8A !important;
+    }
+
+    html[data-theme="dark"] .alert-warning {
+        background: #46361E !important;
+        color: #E5B967 !important;
+    }
+
+
+    /* ---------- ADMIN DASHBOARD ---------- */
+
+    html[data-theme="dark"] .admin-dashboard {
+        color: var(--emeds-text);
+    }
+
+    html[data-theme="dark"] .admin-stat-card,
+    html[data-theme="dark"] .admin-alert-card,
+    html[data-theme="dark"] .admin-management-card,
+    html[data-theme="dark"] .admin-header-badge {
+        background: var(--emeds-surface) !important;
+        border-color: var(--emeds-border) !important;
+        color: var(--emeds-text);
+    }
+
+        html[data-theme="dark"] .admin-stat-card:hover,
+        html[data-theme="dark"] .admin-management-card:hover {
+            border-color: var(--emeds-primary);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+        }
+
+        html[data-theme="dark"] .admin-stat-icon,
+        html[data-theme="dark"] .admin-management-icon,
+        html[data-theme="dark"] .admin-header-badge > span {
+            background: var(--emeds-surface-soft);
+        }
+
+    html[data-theme="dark"] .admin-alert-warning .admin-alert-icon {
+        background: rgba(214, 166, 84, 0.16);
+    }
+
+    html[data-theme="dark"] .admin-alert-prescription .admin-alert-icon {
+        background: var(--emeds-surface-soft);
+    }
+
+    html[data-theme="dark"] .admin-bottom-panel {
+        background: var(--emeds-surface-soft) !important;
+        border-color: var(--emeds-border) !important;
+    }
+
+
+    /* ---------- FOOTER ---------- */
+
+    html[data-theme="dark"] .emeds-footer {
+        background: #10191B !important;
+    }
+
+
+/* =========================================================
+   RESPONSIVE NAVBAR
+   ========================================================= */
+
+@media (max-width: 1199.98px) {
+
+    .emeds-brand {
+        margin-right: 1.25rem;
+    }
+
+    .emeds-navbar .nav-link {
+        padding-left: 0.58rem !important;
+        padding-right: 0.58rem !important;
+    }
+
+    .emeds-navbar .navbar-collapse > .d-flex {
+        padding-left: 1rem;
+        gap: 0.55rem !important;
+    }
+
+    .emeds-navbar .navbar-text {
+        min-width: 135px;
+    }
+}
+
+@media (max-width: 991.98px) {
+
+    .emeds-navbar {
+        min-height: 68px;
+    }
+
+    .emeds-brand {
+        margin-right: 0;
+    }
+
+    .emeds-navbar .navbar-collapse {
+        padding-top: 0.9rem;
+    }
+
+    .emeds-navbar .navbar-nav {
+        align-items: stretch;
+        gap: 0.1rem;
+    }
+
+    .emeds-navbar .nav-link {
+        padding: 0.7rem 0.8rem !important;
+    }
+
+    .emeds-navbar .navbar-collapse > .d-flex {
+        align-items: flex-start !important;
+        margin-left: 0;
+        padding: 0.9rem 0 0;
+        border-left: none;
+        border-top: 1px solid var(--emeds-border);
+    }
+
+    .emeds-navbar .theme-toggle-btn {
+        margin: 0;
+    }
+}
+
+@media (max-width: 575.98px) {
+
+    .emeds-navbar .navbar-text {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .emeds-navbar .navbar-collapse > .d-flex {
+        width: 100%;
+    }
+}
