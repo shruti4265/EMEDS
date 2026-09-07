@@ -1,48 +1,164 @@
 ﻿@{
     ViewData["Title"] = "Upload Prescription";
+    int medicineId = ViewBag.MedicineId;
 }
 
-<h1>Upload Prescription</h1>
+<div class="row justify-content-center">
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["Error"]
+    <div class="col-md-9 col-lg-7 col-xl-6">
+
+        <!-- HEADER -->
+        <div class="mb-4">
+
+            <a asp-controller="Medicine"
+               asp-action="Index"
+               class="text-decoration-none text-muted d-inline-block mb-3">
+                ← Back to Medicines
+            </a>
+
+            <span class="section-eyebrow d-block">
+                PRESCRIPTION UPLOAD
+            </span>
+
+            <h2 class="fw-bold mb-1">
+                Upload Prescription
+            </h2>
+
+            <p class="text-muted mb-0">
+                Upload a valid prescription for the selected medicine.
+            </p>
+
+        </div>
+
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+
+
+        <!-- MAIN CARD -->
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body p-4 p-md-5">
+
+                <!-- SELECTED MEDICINE -->
+                <div class="alert prescription-medicine-alert mb-4">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="prescription-table-icon">
+                            Rx
+                        </div>
+
+                        <div>
+                            <small class="d-block text-muted">
+                                SELECTED MEDICINE
+                            </small>
+
+                            <strong>
+                                Medicine #@medicineId
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <form asp-controller="Prescription"
+                      asp-action="Upload"
+                      method="post"
+                      enctype="multipart/form-data">
+
+                    <!-- EXACTLY MATCHES Upload(... int medicineId) -->
+                    <input type="hidden"
+                           name="medicineId"
+                           value="@medicineId" />
+
+
+                    <div class="mb-4">
+
+                        <label class="form-label fw-semibold">
+                            Prescription File
+                        </label>
+
+
+                        <div class="prescription-upload-box">
+
+                            <div class="prescription-upload-icon">
+                                ↑
+                            </div>
+
+                            <h5 class="fw-bold mb-2">
+                                Select Prescription
+                            </h5>
+
+                            <p class="text-muted small mb-4">
+                                Upload a clear image or PDF of your prescription.
+                            </p>
+
+
+                            <!-- EXACTLY MATCHES IFormFile prescriptionFile -->
+                            <input type="file"
+                                   name="prescriptionFile"
+                                   class="form-control"
+                                   accept=".jpg,.jpeg,.png,.pdf"
+                                   required />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FILE RULES -->
+                    <div class="alert prescription-info-alert mb-4">
+
+                        <strong class="d-block mb-2">
+                            File Requirements
+                        </strong>
+
+                        <div class="small">
+                            <div class="mb-1">
+                                ✓ JPG, JPEG, PNG and PDF files are allowed
+                            </div>
+
+                            <div>
+                                ✓ Maximum file size is 5 MB
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+
+                            Upload Prescription
+
+                        </button>
+
+
+                        <a asp-controller="Medicine"
+                           asp-action="Index"
+                           class="btn btn-light px-4">
+
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
     </div>
-}
 
-<form asp-action="Upload"
-      method="post"
-      enctype="multipart/form-data">
-
-    <input type="hidden" name="medicineId" value="@ViewBag.MedicineId" />
-
-    <div class="mb-3">
-        <label for="prescriptionFile" class="form-label">
-            Select Prescription
-        </label>
-
-        <input type="file"
-               id="prescriptionFile"
-               name="prescriptionFile"
-               class="form-control"
-               accept=".jpg,.jpeg,.png,.pdf"
-               required />
-    </div>
-
-    <small class="text-muted">
-        Allowed formats: JPG, JPEG, PNG and PDF.
-        Maximum file size: 5 MB.
-    </small>
-
-    <br /><br />
-
-    <button type="submit" class="btn btn-primary">
-        Upload
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Back
-    </a>
-</form>
+</div>

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EMEDS_Project.Models.Order>
+﻿@* @model IEnumerable<EMEDS_Project.Models.Order>
 
 @{
     ViewData["Title"] = "Manage Orders";
@@ -70,4 +70,260 @@ else
             }
         </tbody>
     </table>
+} *@  
+
+
+
+
+
+
+@model IEnumerable<EMEDS_Project.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+
+    int totalOrders = Model.Count();
+    int pendingOrders = Model.Count(x => x.OrderStatus == "Pending");
+    int activeOrders = Model.Count(x =>
+        x.OrderStatus != "Delivered" &&
+        x.OrderStatus != "Cancelled");
+    int deliveredOrders = Model.Count(x => x.OrderStatus == "Delivered");
+}
+
+<div class="page-header">
+
+    <span class="section-eyebrow">
+        ADMINISTRATION
+    </span>
+
+    <h2>Manage Orders</h2>
+
+    <p class="page-subtitle">
+        Review customer orders and manage their
+        processing and delivery status.
+    </p>
+
+</div>
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        ✓ @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+
+<!-- REAL COUNTS FROM MODEL -->
+
+<div class="admin-order-stats">
+
+    <div class="admin-stat-card">
+
+        <span>Total Orders</span>
+
+        <strong>
+            @totalOrders
+        </strong>
+
+        <small>
+            All customer orders
+        </small>
+
+    </div>
+
+
+    <div class="admin-stat-card">
+
+        <span>Pending</span>
+
+        <strong>
+            @pendingOrders
+        </strong>
+
+        <small>
+            Awaiting confirmation
+        </small>
+
+    </div>
+
+
+    <div class="admin-stat-card">
+
+        <span>Active Orders</span>
+
+        <strong>
+            @activeOrders
+        </strong>
+
+        <small>
+            Currently being processed
+        </small>
+
+    </div>
+
+
+    <div class="admin-stat-card">
+
+        <span>Delivered</span>
+
+        <strong>
+            @deliveredOrders
+        </strong>
+
+        <small>
+            Successfully completed
+        </small>
+
+    </div>
+
+</div>
+
+
+@if (!Model.Any())
+{
+    <div class="orders-empty-state">
+
+        <div class="orders-empty-icon">
+            O
+        </div>
+
+        <h3>No orders available</h3>
+
+        <p>
+            Customer orders will appear here after
+            they are placed.
+        </p>
+
+    </div>
+}
+else
+{
+    <div class="admin-table-card">
+
+        <div class="admin-table-heading">
+
+            <div>
+                <h4>Customer Orders</h4>
+
+                <p>
+                    @totalOrders order@(totalOrders == 1 ? "" : "s") found
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table admin-orders-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Order</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Delivery Address</th>
+                        <th></th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var order in Model.OrderByDescending(x => x.OrderDate))
+                    {
+                        <tr>
+
+                            <td>
+                                <strong class="admin-order-id">
+                                    #@order.OrderId
+                                </strong>
+                            </td>
+
+
+                            <td>
+
+                                <span class="customer-id-text"
+                                      title="@order.UserId">
+
+                                    @order.UserId
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                @order.OrderDate.ToString("dd MMM yyyy")
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    ₹@order.TotalAmount.ToString("0.00")
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="order-badge @order.OrderStatus.ToLower()">
+
+                                    @(order.OrderStatus == "OutForDelivery"
+                                        ? "Out For Delivery"
+                                        : order.OrderStatus)
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="admin-address-text"
+                                      title="@order.DeliveryAddress">
+
+                                    @order.DeliveryAddress
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <a asp-action="AdminDetails"
+                                   asp-route-id="@order.OrderId"
+                                   class="btn btn-outline-primary btn-sm">
+
+                                    Manage
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 }

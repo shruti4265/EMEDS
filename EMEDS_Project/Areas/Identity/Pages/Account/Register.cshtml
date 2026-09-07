@@ -1,4 +1,4 @@
-@page
+@* @page
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -60,6 +60,241 @@
             }
         </section>
     </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} *@
+
+
+
+
+@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-page">
+
+    <div class="row justify-content-center align-items-center">
+
+        <div class="col-lg-10 col-xl-9">
+
+            <div class="card auth-card border-0 shadow-sm overflow-hidden">
+
+                <div class="row g-0">
+
+                    <!-- LEFT -->
+                    <div class="col-lg-5 d-none d-lg-flex">
+
+                        <div class="auth-side-panel w-100">
+
+                            <div>
+
+                                <div class="auth-logo mb-4">
+                                    E+
+                                </div>
+
+                                <span class="auth-eyebrow">
+                                    JOIN E-MEDS
+                                </span>
+
+                                <h2 class="fw-bold mt-2 mb-3">
+                                    Healthcare access<br />
+                                    made easier.
+                                </h2>
+
+                                <p class="mb-4">
+                                    Create your account to browse medicines,
+                                    upload prescriptions and manage your orders.
+                                </p>
+
+                                <div class="auth-feature">
+                                    <span>✓</span>
+                                    Secure customer account
+                                </div>
+
+                                <div class="auth-feature">
+                                    <span>✓</span>
+                                    Prescription management
+                                </div>
+
+                                <div class="auth-feature">
+                                    <span>✓</span>
+                                    Easy order tracking
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REGISTER -->
+                    <div class="col-lg-7">
+
+                        <div class="auth-form-panel">
+
+                            <div class="mb-4">
+
+                                <span class="section-eyebrow">
+                                    GET STARTED
+                                </span>
+
+                                <h2 class="fw-bold mb-2">
+                                    Create Account
+                                </h2>
+
+                                <p class="text-muted mb-0">
+                                    Register as an E-MEDS customer.
+                                </p>
+
+                            </div>
+
+
+                            <form id="registerForm"
+                                  asp-route-returnUrl="@Model.ReturnUrl"
+                                  method="post">
+
+                                <div asp-validation-summary="ModelOnly"
+                                     class="text-danger small mb-3"
+                                     role="alert">
+                                </div>
+
+
+                                <!-- EMAIL -->
+                                <div class="mb-3">
+
+                                    <label asp-for="Input.Email"
+                                           class="form-label fw-semibold">
+                                        Email Address
+                                    </label>
+
+                                    <input asp-for="Input.Email"
+                                           class="form-control form-control-lg"
+                                           autocomplete="username"
+                                           aria-required="true"
+                                           placeholder="name@example.com" />
+
+                                    <span asp-validation-for="Input.Email"
+                                          class="text-danger small"></span>
+
+                                </div>
+
+
+                                <!-- PASSWORD -->
+                                <div class="mb-3">
+
+                                    <label asp-for="Input.Password"
+                                           class="form-label fw-semibold">
+                                        Password
+                                    </label>
+
+                                    <input asp-for="Input.Password"
+                                           class="form-control form-control-lg"
+                                           autocomplete="new-password"
+                                           aria-required="true"
+                                           placeholder="Create a password" />
+
+                                    <span asp-validation-for="Input.Password"
+                                          class="text-danger small"></span>
+
+                                    <div class="form-text">
+                                        Password must contain at least 6 characters.
+                                    </div>
+
+                                </div>
+
+
+                                <!-- CONFIRM PASSWORD -->
+                                <div class="mb-4">
+
+                                    <label asp-for="Input.ConfirmPassword"
+                                           class="form-label fw-semibold">
+                                        Confirm Password
+                                    </label>
+
+                                    <input asp-for="Input.ConfirmPassword"
+                                           class="form-control form-control-lg"
+                                           autocomplete="new-password"
+                                           aria-required="true"
+                                           placeholder="Re-enter your password" />
+
+                                    <span asp-validation-for="Input.ConfirmPassword"
+                                          class="text-danger small"></span>
+
+                                </div>
+
+
+                                <button id="registerSubmit"
+                                        type="submit"
+                                        class="btn btn-primary btn-lg w-100">
+                                    Create Account
+                                </button>
+
+
+                                <div class="text-center mt-4">
+
+                                    <span class="text-muted">
+                                        Already have an account?
+                                    </span>
+
+                                    <a asp-page="./Login"
+                                       asp-route-returnUrl="@Model.ReturnUrl"
+                                       class="auth-link fw-semibold ms-1">
+                                        Sign In
+                                    </a>
+
+                                </div>
+
+                            </form>
+
+
+                            @if ((Model.ExternalLogins?.Count ?? 0) > 0)
+                            {
+                                <div class="auth-divider my-4">
+                                    <span>OR</span>
+                                </div>
+
+                                <form id="external-account"
+                                      asp-page="./ExternalLogin"
+                                      asp-route-returnUrl="@Model.ReturnUrl"
+                                      method="post">
+
+                                    <div class="d-grid gap-2">
+
+                                        @foreach (var provider in Model.ExternalLogins!)
+                                        {
+                                            <button type="submit"
+                                                    class="btn btn-outline-secondary"
+                                                    name="provider"
+                                                    value="@provider.Name">
+
+                                                Register with @provider.DisplayName
+
+                                            </button>
+                                        }
+
+                                    </div>
+
+                                </form>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
 @section Scripts {

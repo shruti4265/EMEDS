@@ -1,15 +1,24 @@
 ﻿@model IEnumerable<EMEDS_Project.Models.Prescription>
-@inject EMEDS_Project.Repository.IMedicineRepo MedicineRepo
 
 @{
     ViewData["Title"] = "My Prescriptions";
-
-    var prescriptionMedicines = MedicineRepo.GetAllMedicines()
-        .Where(m => m.RequiresPrescription)
-        .ToList();
 }
 
-<h1>My Prescriptions</h1>
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <span class="section-eyebrow">MY PRESCRIPTIONS</span>
+        <h2 class="fw-bold mb-1">My Prescriptions</h2>
+        <p class="text-muted mb-0">
+            View and manage your uploaded prescriptions.
+        </p>
+    </div>
+
+    <a asp-controller="Medicine"
+       asp-action="Index"
+       class="btn btn-primary px-4">
+        Browse Medicines
+    </a>
+</div>
 
 @if (TempData["Success"] != null)
 {
@@ -25,66 +34,146 @@
     </div>
 }
 
-<div class="mb-3">
-    <label class="form-label">Upload a new prescription for:</label>
-    <form asp-action="Upload" method="get" class="d-flex gap-2">
-        <select name="medicineId" class="form-select" style="max-width: 300px;" required>
-            <option value="">-- Select Medicine --</option>
-            @foreach (var medicine in prescriptionMedicines)
-            {
-                <option value="@medicine.MedicineId">@medicine.MedicineName</option>
-            }
-        </select>
-        <button type="submit" class="btn btn-primary">Upload Prescription</button>
-    </form>
-</div>
-
-@if (!Model.Any())
+@if (Model == null || !Model.Any())
 {
-    <div class="alert alert-info">
-        You have not uploaded any prescriptions yet.
+    <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body text-center py-5">
+
+            <div class="prescription-empty-icon mx-auto mb-3">
+                Rx
+            </div>
+
+            <h4 class="fw-bold">No Prescriptions Yet</h4>
+
+            <p class="text-muted mb-4">
+                Your uploaded prescriptions will appear here.
+            </p>
+
+            <a asp-controller="Medicine"
+               asp-action="Index"
+               class="btn btn-primary">
+                Browse Medicines
+            </a>
+
+        </div>
     </div>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Prescription ID</th>
-                <th>Upload Date</th>
-                <th>Status</th>
-                <th>Admin Remarks</th>
-                <th>Action</th>
-            </tr>
-        </thead>
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-        <tbody>
-            @foreach (var prescription in Model)
-            {
-                <tr>
-                    <td>@prescription.PrescriptionId</td>
+        <div class="card-header bg-white p-4">
+            <h5 class="fw-bold mb-1">Uploaded Prescriptions</h5>
+            <small class="text-muted">
+                @Model.Count() prescription@(Model.Count() == 1 ? "" : "s") uploaded
+            </small>
+        </div>
 
-                    <td>
-                        @prescription.UploadDate.ToString("dd-MM-yyyy")
-                    </td>
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
 
-                    <td>@prescription.Status</td>
+                <thead class="table-light">
+                    <tr>
+                        <th>Prescription</th>
+                        <th>Medicine</th>
+                        <th>Upload Date</th>
+                        <th>Status</th>
+                        <th>Admin Remarks</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
 
-                    <td>
-                        @(string.IsNullOrEmpty(prescription.AdminRemarks)
-                            ? "No remarks"
-                            : prescription.AdminRemarks)
-                    </td>
+                <tbody>
 
-                    <td>
-                        <a asp-action="Details"
-                           asp-route-id="@prescription.PrescriptionId"
-                           class="btn btn-primary btn-sm">
-                            Details
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    @foreach (var item in Model.OrderByDescending(x => x.UploadDate))
+                    {
+                        string statusClass =
+                            item.Status == "Approved"
+                                ? "bg-success-subtle text-success"
+                                : item.Status == "Rejected"
+                                    ? "bg-danger-subtle text-danger"
+                                    : "bg-warning-subtle text-warning-emphasis";
+
+                        <tr>
+
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="prescription-table-icon">
+                                        Rx
+                                    </div>
+
+                                    <div>
+                                        <strong class="d-block">
+                                            #@item.PrescriptionId
+                                        </strong>
+
+                                        <small class="text-muted">
+                                            Prescription
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                @if (item.Medicine != null)
+                                {
+                                    <strong>@item.Medicine.MedicineName</strong>
+
+                                    <small class="d-block text-muted">
+                                        Medicine #@item.MedicineId
+                                    </small>
+                                }
+                                else
+                                {
+                                    <span>Medicine #@item.MedicineId</span>
+                                }
+                            </td>
+
+                            <td>
+                                @item.UploadDate.ToString("dd MMM yyyy")
+
+                                <small class="d-block text-muted">
+                                    @item.UploadDate.ToString("hh:mm tt")
+                                </small>
+                            </td>
+
+                            <td>
+                                <span class="badge rounded-pill @statusClass px-3 py-2">
+                                    @item.Status
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (string.IsNullOrWhiteSpace(item.AdminRemarks))
+                                {
+                                    <span class="text-muted">—</span>
+                                }
+                                else
+                                {
+                                    <span class="prescription-remarks"
+                                          title="@item.AdminRemarks">
+                                        @item.AdminRemarks
+                                    </span>
+                                }
+                            </td>
+
+                            <td class="text-end">
+                                <a asp-action="Details"
+                                   asp-route-id="@item.PrescriptionId"
+                                   class="btn btn-outline-primary btn-sm">
+                                    View Details
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
 }

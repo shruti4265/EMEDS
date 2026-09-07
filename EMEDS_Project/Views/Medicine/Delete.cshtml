@@ -1,52 +1,80 @@
-﻿@model EMEDS_Project.Models.Medicine
+﻿
+@model EMEDS_Project.Models.Medicine
 
 @{
     ViewData["Title"] = "Delete Medicine";
 }
 
-<h1>Delete Medicine</h1>
+<div class="delete-container">
 
-<div class="alert alert-danger">
-    <h4>Are you sure you want to delete this medicine?</h4>
-    <p>This action cannot be undone.</p>
-</div>
+    <div class="delete-card">
 
-<div class="card mb-3">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Medicine Name</dt>
-            <dd class="col-sm-9">@Model.MedicineName</dd>
+        <div class="delete-icon">
+            !
+        </div>
 
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">@Model.Description</dd>
+        <span class="section-eyebrow danger-eyebrow">
+            DELETE MEDICINE
+        </span>
 
-            <dt class="col-sm-3">Price</dt>
-            <dd class="col-sm-9">@Model.Price</dd>
+        <h2>Delete @Model.MedicineName?</h2>
 
-            <dt class="col-sm-3">Category Id</dt>
-            <dd class="col-sm-9">@Model.CategoryId</dd>
+        <p class="delete-message">
+            Are you sure you want to remove this medicine?
+            This action cannot be undone.
+        </p>
 
-            <dt class="col-sm-3">Supplier Id</dt>
-            <dd class="col-sm-9">@Model.SupplierId</dd>
 
-            <dt class="col-sm-3">Prescription Required</dt>
-            <dd class="col-sm-9">
-                @(Model.RequiresPrescription ? "Yes" : "No")
-            </dd>
-        </dl>
+        <div class="delete-summary">
+
+            <div>
+                <span>Medicine</span>
+                <strong>@Model.MedicineName</strong>
+            </div>
+
+            <div>
+                <span>Price</span>
+                <strong>₹@Model.Price.ToString("0.00")</strong>
+            </div>
+
+            <div>
+                <span>Category</span>
+                <strong>#@Model.CategoryId</strong>
+            </div>
+
+            <div>
+                <span>Prescription</span>
+                <strong>
+                    @(Model.RequiresPrescription ? "Required" : "Not Required")
+                </strong>
+            </div>
+
+        </div>
+
+
+        <form asp-action="DeleteConfirmed"
+              method="post">
+
+            <input type="hidden"
+                   name="id"
+                   value="@Model.MedicineId" />
+
+            <div class="delete-actions">
+
+                <a asp-action="Index"
+                   class="btn btn-light">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    Delete Medicine
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
+
 </div>
-
-<form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden"
-           name="id"
-           value="@Model.MedicineId" />
-
-    <button type="submit" class="btn btn-danger">
-        Delete
-    </button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Cancel
-    </a>
-</form>

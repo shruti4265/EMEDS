@@ -1,67 +1,112 @@
-﻿@model IEnumerable<EMEDS_Project.Models.Category>
+﻿
+@model IEnumerable<EMEDS_Project.Models.Category>
 
 @{
     ViewData["Title"] = "Categories";
 }
 
-<h1>Categories</h1>
+<div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-3">
 
-@if (User.IsInRole("Admin"))
-{
-    <p>
-        <a asp-action="Create" class="btn btn-primary">
-            Add Category
+    <div>
+
+        <span class="section-eyebrow">
+            MEDICINE CATALOGUE
+        </span>
+
+        <h2>Categories</h2>
+
+        <p class="page-subtitle mb-0">
+            Browse medicine categories available on E-MEDS.
+        </p>
+
+    </div>
+
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create"
+           class="btn btn-primary">
+            + Add Category
         </a>
-    </p>
-}
+    }
+
+</div>
+
 
 @if (!Model.Any())
 {
-    <div class="alert alert-info">
-        No categories found.
+    <div class="emeds-empty-state">
+
+        <div class="empty-state-icon">
+            C
+        </div>
+
+        <h4>No categories found</h4>
+
+        <p>
+            There are currently no medicine categories available.
+        </p>
+
     </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Category Name</th>
-                <th>Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+    <div class="category-grid">
 
-        <tbody>
-            @foreach (var category in Model)
-            {
-                <tr>
-                    <td>@category.CategoryName</td>
-                    <td>@category.Description</td>
-                    <td>
-                        <a asp-action="Details"
+        @foreach (var category in Model)
+        {
+            <div class="category-card">
+
+                <div class="category-icon">
+                    +
+                </div>
+
+                <div class="category-content">
+
+                    <span class="category-id">
+                        CATEGORY #@category.CategoryId
+                    </span>
+
+                    <h3>
+                        @category.CategoryName
+                    </h3>
+
+                    <p>
+                        @(string.IsNullOrWhiteSpace(category.Description)
+                            ? "No description available for this category."
+                            : category.Description)
+                    </p>
+
+                </div>
+
+
+                <div class="category-actions">
+
+                    <a asp-action="Details"
+                       asp-route-id="@category.CategoryId"
+                       class="btn btn-outline-primary btn-sm">
+                        Details
+                    </a>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit"
                            asp-route-id="@category.CategoryId"
-                           class="btn btn-info btn-sm">
-                            Details
+                           class="btn btn-light btn-sm">
+                            Edit
                         </a>
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-action="Edit"
-                               asp-route-id="@category.CategoryId"
-                               class="btn btn-warning btn-sm">
-                                Edit
-                            </a>
+                        <a asp-action="Delete"
+                           asp-route-id="@category.CategoryId"
+                           class="btn btn-outline-danger btn-sm">
+                            Delete
+                        </a>
+                    }
 
-                            <a asp-action="Delete"
-                               asp-route-id="@category.CategoryId"
-                               class="btn btn-danger btn-sm">
-                                Delete
-                            </a>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                </div>
+
+            </div>
+        }
+
+    </div>
 }

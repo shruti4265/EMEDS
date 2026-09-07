@@ -1,34 +1,90 @@
-﻿@model EMEDS_Project.Models.Category
+﻿
+
+@model EMEDS_Project.Models.Category
 
 @{
     ViewData["Title"] = "Add Category";
 }
 
-<h1>Add Category</h1>
+<div class="form-page-header">
 
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <span class="section-eyebrow">
+        CATEGORY MANAGEMENT
+    </span>
 
-    <div class="mb-3">
-        <label asp-for="CategoryName" class="form-label"></label>
-        <input asp-for="CategoryName" class="form-control" />
-        <span asp-validation-for="CategoryName" class="text-danger"></span>
-    </div>
+    <h2>Add Category</h2>
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+    <p>
+        Create a new category for the medicine catalogue.
+    </p>
 
-    <button type="submit" class="btn btn-primary">
-        Add Category
-    </button>
+</div>
 
-    <a asp-action="Index" class="btn btn-secondary">
-        Back to List
-    </a>
-</form>
+
+<div class="emeds-form-card">
+
+    <form asp-action="Create" method="post">
+
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
+        </div>
+
+
+        <div class="mb-4">
+
+            <label asp-for="CategoryName"
+                   class="form-label">
+                Category Name
+            </label>
+
+            <input asp-for="CategoryName"
+                   class="form-control"
+                   placeholder="Enter category name" />
+
+            <span asp-validation-for="CategoryName"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <div class="mb-4">
+
+            <label asp-for="Description"
+                   class="form-label">
+                Description
+            </label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="5"
+                      placeholder="Enter a short description"></textarea>
+
+            <span asp-validation-for="Description"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Add Category
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-light">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

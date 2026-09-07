@@ -1,4 +1,4 @@
-﻿@model EMEDS_Project.Models.Order
+﻿@* @model EMEDS_Project.Models.Order
 
 @{
     ViewData["Title"] = "Manage Order";
@@ -116,4 +116,391 @@
 <a asp-action="ManageOrders"
    class="btn btn-secondary">
     Back to Manage Orders
-</a>
+</a> *@   
+
+
+
+
+
+
+
+@model EMEDS_Project.Models.Order
+
+@{
+    ViewData["Title"] = "Manage Order";
+
+    string[] statuses =
+    {
+        "Pending",
+        "Confirmed",
+        "Packed",
+        "Shipped",
+        "OutForDelivery",
+        "Delivered"
+    };
+
+    int currentStatusIndex =
+        Array.IndexOf(statuses, Model.OrderStatus);
+}
+
+<div class="details-back-link">
+
+    <a asp-action="ManageOrders">
+        ← Back to Manage Orders
+    </a>
+
+</div>
+
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        ✓ @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+
+<div class="order-details-header">
+
+    <div>
+
+        <span class="section-eyebrow">
+            ADMIN ORDER MANAGEMENT
+        </span>
+
+        <h2>
+            Order #@Model.OrderId
+        </h2>
+
+        <p>
+            Placed on
+            @Model.OrderDate.ToString("dd MMMM yyyy 'at' hh:mm tt")
+        </p>
+
+    </div>
+
+
+    <span class="order-badge @Model.OrderStatus.ToLower() large-order-badge">
+
+        @(Model.OrderStatus == "OutForDelivery"
+            ? "Out For Delivery"
+            : Model.OrderStatus)
+
+    </span>
+
+</div>
+
+
+<!-- PROGRESS -->
+
+<div class="tracking-card">
+
+    <div class="tracking-heading">
+
+        <div>
+
+            <span class="section-eyebrow">
+                ORDER PROGRESS
+            </span>
+
+            <h4>Processing Status</h4>
+
+        </div>
+
+    </div>
+
+
+    @if (Model.OrderStatus == "Cancelled")
+    {
+        <div class="tracking-cancelled">
+
+            <div>×</div>
+
+            <section>
+
+                <strong>Order Cancelled</strong>
+
+                <p>
+                    This order has been marked as cancelled.
+                </p>
+
+            </section>
+
+        </div>
+    }
+    else
+    {
+        <div class="order-tracker">
+
+            @for (int i = 0; i < statuses.Length; i++)
+            {
+                bool completed = i <= currentStatusIndex;
+
+                string displayStatus =
+                    statuses[i] == "OutForDelivery"
+                    ? "Out for Delivery"
+                    : statuses[i];
+
+                <div class="tracker-step @(completed ? "completed" : "")">
+
+                    <div class="tracker-circle">
+
+                        @if (i < currentStatusIndex)
+                        {
+                            <span>✓</span>
+                        }
+                        else
+                        {
+                            <span>@(i + 1)</span>
+                        }
+
+                    </div>
+
+                    <span class="tracker-label">
+                        @displayStatus
+                    </span>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+
+
+<div class="row g-4">
+
+    <!-- ORDER INFORMATION -->
+
+    <div class="col-lg-8">
+
+        <div class="order-details-panel">
+
+            <div class="order-panel-heading">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        ORDER CONTENTS
+                    </span>
+
+                    <h4>Order Items</h4>
+
+                </div>
+
+            </div>
+
+
+            <div class="order-items-list">
+
+                @foreach (var item in Model.OrderItems)
+                {
+                    <div class="order-detail-item">
+
+                        <div class="order-item-icon">
+                            +
+                        </div>
+
+
+                        <div class="order-item-name">
+
+                            <small>MEDICINE</small>
+
+                            <strong>
+                                Medicine #@item.MedicineId
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>QUANTITY</small>
+
+                            <strong>
+                                @item.Quantity
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <small>UNIT PRICE</small>
+
+                            <strong>
+                                ₹@item.UnitPrice.ToString("0.00")
+                            </strong>
+
+                        </div>
+
+
+                        <div class="order-item-subtotal">
+
+                            <small>SUBTOTAL</small>
+
+                            <strong>
+                                ₹@item.Subtotal.ToString("0.00")
+                            </strong>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <div class="order-total-row">
+
+                <span>Order Total</span>
+
+                <strong>
+                    ₹@Model.TotalAmount.ToString("0.00")
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+
+    <div class="col-lg-4">
+
+        <div class="admin-order-sidebar">
+
+            <span class="section-eyebrow">
+                ORDER INFORMATION
+            </span>
+
+            <h4>Details</h4>
+
+
+            <div class="order-summary-line">
+
+                <span>Order ID</span>
+
+                <strong>
+                    #@Model.OrderId
+                </strong>
+
+            </div>
+
+
+            <div class="order-summary-line">
+
+                <span>Total Amount</span>
+
+                <strong>
+                    ₹@Model.TotalAmount.ToString("0.00")
+                </strong>
+
+            </div>
+
+
+            <div class="admin-customer-box">
+
+                <span>CUSTOMER ID</span>
+
+                <p>
+                    @Model.UserId
+                </p>
+
+            </div>
+
+
+            <div class="order-address-box">
+
+                <span>DELIVERY ADDRESS</span>
+
+                <p>
+                    @Model.DeliveryAddress
+                </p>
+
+            </div>
+
+
+            <div class="admin-status-divider"></div>
+
+
+            <span class="section-eyebrow">
+                UPDATE STATUS
+            </span>
+
+            <h5>Order Status</h5>
+
+
+            <form asp-action="UpdateOrderStatus"
+                  method="post">
+
+                <input type="hidden"
+                       name="orderId"
+                       value="@Model.OrderId" />
+
+
+                <select name="orderStatus"
+                        class="form-select mb-3">
+
+                    <option value="Pending"
+                            selected="@(Model.OrderStatus == "Pending")">
+                        Pending
+                    </option>
+
+                    <option value="Confirmed"
+                            selected="@(Model.OrderStatus == "Confirmed")">
+                        Confirmed
+                    </option>
+
+                    <option value="Packed"
+                            selected="@(Model.OrderStatus == "Packed")">
+                        Packed
+                    </option>
+
+                    <option value="Shipped"
+                            selected="@(Model.OrderStatus == "Shipped")">
+                        Shipped
+                    </option>
+
+                    <option value="OutForDelivery"
+                            selected="@(Model.OrderStatus == "OutForDelivery")">
+                        Out For Delivery
+                    </option>
+
+                    <option value="Delivered"
+                            selected="@(Model.OrderStatus == "Delivered")">
+                        Delivered
+                    </option>
+
+                    <option value="Cancelled"
+                            selected="@(Model.OrderStatus == "Cancelled")">
+                        Cancelled
+                    </option>
+
+                </select>
+
+
+                <button type="submit"
+                        class="btn btn-primary w-100">
+
+                    Update Order Status
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

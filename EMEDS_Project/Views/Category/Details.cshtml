@@ -1,32 +1,65 @@
-﻿@model EMEDS_Project.Models.Category
+﻿
+@model EMEDS_Project.Models.Category
 
 @{
     ViewData["Title"] = "Category Details";
 }
 
-<h1>Category Details</h1>
+<div class="details-back-link">
+    <a asp-action="Index">
+        ← Back to Categories
+    </a>
+</div>
 
-<div class="card">
-    <div class="card-body">
-        <h4 class="card-title">@Model.CategoryName</h4>
 
-        <dl class="row">
-            <dt class="col-sm-3">Category Name</dt>
-            <dd class="col-sm-9">@Model.CategoryName</dd>
+<div class="simple-details-card">
 
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">@Model.Description</dd>
-        </dl>
+    <div class="simple-details-icon">
+        +
+    </div>
 
-        <a asp-action="Edit"
-           asp-route-id="@Model.CategoryId"
-           class="btn btn-warning">
-            Edit
-        </a>
+    <span class="section-eyebrow">
+        CATEGORY DETAILS
+    </span>
+
+    <h2>@Model.CategoryName</h2>
+
+    <p class="simple-details-description">
+        @(string.IsNullOrWhiteSpace(Model.Description)
+            ? "No description available for this category."
+            : Model.Description)
+    </p>
+
+
+    <div class="simple-detail-row">
+
+        <span>Category ID</span>
+
+        <strong>
+            #@Model.CategoryId
+        </strong>
+
+    </div>
+
+
+    <div class="details-actions">
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Edit"
+               asp-route-id="@Model.CategoryId"
+               class="btn btn-primary">
+                Edit Category
+            </a>
+        }
 
         <a asp-action="Index"
-           class="btn btn-secondary">
-            Back to List
+           class="btn btn-light">
+            Back to Categories
         </a>
+
     </div>
+
 </div>
+
+

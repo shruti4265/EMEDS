@@ -1,44 +1,95 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>@ViewData["Title"] - EMEDS_Project</title>
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - E-MEDS</title>
+
+    @* =====================================================
+       APPLY SAVED THEME BEFORE PAGE RENDERS
+       This prevents the page from flashing light before
+       dark mode is applied.
+       ===================================================== *@
+
+    <script>
+        (function () {
+
+            const savedTheme = localStorage.getItem("emeds-theme");
+
+            if (savedTheme === "dark") {
+                document.documentElement.setAttribute(
+                    "data-theme",
+                    "dark"
+                );
+            }
+
+        })();
+    </script>
+
 
     <script type="importmap"></script>
 
+
+    <!-- BOOTSTRAP -->
+
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+
+    <!-- E-MEDS CSS -->
 
     <link rel="stylesheet"
           href="~/css/site.css"
           asp-append-version="true" />
 
+
     <link rel="stylesheet"
           href="~/EMEDS_Project.styles.css"
           asp-append-version="true" />
+
 </head>
+
 
 <body>
 
+
+    <!-- =========================
+         NAVBAR
+         ========================= -->
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg emeds-navbar">
 
-                <a class="navbar-brand"
+            <div class="container">
+
+
+                <!-- BRAND -->
+
+                <a class="navbar-brand emeds-brand"
                    asp-area=""
                    asp-controller="Home"
                    asp-action="Index">
-                    EMEDS_Project
+
+                    <span class="emeds-brand-mark">+</span>
+
+                    <span>E-MEDS</span>
+
                 </a>
+
+
+                <!-- MOBILE TOGGLER -->
 
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse"
-                        aria-controls="navbarSupportedContent"
+                        data-bs-target="#emedsNavbar"
+                        aria-controls="emedsNavbar"
                         aria-expanded="false"
                         aria-label="Toggle navigation">
 
@@ -46,111 +97,605 @@
 
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
-                    <ul class="navbar-nav flex-grow-1">
+                <!-- NAVIGATION -->
 
-                        <!-- Home -->
+                <div class="collapse navbar-collapse"
+                     id="emedsNavbar">
+
+
+                    <!-- LEFT NAVIGATION -->
+
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
+
+                            <a class="nav-link"
                                asp-area=""
                                asp-controller="Home"
                                asp-action="Index">
+
                                 Home
+
                             </a>
+
                         </li>
 
-                        <!-- Medicine -->
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
+
+                            <a class="nav-link"
                                asp-area=""
                                asp-controller="Medicine"
                                asp-action="Index">
+
                                 Medicines
+
                             </a>
+
                         </li>
 
-                        <!-- Category -->
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark"
+
+                            <a class="nav-link"
                                asp-area=""
                                asp-controller="Category"
                                asp-action="Index">
+
                                 Categories
+
                             </a>
+
                         </li>
 
-                       
+
+
+                        @* =================================
+                           ADMIN NAVIGATION
+                           ================================= *@
+
                         @if (User.IsInRole("Admin"))
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Supplier" asp-action="Index">Suppliers</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Index">Inventory</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Prescription" asp-action="ManagePrescriptions">Prescriptions</a>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Prescription" asp-action="Index">My Prescriptions</a>
-    </li>
-}
- <!-- Privacy -->
-                        <li class="nav-item">
-                            <a class="nav-link text-dark"
-                               asp-area=""
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Privacy
-                            </a>
-                        </li>
+                        {
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Supplier"
+                                   asp-action="Index">
+
+                                    Suppliers
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Inventory"
+                                   asp-action="Index">
+
+                                    Inventory
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Order"
+                                   asp-action="ManageOrders">
+
+                                    Orders
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Prescription"
+                                   asp-action="ManagePrescriptions">
+
+                                    Prescriptions
+
+                                </a>
+
+                            </li>
+
+                        }
+
+
+                        @* =================================
+                           CUSTOMER NAVIGATION
+                           ================================= *@
+
+                        else if (User.Identity != null &&
+                                 User.Identity.IsAuthenticated)
+                        {
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Cart"
+                                   asp-action="Index">
+
+                                    Cart
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Order"
+                                   asp-action="MyOrders">
+
+                                    My Orders
+
+                                </a>
+
+                            </li>
+
+
+                            <li class="nav-item">
+
+                                <a class="nav-link"
+                                   asp-controller="Prescription"
+                                   asp-action="Index">
+
+                                    Prescriptions
+
+                                </a>
+
+                            </li>
+
+                        }
+
                     </ul>
 
-                    <!-- Login / Register / Logout -->
-                    <partial name="_LoginPartial" />
+
+
+                    <!-- =========================
+                         RIGHT SIDE
+                         THEME + LOGIN
+                         ========================= -->
+
+                    <div class="d-flex align-items-center gap-2">
+
+
+                        <!-- DARK / LIGHT THEME BUTTON -->
+
+                        <button type="button"
+                                id="themeToggle"
+                                class="btn theme-toggle-btn"
+                                title="Switch to dark theme"
+                                aria-label="Switch between light and dark theme">
+
+                            <span id="themeIcon">
+                                🌙
+                            </span>
+
+                        </button>
+
+
+                        <!-- LOGIN / LOGOUT -->
+
+                        <partial name="_LoginPartial" />
+
+
+                    </div>
+
 
                 </div>
+
             </div>
 
         </nav>
+
     </header>
 
-    <div class="container">
 
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
 
-    </div>
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
 
-    <footer class="border-top footer text-muted">
+    <main class="emeds-main">
 
         <div class="container">
-            &copy; 2026 - EMEDS_Project -
-            <a asp-area=""
-               asp-controller="Home"
-               asp-action="Privacy">
-                Privacy
-            </a>
+
+            @RenderBody()
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =========================
+         FOOTER
+         ========================= -->
+
+    <footer class="emeds-footer">
+
+        <div class="container">
+
+            <div class="row g-4">
+
+
+                <!-- BRAND -->
+
+                <div class="col-lg-5 col-md-6">
+
+                    <div class="footer-brand mb-2">
+
+                        E-MEDS
+
+                    </div>
+
+                    <p class="mb-0">
+
+                        A simple and convenient platform for
+                        managing medicines, prescriptions and
+                        orders.
+
+                    </p>
+
+                </div>
+
+
+                <!-- NAVIGATION -->
+
+                <div class="col-lg-2 col-md-3">
+
+                    <h6 class="mb-3">
+
+                        Navigation
+
+                    </h6>
+
+                    <div class="d-flex flex-column gap-2">
+
+                        <a asp-controller="Home"
+                           asp-action="Index">
+                            Home
+                        </a>
+
+                        <a asp-controller="Medicine"
+                           asp-action="Index">
+                            Medicines
+                        </a>
+
+                        <a asp-controller="Category"
+                           asp-action="Index">
+                            Categories
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCOUNT -->
+
+                <div class="col-lg-2 col-md-3">
+
+                    <h6 class="mb-3">
+
+                        Account
+
+                    </h6>
+
+                    <div class="d-flex flex-column gap-2">
+
+                        @if (User.Identity != null &&
+                             User.Identity.IsAuthenticated)
+                        {
+
+                            @if (!User.IsInRole("Admin"))
+                            {
+
+                                <a asp-controller="Order"
+                                   asp-action="MyOrders">
+
+                                    My Orders
+
+                                </a>
+
+
+                                <a asp-controller="Prescription"
+                                   asp-action="Index">
+
+                                    Prescriptions
+
+                                </a>
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            <a asp-area="Identity"
+                               asp-page="/Account/Login">
+
+                                Login
+
+                            </a>
+
+
+                            <a asp-area="Identity"
+                               asp-page="/Account/Register">
+
+                                Register
+
+                            </a>
+
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUPPORT -->
+
+                <div class="col-lg-3 col-md-6">
+
+                    <h6 class="mb-3">
+
+                        Support
+
+                    </h6>
+
+                    <p class="mb-2">
+
+                        Need help using E-MEDS?
+
+                    </p>
+
+
+                    @if (User.Identity != null &&
+                         User.Identity.IsAuthenticated)
+                    {
+
+                        <a asp-controller="Chatbot"
+                           asp-action="Index">
+
+                            Open Help Assistant →
+
+                        </a>
+
+                    }
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FOOTER BOTTOM -->
+
+            <div class="footer-bottom">
+
+                &copy; 2026 E-MEDS.
+                All rights reserved.
+
+            </div>
+
         </div>
 
     </footer>
 
+
+
+    <!-- =========================
+         CHATBOT FLOATING BUTTON
+         ONLY AFTER LOGIN
+         ========================= -->
+
+    @if (User.Identity != null &&
+         User.Identity.IsAuthenticated)
+    {
+
+        <a asp-controller="Chatbot"
+           asp-action="Index"
+           class="chatbot-floating-btn"
+           title="E-MEDS Help Assistant">
+
+            <span>
+                💬
+            </span>
+
+            <span class="chatbot-floating-text">
+                Help
+            </span>
+
+        </a>
+
+    }
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
+
+    <!-- JQUERY -->
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+
+    <!-- BOOTSTRAP -->
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- PROJECT JS -->
 
     <script src="~/js/site.js"
             asp-append-version="true"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <!-- =========================
+         DARK / LIGHT THEME SCRIPT
+         ========================= -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+
+                const themeToggle =
+                    document.getElementById("themeToggle");
+
+
+                const themeIcon =
+                    document.getElementById("themeIcon");
+
+
+
+                /*
+                 * Update moon / sun icon
+                 */
+
+                function updateThemeIcon() {
+
+
+                    const isDark =
+                        document.documentElement
+                            .getAttribute("data-theme") === "dark";
+
+
+                    if (themeIcon) {
+
+                        themeIcon.textContent =
+                            isDark ? "☀️" : "🌙";
+
+                    }
+
+
+                    if (themeToggle) {
+
+                        themeToggle.title =
+                            isDark
+                                ? "Switch to light theme"
+                                : "Switch to dark theme";
+
+                    }
+
+                }
+
+
+
+                /*
+                 * Apply correct icon
+                 * when page loads
+                 */
+
+                updateThemeIcon();
+
+
+
+                /*
+                 * Toggle theme
+                 */
+
+                if (themeToggle) {
+
+
+                    themeToggle.addEventListener(
+                        "click",
+                        function () {
+
+
+                            const isDark =
+                                document.documentElement
+                                    .getAttribute("data-theme") === "dark";
+
+
+                            /*
+                             * DARK -> LIGHT
+                             */
+
+                            if (isDark) {
+
+
+                                document.documentElement
+                                    .removeAttribute(
+                                        "data-theme"
+                                    );
+
+
+                                localStorage.setItem(
+                                    "emeds-theme",
+                                    "light"
+                                );
+
+                            }
+
+
+                            /*
+                             * LIGHT -> DARK
+                             */
+
+                            else {
+
+
+                                document.documentElement
+                                    .setAttribute(
+                                        "data-theme",
+                                        "dark"
+                                    );
+
+
+                                localStorage.setItem(
+                                    "emeds-theme",
+                                    "dark"
+                                );
+
+                            }
+
+
+                            /*
+                             * Change icon
+                             */
+
+                            updateThemeIcon();
+
+
+                        }
+                    );
+
+                }
+
+
+            }
+        );
+
+    </script>
+
+    <!-- PAGE SPECIFIC SCRIPTS -->
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
+
 
 </body>
+
 </html>

@@ -1,62 +1,229 @@
-﻿@model EMEDS_Project.Models.Medicine
+﻿
+
+@model EMEDS_Project.Models.Medicine
+@inject EMEDS_Project.Repository.IPrescriptionRepo PrescriptionRepo
+@inject Microsoft.AspNetCore.Identity.UserManager<EMEDS_Project.Data.ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Add Medicine";
+    ViewData["Title"] = "Medicine Details";
+
+    string? currentUserId = null;
+
+    if (!User.IsInRole("Admin"))
+    {
+        currentUserId = UserManager.GetUserId(User);
+    }
+
+    bool needsPrescriptionUpload =
+        Model.RequiresPrescription &&
+        (currentUserId == null ||
+         !PrescriptionRepo.HasApprovedPrescriptionForMedicine(
+             currentUserId,
+             Model.MedicineId));
 }
 
-<h1>Add Medicine</h1>
-
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="mb-3">
-        <label asp-for="MedicineName" class="form-label"></label>
-        <input asp-for="MedicineName" class="form-control" />
-        <span asp-validation-for="MedicineName" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Price" class="form-label"></label>
-        <input asp-for="Price" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="CategoryId" class="form-label"></label>
-        <input asp-for="CategoryId" class="form-control" type="number" />
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="SupplierId" class="form-label"></label>
-        <input asp-for="SupplierId" class="form-control" type="number" />
-        <span asp-validation-for="SupplierId" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="ImageUrl" class="form-label"></label>
-        <input asp-for="ImageUrl" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-    </div>
-
-    <div class="form-check mb-3">
-        <input asp-for="RequiresPrescription" class="form-check-input" />
-        <label asp-for="RequiresPrescription" class="form-check-label"></label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add Medicine</button>
-
-    <a asp-action="Index" class="btn btn-secondary">
-        Back to List
+<div class="details-back-link">
+    <a asp-action="Index">
+        ← Back to Medicines
     </a>
-</form>
+</div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+
+<div class="medicine-details-card">
+
+    <div class="row g-0">
+
+
+        <!-- IMAGE -->
+
+        <div class="col-lg-5 medicine-details-visual">
+
+            @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl"
+                     alt="@Model.MedicineName"
+                     class="medicine-details-image" />
+            }
+            else
+            {
+                <div class="medicine-details-placeholder">
+
+                    <div class="details-plus">
+                        +
+                    </div>
+
+                    <span>E-MEDS</span>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- INFORMATION -->
+
+        <div class="col-lg-7">
+
+            <div class="medicine-details-content">
+
+                <div class="d-flex justify-content-between align-items-start gap-3">
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            MEDICINE DETAILS
+                        </span>
+
+                        <h1>
+                            @Model.MedicineName
+                        </h1>
+
+                    </div>
+
+                    @if (Model.RequiresPrescription)
+                    {
+                        <span class="prescription-tag static-tag">
+                            Rx Required
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="otc-tag static-tag">
+                            No Prescription
+                        </span>
+                    }
+
+                </div>
+
+
+                <div class="details-price">
+                    ₹@Model.Price.ToString("0.00")
+                </div>
+
+
+                <p class="details-description">
+
+                    @(string.IsNullOrWhiteSpace(Model.Description)
+                        ? "No description is available for this medicine."
+                        : Model.Description)
+
+                </p>
+
+
+                <div class="medicine-detail-list">
+
+                    <div class="detail-row">
+
+                        <span>Medicine ID</span>
+
+                        <strong>
+                            #@Model.MedicineId
+                        </strong>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>Category</span>
+
+                        <strong>
+                            @(Model.Category?.CategoryName
+                                ?? $"Category #{Model.CategoryId}")
+                        </strong>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>Supplier</span>
+
+                        <strong>
+                            Supplier #@Model.SupplierId
+                        </strong>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>Prescription</span>
+
+                        <strong>
+                            @(Model.RequiresPrescription
+                                ? "Required"
+                                : "Not Required")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CUSTOMER -->
+                @if (!User.IsInRole("Admin"))
+                {
+                    <div class="details-actions">
+
+                        @if (needsPrescriptionUpload)
+                        {
+                            <a asp-controller="Prescription"
+                               asp-action="Upload"
+                               asp-route-medicineId="@Model.MedicineId"
+                               class="btn prescription-btn btn-lg">
+
+                                Upload Prescription to Buy
+
+                            </a>
+                        }
+                        else
+                        {
+                            <form asp-controller="Cart"
+                                  asp-action="AddToCart"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="medicineId"
+                                       value="@Model.MedicineId" />
+
+                                <button type="submit"
+                                        class="btn btn-primary btn-lg">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </form>
+                        }
+
+                    </div>
+                }
+
+
+                <!-- ADMIN -->
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="details-actions">
+
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.MedicineId"
+                           class="btn btn-primary">
+                            Edit Medicine
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@Model.MedicineId"
+                           class="btn btn-outline-danger">
+                            Delete
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

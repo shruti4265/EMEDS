@@ -2,43 +2,212 @@
 
 @{
     ViewData["Title"] = "Edit Inventory";
+    bool isLowStock = Model.StockQuantity <= Model.ReorderLevel;
 }
 
-<div class="container mt-4">
-    <h2>Edit Inventory</h2>
+<div class="container-fluid px-0">
 
-    <form asp-action="Edit" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="InventoryId" />
-        <input type="hidden" asp-for="MedicineId" />
+    <div class="mb-3">
+        <a asp-action="Index"
+           class="text-decoration-none text-muted">
+            ← Back to Inventory
+        </a>
+    </div>
 
-        <div class="mb-3">
-            <label class="form-label">Medicine ID</label>
-            <input value="@Model.MedicineId" class="form-control" disabled />
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-xl-7">
+
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+
+                <div>
+                    <span class="section-eyebrow">INVENTORY</span>
+
+                    <h2 class="fw-bold mb-1">
+                        Edit Inventory
+                    </h2>
+
+                    <p class="text-muted mb-0">
+                        Update stock, reorder level and supplier information.
+                    </p>
+                </div>
+
+                @if (isLowStock)
+                {
+                    <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2">
+                        Low Stock
+                    </span>
+                }
+                else
+                {
+                    <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                        In Stock
+                    </span>
+                }
+
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white p-4">
+
+                    <h5 class="fw-bold mb-1">
+                        Inventory #@Model.InventoryId
+                    </h5>
+
+                    <small class="text-muted">
+                        Modify the inventory information below.
+                    </small>
+
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="Edit" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"></div>
+
+                        <!-- IMPORTANT HIDDEN VALUES -->
+                        <input type="hidden"
+                               asp-for="InventoryId" />
+
+                        <input type="hidden"
+                               asp-for="MedicineId" />
+
+                        <!-- MEDICINE -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Medicine
+                            </label>
+
+                            <input value="Medicine #@Model.MedicineId"
+                                   class="form-control"
+                                   disabled />
+
+                            <div class="form-text">
+                                Medicine cannot be changed for an existing inventory record.
+                            </div>
+
+                        </div>
+
+                        <!-- SUPPLIER -->
+                        <div class="mb-4">
+
+                            <label asp-for="SupplierId"
+                                   class="form-label fw-semibold">
+                                Supplier
+                            </label>
+
+                            <select asp-for="SupplierId"
+                                    asp-items="ViewBag.Suppliers"
+                                    class="form-select">
+
+                                <option value="">
+                                    -- Select Supplier (optional) --
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="row g-3">
+
+                            <!-- STOCK -->
+                            <div class="col-md-6">
+
+                                <div class="mb-4">
+
+                                    <label asp-for="StockQuantity"
+                                           class="form-label fw-semibold">
+                                        Stock Quantity
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <input asp-for="StockQuantity"
+                                               class="form-control"
+                                               min="0" />
+
+                                        <span class="input-group-text">
+                                            units
+                                        </span>
+
+                                    </div>
+
+                                    <span asp-validation-for="StockQuantity"
+                                          class="text-danger small"></span>
+
+                                </div>
+
+                            </div>
+
+                            <!-- REORDER -->
+                            <div class="col-md-6">
+
+                                <div class="mb-4">
+
+                                    <label asp-for="ReorderLevel"
+                                           class="form-label fw-semibold">
+                                        Reorder Level
+                                    </label>
+
+                                    <div class="input-group">
+
+                                        <input asp-for="ReorderLevel"
+                                               class="form-control"
+                                               min="0" />
+
+                                        <span class="input-group-text">
+                                            units
+                                        </span>
+
+                                    </div>
+
+                                    <span asp-validation-for="ReorderLevel"
+                                          class="text-danger small"></span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="alert inventory-info-alert">
+
+                            <strong>Stock monitoring:</strong>
+
+                            An item is considered low stock when its stock
+                            quantity is less than or equal to its reorder level.
+
+                        </div>
+
+                        <div class="d-flex gap-2 flex-wrap mt-4">
+
+                            <button type="submit"
+                                    class="btn btn-primary px-4">
+                                Save Changes
+                            </button>
+
+                            <a asp-action="Details"
+                               asp-route-id="@Model.InventoryId"
+                               class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="mb-3">
-            <label asp-for="SupplierId" class="form-label"></label>
-            <select asp-for="SupplierId" asp-items="ViewBag.Suppliers" class="form-select">
-                <option value="">-- Select Supplier (optional) --</option>
-            </select>
-        </div>
+    </div>
 
-        <div class="mb-3">
-            <label asp-for="StockQuantity" class="form-label"></label>
-            <input asp-for="StockQuantity" class="form-control" />
-            <span asp-validation-for="StockQuantity" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <label asp-for="ReorderLevel" class="form-label"></label>
-            <input asp-for="ReorderLevel" class="form-control" />
-            <span asp-validation-for="ReorderLevel" class="text-danger"></span>
-        </div>
-
-        <a asp-action="Index" class="btn btn-secondary">Back</a>
-        <button type="submit" class="btn btn-success">Save Changes</button>
-    </form>
 </div>
 
 @section Scripts {

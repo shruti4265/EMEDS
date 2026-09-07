@@ -2,31 +2,325 @@
 
 @{
     ViewData["Title"] = "Inventory Details";
+
+    bool isLowStock = Model.StockQuantity <= Model.ReorderLevel;
 }
 
-<div class="container mt-4">
-    <h2>Inventory Details</h2>
+<div class="container-fluid px-0">
 
-    <dl class="row">
-        <dt class="col-sm-3">Inventory ID</dt>
-        <dd class="col-sm-9">@Model.InventoryId</dd>
+    <!-- BACK BUTTON -->
+    <div class="mb-3">
 
-        <dt class="col-sm-3">Medicine ID</dt>
-        <dd class="col-sm-9">@Model.MedicineId</dd>
+        <a asp-action="Index"
+           class="text-decoration-none text-muted">
+            ← Back to Inventory
+        </a>
 
-        <dt class="col-sm-3">Supplier</dt>
-        <dd class="col-sm-9">@(Model.Supplier?.SupplierName ?? "Not assigned")</dd>
+    </div>
 
-        <dt class="col-sm-3">Stock Quantity</dt>
-        <dd class="col-sm-9">@Model.StockQuantity</dd>
 
-        <dt class="col-sm-3">Reorder Level</dt>
-        <dd class="col-sm-9">@Model.ReorderLevel</dd>
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
 
-        <dt class="col-sm-3">Last Updated</dt>
-        <dd class="col-sm-9">@Model.LastUpdated.ToString("g")</dd>
-    </dl>
+        <div>
 
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
-    <a asp-action="Edit" asp-route-id="@Model.InventoryId" class="btn btn-warning">Edit</a>
+            <span class="section-eyebrow">
+                INVENTORY
+            </span>
+
+            <h2 class="fw-bold mb-1">
+                Inventory Details
+            </h2>
+
+            <p class="text-muted mb-0">
+                View stock and supplier information for this inventory record.
+            </p>
+
+        </div>
+
+
+        @if (isLowStock)
+        {
+            <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2">
+                Low Stock
+            </span>
+        }
+        else
+        {
+            <span class="badge rounded-pill bg-success-subtle text-success px-3 py-2">
+                In Stock
+            </span>
+        }
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-white p-4">
+
+                    <h5 class="fw-bold mb-1">
+                        Inventory Information
+                    </h5>
+
+                    <small class="text-muted">
+                        Inventory record #@Model.InventoryId
+                    </small>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    <div class="row g-3">
+
+
+                        <!-- INVENTORY ID -->
+                        <div class="col-md-6">
+
+                            <div class="inventory-detail-box">
+
+                                <small>
+                                    INVENTORY ID
+                                </small>
+
+                                <strong>
+                                    #@Model.InventoryId
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- MEDICINE ID -->
+                        <div class="col-md-6">
+
+                            <div class="inventory-detail-box">
+
+                                <small>
+                                    MEDICINE ID
+                                </small>
+
+                                <strong>
+                                    #@Model.MedicineId
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SUPPLIER -->
+                        <div class="col-md-6">
+
+                            <div class="inventory-detail-box">
+
+                                <small>
+                                    SUPPLIER
+                                </small>
+
+                                @if (Model.Supplier != null)
+                                {
+                                    <strong>
+                                        @Model.Supplier.SupplierName
+                                    </strong>
+                                }
+                                else
+                                {
+                                    <strong class="text-muted">
+                                        Not Assigned
+                                    </strong>
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LAST UPDATED -->
+                        <div class="col-md-6">
+
+                            <div class="inventory-detail-box">
+
+                                <small>
+                                    LAST UPDATED
+                                </small>
+
+                                <strong>
+                                    @Model.LastUpdated.ToString("dd MMM yyyy")
+                                </strong>
+
+                                <span class="d-block text-muted small mt-1">
+                                    @Model.LastUpdated.ToString("hh:mm tt")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STOCK SECTION -->
+                    <div class="mt-4">
+
+                        <h6 class="fw-bold mb-3">
+                            Stock Information
+                        </h6>
+
+
+                        <div class="row g-3">
+
+
+                            <!-- CURRENT STOCK -->
+                            <div class="col-md-6">
+
+                                <div class="inventory-stock-box">
+
+                                    <small class="text-muted d-block mb-2">
+                                        CURRENT STOCK
+                                    </small>
+
+                                    <div class="d-flex align-items-end gap-2">
+
+                                        <h2 class="fw-bold mb-0 @(isLowStock ? "text-danger" : "inventory-stat-number")">
+                                            @Model.StockQuantity
+                                        </h2>
+
+                                        <span class="text-muted mb-1">
+                                            units
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- REORDER LEVEL -->
+                            <div class="col-md-6">
+
+                                <div class="inventory-stock-box">
+
+                                    <small class="text-muted d-block mb-2">
+                                        REORDER LEVEL
+                                    </small>
+
+                                    <div class="d-flex align-items-end gap-2">
+
+                                        <h2 class="fw-bold mb-0 inventory-stat-number">
+                                            @Model.ReorderLevel
+                                        </h2>
+
+                                        <span class="text-muted mb-1">
+                                            units
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STOCK MESSAGE -->
+                    <div class="mt-4">
+
+                        @if (isLowStock)
+                        {
+                            <div class="alert alert-danger mb-0">
+
+                                <strong>Low stock alert.</strong>
+
+                                Current stock has reached or fallen below
+                                the reorder level.
+
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-success mb-0">
+
+                                <strong>Stock level is healthy.</strong>
+
+                                Current stock is above the reorder level.
+
+                            </div>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-header bg-white p-4">
+
+                    <h5 class="fw-bold mb-1">
+                        Quick Actions
+                    </h5>
+
+                    <small class="text-muted">
+                        Manage this inventory record
+                    </small>
+
+                </div>
+
+
+                <div class="card-body p-4">
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.InventoryId"
+                       class="btn btn-primary w-100 mb-2">
+
+                        Edit Inventory
+
+                    </a>
+
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary w-100 mb-2">
+
+                        Back to Inventory
+
+                    </a>
+
+
+                    @if (isLowStock)
+                    {
+                        <a asp-action="LowStock"
+                           class="btn btn-outline-danger w-100">
+
+                            View Low Stock Items
+
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

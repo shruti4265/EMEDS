@@ -1,56 +1,173 @@
-﻿@model EMEDS_Project.Models.Order
+﻿
+@model EMEDS_Project.Models.Order
 
 @{
     ViewData["Title"] = "Order Confirmation";
 }
 
-<div class="container mt-4">
-    <div class="alert alert-success">
-        <h3>Thank you! Your order has been placed.</h3>
+<div class="confirmation-wrapper">
+
+    <!-- SUCCESS -->
+
+    <div class="confirmation-success">
+
+        <div class="confirmation-check">
+            ✓
+        </div>
+
+        <span class="section-eyebrow">
+            ORDER CONFIRMED
+        </span>
+
+        <h1>Thank you for your order!</h1>
+
+        <p>
+            Your order has been placed successfully.
+            You can follow its progress from My Orders.
+        </p>
+
     </div>
 
-    <dl class="row">
-        <dt class="col-sm-3">Order ID</dt>
-        <dd class="col-sm-9">@Model.OrderId</dd>
 
-        <dt class="col-sm-3">Order Date</dt>
-        <dd class="col-sm-9">@Model.OrderDate.ToString("g")</dd>
+    <!-- ORDER CARD -->
 
-        <dt class="col-sm-3">Delivery Address</dt>
-        <dd class="col-sm-9">@Model.DeliveryAddress</dd>
+    <div class="confirmation-card">
 
-        <dt class="col-sm-3">Status</dt>
-        <dd class="col-sm-9">@Model.OrderStatus</dd>
+        <div class="confirmation-card-header">
 
-        <dt class="col-sm-3">Payment Status</dt>
-        <dd class="col-sm-9">@ViewBag.PaymentStatus</dd>
+            <div>
 
-        <dt class="col-sm-3">Total Amount</dt>
-        <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
-    </dl>
+                <small>ORDER NUMBER</small>
 
-    <h4>Items</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Medicine ID</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
+                <h4>
+                    #@Model.OrderId
+                </h4>
+
+            </div>
+
+
+            <span class="order-status-pill">
+                @Model.OrderStatus
+            </span>
+
+        </div>
+
+
+        <div class="confirmation-info-grid">
+
+            <div>
+
+                <span>Order Date</span>
+
+                <strong>
+                    @Model.OrderDate.ToString("dd MMM yyyy, hh:mm tt")
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>Payment Status</span>
+
+                <strong>
+                    @ViewBag.PaymentStatus
+                </strong>
+
+            </div>
+
+
+            <div class="confirmation-address">
+
+                <span>Delivery Address</span>
+
+                <strong>
+                    @Model.DeliveryAddress
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- ITEMS -->
+
+        <div class="confirmation-items">
+
+            <h5>Order Items</h5>
+
+
             @foreach (var item in Model.OrderItems)
             {
-                <tr>
-                    <td>@item.MedicineId</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.UnitPrice.ToString("C")</td>
-                    <td>@item.Subtotal.ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                <div class="confirmation-item">
 
-    <a asp-controller="Medicine" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+                    <div class="confirmation-item-icon">
+                        +
+                    </div>
+
+
+                    <div class="confirmation-item-info">
+
+                        <span>
+                            Medicine #@item.MedicineId
+                        </span>
+
+                        <small>
+                            @item.Quantity ×
+                            ₹@item.UnitPrice.ToString("0.00")
+                        </small>
+
+                    </div>
+
+
+                    <strong>
+                        ₹@item.Subtotal.ToString("0.00")
+                    </strong>
+
+                </div>
+            }
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="confirmation-total">
+
+            <span>Total Amount</span>
+
+            <strong>
+                ₹@Model.TotalAmount.ToString("0.00")
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="confirmation-actions">
+
+        <a asp-controller="Order"
+           asp-action="MyOrders"
+           class="btn btn-primary">
+            View My Orders
+        </a>
+
+        <a asp-controller="Medicine"
+           asp-action="Index"
+           class="btn btn-light">
+            Continue Shopping
+        </a>
+
+    </div>
+
 </div>
+
+
+
+
+
+
+

@@ -2,32 +2,246 @@
 
 @{
     ViewData["Title"] = "Low Stock";
+
+    int lowStockCount = Model.Count();
+    int totalUnits = Model.Sum(x => x.StockQuantity);
 }
 
-<div class="container mt-4">
-    <h2 class="text-danger">Low Stock Items</h2>
+<div class="container-fluid px-0">
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Medicine ID</th>
-                <th>Stock Quantity</th>
-                <th>Reorder Level</th>
-                <th>Last Updated</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="table-danger">
-                    <td>@item.MedicineId</td>
-                    <td>@item.StockQuantity</td>
-                    <td>@item.ReorderLevel</td>
-                    <td>@item.LastUpdated.ToString("g")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
 
-    <a asp-action="Index" class="btn btn-secondary">Back to Inventory</a>
+        <div>
+
+            <span class="section-eyebrow">
+                INVENTORY ALERTS
+            </span>
+
+            <h2 class="fw-bold mb-1">
+                Low Stock Items
+            </h2>
+
+            <p class="text-muted mb-0">
+                Medicines that have reached or fallen below their reorder level.
+            </p>
+
+        </div>
+
+        <a asp-action="Index"
+           class="btn btn-outline-secondary">
+            ← Back to Inventory
+        </a>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <small class="text-muted d-block mb-2">
+                        Low Stock Records
+                    </small>
+
+                    <h2 class="fw-bold text-danger mb-1">
+                        @lowStockCount
+                    </h2>
+
+                    <small class="text-muted">
+                        Items requiring attention
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <small class="text-muted d-block mb-2">
+                        Remaining Units
+                    </small>
+
+                    <h2 class="inventory-stat-number fw-bold mb-1">
+                        @totalUnits
+                    </h2>
+
+                    <small class="text-muted">
+                        Across low stock records
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+
+        <div class="card-header bg-white p-4">
+
+            <h5 class="fw-bold mb-1">
+                Stock Alerts
+            </h5>
+
+            <small class="text-muted">
+                @lowStockCount item@(lowStockCount == 1 ? "" : "s") need attention
+            </small>
+
+        </div>
+
+
+        @if (!Model.Any())
+        {
+            <div class="card-body text-center py-5">
+
+                <div class="inventory-success-icon mx-auto mb-3">
+                    ✓
+                </div>
+
+                <h5 class="fw-bold">
+                    Stock Levels Look Good
+                </h5>
+
+                <p class="text-muted mb-4">
+                    There are currently no medicines at or below their reorder level.
+                </p>
+
+                <a asp-action="Index"
+                   class="btn btn-primary">
+                    View Inventory
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+                            <th class="ps-4">Medicine</th>
+                            <th>Current Stock</th>
+                            <th>Reorder Level</th>
+                            <th>Shortage</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            int shortage = Math.Max(
+                                item.ReorderLevel - item.StockQuantity,
+                                0);
+
+                            <tr>
+
+                                <td class="ps-4">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="inventory-warning-icon">
+                                            !
+                                        </div>
+
+                                        <div>
+                                            <strong class="d-block">
+                                                Medicine #@item.MedicineId
+                                            </strong>
+
+                                            <small class="text-muted">
+                                                Inventory #@item.InventoryId
+                                            </small>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <strong class="text-danger">
+                                        @item.StockQuantity
+                                    </strong>
+
+                                    <small class="text-muted">
+                                        units
+                                    </small>
+
+                                </td>
+
+                                <td>
+                                    @item.ReorderLevel
+                                    <small class="text-muted">units</small>
+                                </td>
+
+                                <td>
+
+                                    @if (shortage > 0)
+                                    {
+                                        <span class="text-danger fw-semibold">
+                                            @shortage units
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            At threshold
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger px-3 py-2">
+                                        Low Stock
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="d-block">
+                                        @item.LastUpdated.ToString("dd MMM yyyy")
+                                    </span>
+
+                                    <small class="text-muted">
+                                        @item.LastUpdated.ToString("hh:mm tt")
+                                    </small>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
 </div>

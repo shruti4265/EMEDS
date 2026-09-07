@@ -1,61 +1,190 @@
-﻿@model EMEDS_Project.Models.Medicine
+﻿
+
+@model EMEDS_Project.Models.Medicine
 
 @{
     ViewData["Title"] = "Add Medicine";
 }
 
-<h1>Add Medicine</h1>
+<div class="form-page-header">
+    <span class="section-eyebrow">MEDICINE MANAGEMENT</span>
+    <h2>Add Medicine</h2>
+    <p>Add a new medicine to the E-MEDS catalogue.</p>
+</div>
 
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div class="mb-3">
-        <label asp-for="MedicineName" class="form-label"></label>
-        <input asp-for="MedicineName" class="form-control" />
-        <span asp-validation-for="MedicineName" class="text-danger"></span>
-    </div>
+<div class="emeds-form-card medicine-form-card">
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+    <form asp-action="Create" method="post">
 
-    <div class="mb-3">
-        <label asp-for="Price" class="form-label"></label>
-        <input asp-for="Price" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
+        </div>
 
-    <div class="mb-3">
-        <label asp-for="CategoryId" class="form-label"></label>
-        <input asp-for="CategoryId" class="form-control" type="number" />
-        <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
 
-    <div class="mb-3">
-        <label asp-for="SupplierId" class="form-label"></label>
-        <input asp-for="SupplierId" class="form-control" type="number" />
-        <span asp-validation-for="SupplierId" class="text-danger"></span>
-    </div>
+        <div class="mb-4">
 
-    <div class="mb-3">
-        <label asp-for="ImageUrl" class="form-label"></label>
-        <input asp-for="ImageUrl" class="form-control" />
-        <span asp-validation-for="ImageUrl" class="text-danger"></span>
-    </div>
+            <label asp-for="MedicineName"
+                   class="form-label">
+                Medicine Name
+            </label>
 
-    <div class="form-check mb-3">
-        <input asp-for="RequiresPrescription" class="form-check-input" />
-        <label asp-for="RequiresPrescription" class="form-check-label"></label>
-    </div>
+            <input asp-for="MedicineName"
+                   class="form-control"
+                   placeholder="Enter medicine name" />
 
-    <button type="submit" class="btn btn-primary">Add Medicine</button>
+            <span asp-validation-for="MedicineName"
+                  class="text-danger">
+            </span>
 
-    <a asp-action="Index" class="btn btn-secondary">
-        Back to List
-    </a>
-</form>
+        </div>
+
+
+        <div class="mb-4">
+
+            <label asp-for="Description"
+                   class="form-label">
+                Description
+            </label>
+
+            <textarea asp-for="Description"
+                      class="form-control"
+                      rows="4"
+                      placeholder="Enter medicine description"></textarea>
+
+            <span asp-validation-for="Description"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-4 mb-4">
+
+                <label asp-for="Price"
+                       class="form-label">
+                    Price
+                </label>
+
+                <div class="input-group">
+                    <span class="input-group-text">₹</span>
+
+                    <input asp-for="Price"
+                           class="form-control"
+                           type="number"
+                           step="0.01"
+                           placeholder="0.00" />
+                </div>
+
+                <span asp-validation-for="Price"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+
+                <label asp-for="CategoryId"
+                       class="form-label">
+                    Category ID
+                </label>
+
+                <input asp-for="CategoryId"
+                       class="form-control"
+                       type="number"
+                       placeholder="Category ID" />
+
+                <span asp-validation-for="CategoryId"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <div class="col-md-4 mb-4">
+
+                <label asp-for="SupplierId"
+                       class="form-label">
+                    Supplier ID
+                </label>
+
+                <input asp-for="SupplierId"
+                       class="form-control"
+                       type="number"
+                       placeholder="Supplier ID" />
+
+                <span asp-validation-for="SupplierId"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="mb-4">
+
+            <label asp-for="ImageUrl"
+                   class="form-label">
+                Medicine Image URL
+            </label>
+
+            <input asp-for="ImageUrl"
+                   class="form-control"
+                   placeholder="Enter image URL (optional)" />
+
+            <span asp-validation-for="ImageUrl"
+                  class="text-danger">
+            </span>
+
+        </div>
+
+
+        <div class="prescription-check-box">
+
+            <div class="form-check">
+
+                <input asp-for="RequiresPrescription"
+                       class="form-check-input" />
+
+                <label asp-for="RequiresPrescription"
+                       class="form-check-label">
+
+                    This medicine requires a prescription
+
+                </label>
+
+            </div>
+
+            <small>
+                Customers will need an approved prescription
+                before adding this medicine to their cart.
+            </small>
+
+        </div>
+
+
+        <div class="form-actions">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Add Medicine
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-light">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
