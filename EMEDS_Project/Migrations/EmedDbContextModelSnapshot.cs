@@ -297,6 +297,9 @@ namespace EMEDS_Project.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("MedicineId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -310,6 +313,8 @@ namespace EMEDS_Project.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PrescriptionId");
+
+                    b.HasIndex("MedicineId");
 
                     b.HasIndex("UserId");
 
@@ -546,11 +551,19 @@ namespace EMEDS_Project.Migrations
 
             modelBuilder.Entity("EMEDS_Project.Models.Prescription", b =>
                 {
+                    b.HasOne("EMEDS_Project.Models.Medicine", "Medicine")
+                        .WithMany()
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EMEDS_Project.Data.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Medicine");
 
                     b.Navigation("User");
                 });

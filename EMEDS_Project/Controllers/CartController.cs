@@ -1,19 +1,29 @@
 ﻿using EMEDS_Project.Helpers;
 using EMEDS_Project.Models;
 using EMEDS_Project.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace EMEDS_Project.Controllers
 {
+    [Authorize(Roles = "Customer")]
     public class CartController : Controller
     {
         private readonly IInventoryRepo _inventoryRepo;
+        private readonly IMedicineRepo _medicineRepo;
+        private readonly IPrescriptionRepo _prescriptionRepo;
 
         private const string CartSessionKey = "Cart";
 
-        public CartController(IInventoryRepo inventoryRepo)
+        public CartController(
+            IInventoryRepo inventoryRepo,
+            IMedicineRepo medicineRepo,
+            IPrescriptionRepo prescriptionRepo)
         {
             _inventoryRepo = inventoryRepo;
+            _medicineRepo = medicineRepo;
+            _prescriptionRepo = prescriptionRepo;
         }
 
         public IActionResult Index()
@@ -22,13 +32,33 @@ namespace EMEDS_Project.Controllers
             return View(cartItems);
         }
 
-        // TEMP: takes medicineName/unitPrice directly until Chhaya's Medicine
-        // module exists. Once it does, this collapses down to just (int medicineId)
-        // and looks the name/price up via IMedicineRepo.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddToCart(int medicineId, string medicineName, decimal unitPrice)
+        public IActionResult AddToCart(int medicineId)
         {
+            var medicine = _medicineRepo.GetMedicineById(medicineId);
+
+            if (medicine == null)
+            {
+                TempData["Error"] = "Medicine not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (medicine.RequiresPrescription)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                             ?? throw new InvalidOperationException("User is not authenticated.");
+
+                var hasApprovedPrescription =
+                    _prescriptionRepo.HasApprovedPrescriptionForMedicine(userId, medicineId);
+
+                if (!hasApprovedPrescription)
+                {
+                    TempData["Error"] = "This medicine requires a verified prescription. Please upload one before purchasing.";
+                    return RedirectToAction("Upload", "Prescription", new { medicineId });
+                }
+            }
+
             var inventory = _inventoryRepo.GetByMedicineId(medicineId);
 
             if (inventory == null || inventory.StockQuantity <= 0)
@@ -54,16 +84,16 @@ namespace EMEDS_Project.Controllers
             {
                 cartItems.Add(new CartItem
                 {
-                    MedicineId = medicineId,
-                    MedicineName = medicineName,
-                    UnitPrice = unitPrice,
+                    MedicineId = medicine.MedicineId,
+                    MedicineName = medicine.MedicineName,
+                    UnitPrice = medicine.Price,
                     Quantity = 1
                 });
             }
 
             SaveCart(cartItems);
 
-            TempData["Success"] = $"{medicineName} added to cart.";
+            TempData["Success"] = $"{medicine.MedicineName} added to cart.";
             return RedirectToAction(nameof(Index));
         }
 

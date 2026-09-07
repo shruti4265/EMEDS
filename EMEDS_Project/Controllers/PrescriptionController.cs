@@ -43,11 +43,13 @@ namespace EMEDS_Project.Controllers
         }
 
 
+        // CUSTOMER - UPLOAD PRESCRIPTION
         // CUSTOMER - OPEN UPLOAD PAGE
         [HttpGet]
         [Authorize(Roles = "Customer")]
-        public IActionResult Upload()
+        public IActionResult Upload(int medicineId)
         {
+            ViewBag.MedicineId = medicineId;
             return View();
         }
 
@@ -55,37 +57,35 @@ namespace EMEDS_Project.Controllers
         // CUSTOMER - UPLOAD PRESCRIPTION
         [HttpPost]
         [Authorize(Roles = "Customer")]
-        public IActionResult Upload(IFormFile prescriptionFile)
+        public IActionResult Upload(IFormFile prescriptionFile, int medicineId)
         {
             if (prescriptionFile == null || prescriptionFile.Length == 0)
             {
                 TempData["Error"] = "Please select a prescription file.";
+                ViewBag.MedicineId = medicineId;
                 return View();
             }
-
 
             // ALLOWED FILE TYPES
             string[] allowedExtensions =
             {
-                ".jpg",
-                ".jpeg",
-                ".png",
-                ".pdf"
-            };
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".pdf"
+    };
 
             string fileExtension =
                 Path.GetExtension(prescriptionFile.FileName)
                     .ToLowerInvariant();
 
-
             if (!allowedExtensions.Contains(fileExtension))
             {
                 TempData["Error"] =
                     "Only JPG, JPEG, PNG and PDF files are allowed.";
-
+                ViewBag.MedicineId = medicineId;
                 return View();
             }
-
 
             // MAXIMUM FILE SIZE = 5 MB
             long maximumFileSize = 5 * 1024 * 1024;
@@ -94,32 +94,27 @@ namespace EMEDS_Project.Controllers
             {
                 TempData["Error"] =
                     "Prescription file size cannot exceed 5 MB.";
-
+                ViewBag.MedicineId = medicineId;
                 return View();
             }
-
 
             // CREATE PRESCRIPTION FOLDER
             string uploadsFolder = Path.Combine(
                 _environment.WebRootPath,
                 "prescriptions");
 
-
             if (!Directory.Exists(uploadsFolder))
             {
                 Directory.CreateDirectory(uploadsFolder);
             }
 
-
             // GENERATE UNIQUE FILE NAME
             string uniqueFileName =
                 Guid.NewGuid().ToString() + fileExtension;
 
-
             string physicalFilePath = Path.Combine(
                 uploadsFolder,
                 uniqueFileName);
-
 
             // SAVE FILE
             using (var fileStream = new FileStream(
@@ -129,7 +124,6 @@ namespace EMEDS_Project.Controllers
                 prescriptionFile.CopyTo(fileStream);
             }
 
-
             // GET CURRENT LOGGED-IN USER
             string? userId = _userManager.GetUserId(User);
 
@@ -138,20 +132,18 @@ namespace EMEDS_Project.Controllers
                 return Unauthorized();
             }
 
-
             // SAVE PRESCRIPTION IN DATABASE
             Prescription prescription = new Prescription
             {
                 UserId = userId,
+                MedicineId = medicineId,
                 FilePath = "/prescriptions/" + uniqueFileName,
                 UploadDate = DateTime.Now,
                 Status = "Pending"
             };
 
-
             int result =
                 _prescriptionRepo.AddPrescription(prescription);
-
 
             if (result > 0)
             {
@@ -161,12 +153,13 @@ namespace EMEDS_Project.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-
             TempData["Error"] =
                 "Prescription could not be uploaded.";
 
+            ViewBag.MedicineId = medicineId;
             return View();
         }
+
 
         [Authorize(Roles = "Customer")]
         public IActionResult Details(int id)

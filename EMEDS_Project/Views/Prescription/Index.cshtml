@@ -1,7 +1,12 @@
 ﻿@model IEnumerable<EMEDS_Project.Models.Prescription>
+@inject EMEDS_Project.Repository.IMedicineRepo MedicineRepo
 
 @{
     ViewData["Title"] = "My Prescriptions";
+
+    var prescriptionMedicines = MedicineRepo.GetAllMedicines()
+        .Where(m => m.RequiresPrescription)
+        .ToList();
 }
 
 <h1>My Prescriptions</h1>
@@ -20,12 +25,19 @@
     </div>
 }
 
-<p>
-    <a asp-action="Upload"
-       class="btn btn-primary">
-        Upload Prescription
-    </a>
-</p>
+<div class="mb-3">
+    <label class="form-label">Upload a new prescription for:</label>
+    <form asp-action="Upload" method="get" class="d-flex gap-2">
+        <select name="medicineId" class="form-select" style="max-width: 300px;" required>
+            <option value="">-- Select Medicine --</option>
+            @foreach (var medicine in prescriptionMedicines)
+            {
+                <option value="@medicine.MedicineId">@medicine.MedicineName</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary">Upload Prescription</button>
+    </form>
+</div>
 
 @if (!Model.Any())
 {

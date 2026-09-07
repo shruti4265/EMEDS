@@ -31,6 +31,14 @@ namespace EMEDS_Project.Repository
                 .ToList();
         }
 
+        public bool HasApprovedPrescriptionForMedicine(string userId, int medicineId)
+        {
+            return _context.Prescriptions
+                .Any(p => p.UserId == userId
+                       && p.MedicineId == medicineId
+                       && p.Status == "Approved");
+        }
+
         public int AddPrescription(Prescription prescription)
         {
             _context.Prescriptions.Add(prescription);
@@ -39,9 +47,9 @@ namespace EMEDS_Project.Repository
         }
 
         public int UpdatePrescriptionStatus(
-    int prescriptionId,
-    string status,
-    string? adminRemarks)
+            int prescriptionId,
+            string status,
+            string? adminRemarks)
         {
             var prescription = _context.Prescriptions
                 .FirstOrDefault(

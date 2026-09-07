@@ -1,4 +1,5 @@
 ﻿using EMEDS_Project.Data;
+using EMEDS_Project.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace EMEDS_Project.Models
@@ -10,6 +11,11 @@ namespace EMEDS_Project.Models
 
         [Required]
         public string UserId { get; set; } = string.Empty;
+
+        [Required]
+        public int MedicineId { get; set; }
+
+        public Medicine? Medicine { get; set; }
 
         [Required]
         public string FilePath { get; set; } = string.Empty;

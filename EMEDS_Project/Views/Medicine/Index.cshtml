@@ -1,7 +1,16 @@
 @model IEnumerable<EMEDS_Project.Models.Medicine>
+@inject EMEDS_Project.Repository.IPrescriptionRepo PrescriptionRepo
+@inject Microsoft.AspNetCore.Identity.UserManager<EMEDS_Project.Data.ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Medicines";
+
+    string? currentUserId = null;
+
+    if (!User.IsInRole("Admin"))
+    {
+        currentUserId = UserManager.GetUserId(User);
+    }
 }
 
 <h1>Medicines</h1>
@@ -53,6 +62,10 @@ else
         <tbody>
             @foreach (var medicine in Model)
             {
+                bool needsPrescriptionUpload = medicine.RequiresPrescription &&
+                    (currentUserId == null ||
+                     !PrescriptionRepo.HasApprovedPrescriptionForMedicine(currentUserId, medicine.MedicineId));
+
                 <tr>
                     <td>@medicine.MedicineId</td>
                     <td>@medicine.MedicineName</td>
@@ -69,14 +82,25 @@ else
                            class="btn btn-info btn-sm">
                             Details
                         </a>
+
                         @if (!User.IsInRole("Admin"))
                         {
-                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
-                                <input type="hidden" name="medicineId" value="@medicine.MedicineId" />
-                                <input type="hidden" name="medicineName" value="@medicine.MedicineName" />
-                                <input type="hidden" name="unitPrice" value="@medicine.Price" />
-                                <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
-                            </form>
+                            @if (needsPrescriptionUpload)
+                            {
+                                <a asp-controller="Prescription" asp-action="Upload"
+                                   asp-route-medicineId="@medicine.MedicineId"
+                                   class="btn btn-warning btn-sm">
+                                    Upload Prescription to Buy
+                                </a>
+                            }
+                            else
+                            {
+                                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="medicineId" value="@medicine.MedicineId" />
+                                    <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
+                                </form>
+                            }
                         }
 
                         @if (User.IsInRole("Admin"))
