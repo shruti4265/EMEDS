@@ -14,7 +14,7 @@
             <div class="text-center mb-4">
 
                 <div class="chatbot-page-icon mx-auto mb-3">
-                    <i class="bi bi-chat-dots-fill"></i>
+                    💬
                 </div>
 
                 <span class="section-eyebrow">
@@ -45,7 +45,7 @@
                             <div class="d-flex align-items-center gap-3">
 
                                 <div class="chatbot-avatar">
-                                    <i class="bi bi-chat-heart-fill"></i>
+                                    💙
                                 </div>
 
                                 <div>
@@ -54,11 +54,13 @@
                                     </h5>
 
                                     <div class="d-flex align-items-center gap-2">
+
                                         <span class="chatbot-online-dot"></span>
 
                                         <small>
                                             Online • Ready to help
                                         </small>
+
                                     </div>
                                 </div>
 
@@ -70,7 +72,7 @@
                         <!-- CONVERSATION -->
                         <div class="card-body p-4 chatbot-conversation">
 
-                            <!-- WELCOME -->
+                            <!-- WELCOME MESSAGE -->
                             <div class="d-flex align-items-start gap-2 mb-4">
 
                                 <div class="chatbot-small-avatar">
@@ -138,11 +140,12 @@
                             }
 
 
+                            <!-- DEFAULT HINT -->
                             @if (string.IsNullOrEmpty(Model.Question))
                             {
                                 <div class="chatbot-hint mt-4">
 
-                                    <i class="bi bi-info-circle me-2"></i>
+                                    <span class="me-2">ℹ️</span>
 
                                     This assistant answers common questions
                                     about medicines, prescriptions, orders and
@@ -163,6 +166,7 @@
 
                     <div class="card border-0 shadow-sm rounded-4 h-100">
 
+                        <!-- FAQ HEADER -->
                         <div class="card-header bg-white p-4">
 
                             <h5 class="fw-bold mb-1">
@@ -176,6 +180,7 @@
                         </div>
 
 
+                        <!-- QUESTION LIST -->
                         <div class="card-body p-3">
 
                             <div class="chatbot-question-list">
@@ -195,14 +200,16 @@
                                                 class="chatbot-question-btn">
 
                                             <span class="chatbot-question-icon">
-                                                <i class="bi bi-question-lg"></i>
+                                                ❓
                                             </span>
 
                                             <span class="flex-grow-1">
                                                 @question
                                             </span>
 
-                                            <i class="bi bi-chevron-right chatbot-arrow"></i>
+                                            <span class="chatbot-arrow">
+                                                ›
+                                            </span>
 
                                         </button>
 
@@ -214,11 +221,15 @@
                         </div>
 
 
+                        <!-- FOOTER -->
                         <div class="card-footer bg-white border-top p-3 text-center">
 
                             <small class="text-muted">
-                                <i class="bi bi-shield-check me-1"></i>
+
+                                <span class="me-1">🛡️</span>
+
                                 E-MEDS Help & Support
+
                             </small>
 
                         </div>
@@ -234,3 +245,32 @@
     </div>
 
 </div>
+
+
+<style>
+
+    /* Chatbot icon alignment */
+    .chatbot-page-icon,
+    .chatbot-avatar,
+    .chatbot-question-icon {
+        line-height: 1;
+    }
+
+    .chatbot-page-icon {
+        font-size: 1.7rem;
+    }
+
+    .chatbot-avatar {
+        font-size: 1.2rem;
+    }
+
+    .chatbot-question-icon {
+        font-size: 0.85rem;
+    }
+
+    .chatbot-arrow {
+        font-size: 1.3rem;
+        line-height: 1;
+    }
+
+</style>
