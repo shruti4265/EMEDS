@@ -6,6 +6,12 @@
 }
 
 <div class="container-fluid px-0">
+@if (TempData["Error"] != null)
+{
+    <script>
+            alert("@TempData["Error"]");
+    </script>
+}
 
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
