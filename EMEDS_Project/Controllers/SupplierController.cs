@@ -2,6 +2,7 @@
 using EMEDS_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EMEDS_Project.Controllers
 {
@@ -105,17 +106,25 @@ namespace EMEDS_Project.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var supplier = _supplierRepo.GetById(id);
+          var supplier = _supplierRepo.GetById(id);
 
-            if (supplier == null)
-            {
-                return NotFound();
-            }
+          if (supplier == null)
+             return NotFound();
 
-            _supplierRepo.Delete(supplier);
-            _supplierRepo.Save();
+           try
+           {
+              _supplierRepo.Delete(supplier);
+              _supplierRepo.Save();
 
-            return RedirectToAction(nameof(Index));
-        }
+              TempData["Success"] = "Supplier deleted successfully.";
+           }
+          catch (DbUpdateException)
+          {
+            TempData["Error"] =
+                "This supplier cannot be deleted because it is linked to inventory records.";
+          }
+
+        return RedirectToAction(nameof(Index));
+      }
     }
 }
