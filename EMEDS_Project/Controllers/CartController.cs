@@ -1,9 +1,9 @@
-﻿using EMEDS_Project.Helpers;
+﻿
+using EMEDS_Project.Helpers;
 using EMEDS_Project.Models;
 using EMEDS_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace EMEDS_Project.Controllers
 {
@@ -12,18 +12,15 @@ namespace EMEDS_Project.Controllers
     {
         private readonly IInventoryRepo _inventoryRepo;
         private readonly IMedicineRepo _medicineRepo;
-        private readonly IPrescriptionRepo _prescriptionRepo;
 
         private const string CartSessionKey = "Cart";
 
         public CartController(
             IInventoryRepo inventoryRepo,
-            IMedicineRepo medicineRepo,
-            IPrescriptionRepo prescriptionRepo)
+            IMedicineRepo medicineRepo)
         {
             _inventoryRepo = inventoryRepo;
             _medicineRepo = medicineRepo;
-            _prescriptionRepo = prescriptionRepo;
         }
 
         public IActionResult Index()
@@ -44,20 +41,8 @@ namespace EMEDS_Project.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if (medicine.RequiresPrescription)
-            {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
-                             ?? throw new InvalidOperationException("User is not authenticated.");
-
-                var hasApprovedPrescription =
-                    _prescriptionRepo.HasApprovedPrescriptionForMedicine(userId, medicineId);
-
-                if (!hasApprovedPrescription)
-                {
-                    TempData["Error"] = "This medicine requires a verified prescription. Please upload one before purchasing.";
-                    return RedirectToAction("Upload", "Prescription", new { medicineId });
-                }
-            }
+            // Prescription approval is NOT required before adding to cart.
+            // Even prescription-required medicines can be added normally.
 
             var inventory = _inventoryRepo.GetByMedicineId(medicineId);
 
@@ -68,13 +53,17 @@ namespace EMEDS_Project.Controllers
             }
 
             var cartItems = GetCart();
-            var existingItem = cartItems.FirstOrDefault(c => c.MedicineId == medicineId);
+
+            var existingItem =
+                cartItems.FirstOrDefault(c => c.MedicineId == medicineId);
 
             if (existingItem != null)
             {
                 if (existingItem.Quantity >= inventory.StockQuantity)
                 {
-                    TempData["Error"] = "You cannot add more than the available stock.";
+                    TempData["Error"] =
+                        "You cannot add more than the available stock.";
+
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -93,7 +82,9 @@ namespace EMEDS_Project.Controllers
 
             SaveCart(cartItems);
 
-            TempData["Success"] = $"{medicine.MedicineName} added to cart.";
+            TempData["Success"] =
+                $"{medicine.MedicineName} added to cart.";
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -102,22 +93,27 @@ namespace EMEDS_Project.Controllers
         public IActionResult UpdateCartItem(int medicineId, int quantity)
         {
             var cartItems = GetCart();
-            var item = cartItems.FirstOrDefault(c => c.MedicineId == medicineId);
+
+            var item =
+                cartItems.FirstOrDefault(c => c.MedicineId == medicineId);
 
             if (item == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            var inventory = _inventoryRepo.GetByMedicineId(medicineId);
+            var inventory =
+                _inventoryRepo.GetByMedicineId(medicineId);
 
             if (quantity <= 0)
             {
                 cartItems.Remove(item);
             }
-            else if (inventory != null && quantity > inventory.StockQuantity)
+            else if (inventory != null &&
+                     quantity > inventory.StockQuantity)
             {
-                TempData["Error"] = "Maximum available stock reached.";
+                TempData["Error"] =
+                    "Maximum available stock reached.";
             }
             else
             {
@@ -125,6 +121,7 @@ namespace EMEDS_Project.Controllers
             }
 
             SaveCart(cartItems);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -133,7 +130,9 @@ namespace EMEDS_Project.Controllers
         public IActionResult RemoveFromCart(int medicineId)
         {
             var cartItems = GetCart();
-            var item = cartItems.FirstOrDefault(c => c.MedicineId == medicineId);
+
+            var item =
+                cartItems.FirstOrDefault(c => c.MedicineId == medicineId);
 
             if (item != null)
             {
@@ -141,6 +140,7 @@ namespace EMEDS_Project.Controllers
             }
 
             SaveCart(cartItems);
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -149,18 +149,21 @@ namespace EMEDS_Project.Controllers
         public IActionResult ClearCart()
         {
             HttpContext.Session.Remove(CartSessionKey);
+
             return RedirectToAction(nameof(Index));
         }
 
         private List<CartItem> GetCart()
         {
-            return HttpContext.Session.GetObject<List<CartItem>>(CartSessionKey)
+            return HttpContext.Session
+                       .GetObject<List<CartItem>>(CartSessionKey)
                    ?? new List<CartItem>();
         }
 
         private void SaveCart(List<CartItem> cartItems)
         {
-            HttpContext.Session.SetObject(CartSessionKey, cartItems);
+            HttpContext.Session
+                .SetObject(CartSessionKey, cartItems);
         }
     }
 }

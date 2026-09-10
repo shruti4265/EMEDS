@@ -14,6 +14,8 @@ namespace EMEDS_Project.Models
         [Required]
         public int MedicineId { get; set; }
 
+        public Medicine? Medicine { get; set; }
+
         [Required]
         [Range(1, 1000)]
         public int Quantity { get; set; }

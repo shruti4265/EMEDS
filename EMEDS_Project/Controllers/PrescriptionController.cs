@@ -1,4 +1,268 @@
-﻿using EMEDS_Project.Data;
+﻿//using EMEDS_Project.Data;
+//using EMEDS_Project.Models;
+//using EMEDS_Project.Repository;
+//using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Mvc;
+
+//namespace EMEDS_Project.Controllers
+//{
+//    [Authorize]
+//    public class PrescriptionController : Controller
+//    {
+//        private readonly IPrescriptionRepo _prescriptionRepo;
+//        private readonly UserManager<ApplicationUser> _userManager;
+//        private readonly IWebHostEnvironment _environment;
+
+//        public PrescriptionController(
+//            IPrescriptionRepo prescriptionRepo,
+//            UserManager<ApplicationUser> userManager,
+//            IWebHostEnvironment environment)
+//        {
+//            _prescriptionRepo = prescriptionRepo;
+//            _userManager = userManager;
+//            _environment = environment;
+//        }
+
+
+//        // CUSTOMER - VIEW OWN PRESCRIPTIONS
+//        [Authorize(Roles = "Customer")]
+//        public IActionResult Index()
+//        {
+//            string? userId = _userManager.GetUserId(User);
+
+//            if (userId == null)
+//            {
+//                return Unauthorized();
+//            }
+
+//            var prescriptionList =
+//                _prescriptionRepo.GetPrescriptionsByUserId(userId);
+
+//            return View(prescriptionList);
+//        }
+
+
+//        // CUSTOMER - UPLOAD PRESCRIPTION
+//        // CUSTOMER - OPEN UPLOAD PAGE
+//        [HttpGet]
+//        [Authorize(Roles = "Customer")]
+//        public IActionResult Upload(int medicineId)
+//        {
+//            ViewBag.MedicineId = medicineId;
+//            return View();
+//        }
+
+
+//        // CUSTOMER - UPLOAD PRESCRIPTION
+//        [HttpPost]
+//        [Authorize(Roles = "Customer")]
+//        public IActionResult Upload(IFormFile prescriptionFile, int medicineId)
+//        {
+//            if (prescriptionFile == null || prescriptionFile.Length == 0)
+//            {
+//                TempData["Error"] = "Please select a prescription file.";
+//                ViewBag.MedicineId = medicineId;
+//                return View();
+//            }
+
+//            // ALLOWED FILE TYPES
+//            string[] allowedExtensions =
+//            {
+//        ".jpg",
+//        ".jpeg",
+//        ".png",
+//        ".pdf"
+//    };
+
+//            string fileExtension =
+//                Path.GetExtension(prescriptionFile.FileName)
+//                    .ToLowerInvariant();
+
+//            if (!allowedExtensions.Contains(fileExtension))
+//            {
+//                TempData["Error"] =
+//                    "Only JPG, JPEG, PNG and PDF files are allowed.";
+//                ViewBag.MedicineId = medicineId;
+//                return View();
+//            }
+
+//            // MAXIMUM FILE SIZE = 5 MB
+//            long maximumFileSize = 5 * 1024 * 1024;
+
+//            if (prescriptionFile.Length > maximumFileSize)
+//            {
+//                TempData["Error"] =
+//                    "Prescription file size cannot exceed 5 MB.";
+//                ViewBag.MedicineId = medicineId;
+//                return View();
+//            }
+
+//            // CREATE PRESCRIPTION FOLDER
+//            string uploadsFolder = Path.Combine(
+//                _environment.WebRootPath,
+//                "prescriptions");
+
+//            if (!Directory.Exists(uploadsFolder))
+//            {
+//                Directory.CreateDirectory(uploadsFolder);
+//            }
+
+//            // GENERATE UNIQUE FILE NAME
+//            string uniqueFileName =
+//                Guid.NewGuid().ToString() + fileExtension;
+
+//            string physicalFilePath = Path.Combine(
+//                uploadsFolder,
+//                uniqueFileName);
+
+//            // SAVE FILE
+//            using (var fileStream = new FileStream(
+//                physicalFilePath,
+//                FileMode.Create))
+//            {
+//                prescriptionFile.CopyTo(fileStream);
+//            }
+
+//            // GET CURRENT LOGGED-IN USER
+//            string? userId = _userManager.GetUserId(User);
+
+//            if (userId == null)
+//            {
+//                return Unauthorized();
+//            }
+
+//            // SAVE PRESCRIPTION IN DATABASE
+//            Prescription prescription = new Prescription
+//            {
+//                UserId = userId,
+//                MedicineId = medicineId,
+//                FilePath = "/prescriptions/" + uniqueFileName,
+//                UploadDate = DateTime.Now,
+//                Status = "Pending"
+//            };
+
+//            int result =
+//                _prescriptionRepo.AddPrescription(prescription);
+
+//            if (result > 0)
+//            {
+//                TempData["Success"] =
+//                    "Prescription uploaded successfully.";
+
+//                return RedirectToAction(nameof(Index));
+//            }
+
+//            TempData["Error"] =
+//                "Prescription could not be uploaded.";
+
+//            ViewBag.MedicineId = medicineId;
+//            return View();
+//        }
+
+
+//        [Authorize(Roles = "Customer")]
+//        public IActionResult Details(int id)
+//        {
+//            var prescription =
+//                _prescriptionRepo.GetPrescriptionById(id);
+
+//            if (prescription == null)
+//            {
+//                return NotFound();
+//            }
+
+//            string? userId = _userManager.GetUserId(User);
+
+//            if (userId == null)
+//            {
+//                return Unauthorized();
+//            }
+
+//            if (prescription.UserId != userId)
+//            {
+//                return Forbid();
+//            }
+
+//            return View(prescription);
+//        }
+//        [Authorize(Roles = "Admin")]
+//        public IActionResult Review(int id)
+//        {
+//            var prescription =
+//                _prescriptionRepo.GetPrescriptionById(id);
+
+//            if (prescription == null)
+//            {
+//                return NotFound();
+//            }
+
+//            return View(prescription);
+//        }
+
+
+//        [HttpPost]
+//        [Authorize(Roles = "Admin")]
+//        public IActionResult Approve(int id, string? adminRemarks)
+//        {
+//            var prescription =
+//                _prescriptionRepo.GetPrescriptionById(id);
+
+//            if (prescription == null)
+//            {
+//                return NotFound();
+//            }
+
+//            prescription.Status = "Approved";
+//            prescription.AdminRemarks = adminRemarks;
+
+//            _prescriptionRepo.UpdatePrescriptionStatus(
+//    id,
+//    "Approved",
+//    adminRemarks);
+
+//            return RedirectToAction(nameof(Review), new { id });
+//        }
+
+
+//        [HttpPost]
+//        [Authorize(Roles = "Admin")]
+//        public IActionResult Reject(int id, string? adminRemarks)
+//        {
+//            var prescription =
+//                _prescriptionRepo.GetPrescriptionById(id);
+
+//            if (prescription == null)
+//            {
+//                return NotFound();
+//            }
+
+//            prescription.Status = "Rejected";
+//            prescription.AdminRemarks = adminRemarks;
+
+//            _prescriptionRepo.UpdatePrescriptionStatus(
+//                id,
+//                "Rejected",adminRemarks);
+
+//            return RedirectToAction(nameof(Review), new { id });
+//        }
+
+//        [Authorize(Roles = "Admin")]
+//        public IActionResult ManagePrescriptions()
+//        {
+//            var prescriptionList =
+//                _prescriptionRepo.GetAllPrescriptions();
+
+//            return View(prescriptionList);
+//        }
+//    }
+//}
+
+
+
+
+
+using EMEDS_Project.Data;
 using EMEDS_Project.Models;
 using EMEDS_Project.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -11,21 +275,27 @@ namespace EMEDS_Project.Controllers
     public class PrescriptionController : Controller
     {
         private readonly IPrescriptionRepo _prescriptionRepo;
+        private readonly IOrderRepo _orderRepo;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _environment;
 
         public PrescriptionController(
             IPrescriptionRepo prescriptionRepo,
+            IOrderRepo orderRepo,
             UserManager<ApplicationUser> userManager,
             IWebHostEnvironment environment)
         {
             _prescriptionRepo = prescriptionRepo;
+            _orderRepo = orderRepo;
             _userManager = userManager;
             _environment = environment;
         }
 
 
-        // CUSTOMER - VIEW OWN PRESCRIPTIONS
+        // ==============================
+        // CUSTOMER - MY PRESCRIPTIONS
+        // ==============================
+
         [Authorize(Roles = "Customer")]
         public IActionResult Index()
         {
@@ -36,95 +306,21 @@ namespace EMEDS_Project.Controllers
                 return Unauthorized();
             }
 
-            var prescriptionList =
+            var prescriptions =
                 _prescriptionRepo.GetPrescriptionsByUserId(userId);
 
-            return View(prescriptionList);
+            return View(prescriptions);
         }
 
 
-        // CUSTOMER - UPLOAD PRESCRIPTION
-        // CUSTOMER - OPEN UPLOAD PAGE
+        // ==============================
+        // CUSTOMER - UPLOAD GET
+        // ==============================
+
         [HttpGet]
         [Authorize(Roles = "Customer")]
-        public IActionResult Upload(int medicineId)
+        public IActionResult Upload(int medicineId, int orderId)
         {
-            ViewBag.MedicineId = medicineId;
-            return View();
-        }
-
-
-        // CUSTOMER - UPLOAD PRESCRIPTION
-        [HttpPost]
-        [Authorize(Roles = "Customer")]
-        public IActionResult Upload(IFormFile prescriptionFile, int medicineId)
-        {
-            if (prescriptionFile == null || prescriptionFile.Length == 0)
-            {
-                TempData["Error"] = "Please select a prescription file.";
-                ViewBag.MedicineId = medicineId;
-                return View();
-            }
-
-            // ALLOWED FILE TYPES
-            string[] allowedExtensions =
-            {
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".pdf"
-    };
-
-            string fileExtension =
-                Path.GetExtension(prescriptionFile.FileName)
-                    .ToLowerInvariant();
-
-            if (!allowedExtensions.Contains(fileExtension))
-            {
-                TempData["Error"] =
-                    "Only JPG, JPEG, PNG and PDF files are allowed.";
-                ViewBag.MedicineId = medicineId;
-                return View();
-            }
-
-            // MAXIMUM FILE SIZE = 5 MB
-            long maximumFileSize = 5 * 1024 * 1024;
-
-            if (prescriptionFile.Length > maximumFileSize)
-            {
-                TempData["Error"] =
-                    "Prescription file size cannot exceed 5 MB.";
-                ViewBag.MedicineId = medicineId;
-                return View();
-            }
-
-            // CREATE PRESCRIPTION FOLDER
-            string uploadsFolder = Path.Combine(
-                _environment.WebRootPath,
-                "prescriptions");
-
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
-
-            // GENERATE UNIQUE FILE NAME
-            string uniqueFileName =
-                Guid.NewGuid().ToString() + fileExtension;
-
-            string physicalFilePath = Path.Combine(
-                uploadsFolder,
-                uniqueFileName);
-
-            // SAVE FILE
-            using (var fileStream = new FileStream(
-                physicalFilePath,
-                FileMode.Create))
-            {
-                prescriptionFile.CopyTo(fileStream);
-            }
-
-            // GET CURRENT LOGGED-IN USER
             string? userId = _userManager.GetUserId(User);
 
             if (userId == null)
@@ -132,128 +328,485 @@ namespace EMEDS_Project.Controllers
                 return Unauthorized();
             }
 
-            // SAVE PRESCRIPTION IN DATABASE
-            Prescription prescription = new Prescription
+            var order = _orderRepo.GetOrderWithItems(orderId);
+
+            if (order == null)
             {
-                UserId = userId,
-                MedicineId = medicineId,
-                FilePath = "/prescriptions/" + uniqueFileName,
-                UploadDate = DateTime.Now,
-                Status = "Pending"
+                return NotFound();
+            }
+
+            // Customer can upload only for their own order
+            if (order.UserId != userId)
+            {
+                return Forbid();
+            }
+
+            // Medicine must exist in this order
+            bool medicineExists =
+                order.OrderItems.Any(
+                    x => x.MedicineId == medicineId);
+
+            if (!medicineExists)
+            {
+                return BadRequest();
+            }
+
+            // Prevent duplicate prescription
+            var existingPrescription =
+                _prescriptionRepo
+                    .GetPrescriptionForOrderMedicine(
+                        orderId,
+                        medicineId,
+                        userId);
+
+            if (existingPrescription != null)
+            {
+                TempData["Error"] =
+                    "Prescription has already been uploaded for this medicine.";
+
+                return RedirectToAction(
+                    "Details",
+                    "Order",
+                    new { id = orderId });
+            }
+
+            ViewBag.MedicineId = medicineId;
+            ViewBag.OrderId = orderId;
+
+            return View();
+        }
+
+
+        // ==============================
+        // CUSTOMER - UPLOAD POST
+        // ==============================
+
+        [HttpPost]
+        [Authorize(Roles = "Customer")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Upload(
+            IFormFile prescriptionFile,
+            int medicineId,
+            int orderId)
+        {
+            string? userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+
+            // ---------- Validate Order ----------
+
+            var order = _orderRepo.GetOrderWithItems(orderId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            if (order.UserId != userId)
+            {
+                return Forbid();
+            }
+
+
+            // ---------- Validate Medicine ----------
+
+            bool medicineExists =
+                order.OrderItems.Any(
+                    x => x.MedicineId == medicineId);
+
+            if (!medicineExists)
+            {
+                return BadRequest();
+            }
+
+
+            // ---------- Prevent Duplicate ----------
+
+            var existingPrescription =
+                _prescriptionRepo
+                    .GetPrescriptionForOrderMedicine(
+                        orderId,
+                        medicineId,
+                        userId);
+
+            if (existingPrescription != null)
+            {
+                TempData["Error"] =
+                    "Prescription has already been uploaded for this medicine.";
+
+                return RedirectToAction(
+                    "Details",
+                    "Order",
+                    new { id = orderId });
+            }
+
+
+            // ---------- Validate File ----------
+
+            if (prescriptionFile == null ||
+                prescriptionFile.Length == 0)
+            {
+                TempData["Error"] =
+                    "Please select a prescription file.";
+
+                ViewBag.MedicineId = medicineId;
+                ViewBag.OrderId = orderId;
+
+                return View();
+            }
+
+
+            string extension =
+                Path.GetExtension(
+                    prescriptionFile.FileName)
+                    .ToLowerInvariant();
+
+
+            string[] allowedExtensions =
+            {
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".pdf"
             };
 
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                TempData["Error"] =
+                    "Only JPG, JPEG, PNG and PDF files are allowed.";
+
+                ViewBag.MedicineId = medicineId;
+                ViewBag.OrderId = orderId;
+
+                return View();
+            }
+
+
+            // Maximum = 5 MB
+
+            long maxFileSize =
+                5 * 1024 * 1024;
+
+
+            if (prescriptionFile.Length > maxFileSize)
+            {
+                TempData["Error"] =
+                    "Prescription file cannot exceed 5 MB.";
+
+                ViewBag.MedicineId = medicineId;
+                ViewBag.OrderId = orderId;
+
+                return View();
+            }
+
+
+            // ---------- Save File ----------
+
+            string uploadFolder =
+                Path.Combine(
+                    _environment.WebRootPath,
+                    "prescriptions");
+
+
+            if (!Directory.Exists(uploadFolder))
+            {
+                Directory.CreateDirectory(uploadFolder);
+            }
+
+
+            string uniqueFileName =
+                Guid.NewGuid().ToString()
+                + extension;
+
+
+            string filePath =
+                Path.Combine(
+                    uploadFolder,
+                    uniqueFileName);
+
+
+            using (var stream =
+                   new FileStream(
+                       filePath,
+                       FileMode.Create))
+            {
+                prescriptionFile.CopyTo(stream);
+            }
+
+
+            // ---------- Save Prescription ----------
+
+            Prescription prescription =
+                new Prescription
+                {
+                    UserId = userId,
+
+                    MedicineId = medicineId,
+
+                    OrderId = orderId,
+
+                    FilePath =
+                        "/prescriptions/" +
+                        uniqueFileName,
+
+                    UploadDate = DateTime.Now,
+
+                    Status = "Pending"
+                };
+
+
             int result =
-                _prescriptionRepo.AddPrescription(prescription);
+                _prescriptionRepo
+                    .AddPrescription(prescription);
+
 
             if (result > 0)
             {
                 TempData["Success"] =
-                    "Prescription uploaded successfully.";
+                    "Prescription uploaded successfully. Your order will continue normally.";
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(
+                    "Details",
+                    "Order",
+                    new { id = orderId });
             }
+
 
             TempData["Error"] =
                 "Prescription could not be uploaded.";
 
             ViewBag.MedicineId = medicineId;
+            ViewBag.OrderId = orderId;
+
             return View();
         }
 
+
+        // ==============================
+        // CUSTOMER - DETAILS
+        // ==============================
 
         [Authorize(Roles = "Customer")]
         public IActionResult Details(int id)
         {
             var prescription =
-                _prescriptionRepo.GetPrescriptionById(id);
+                _prescriptionRepo
+                    .GetPrescriptionById(id);
 
             if (prescription == null)
             {
                 return NotFound();
             }
 
-            string? userId = _userManager.GetUserId(User);
+
+            string? userId =
+                _userManager.GetUserId(User);
+
 
             if (userId == null)
             {
                 return Unauthorized();
             }
+
+
+            // Customer cannot view another
+            // customer's prescription
 
             if (prescription.UserId != userId)
             {
                 return Forbid();
             }
 
-            return View(prescription);
-        }
-        [Authorize(Roles = "Admin")]
-        public IActionResult Review(int id)
-        {
-            var prescription =
-                _prescriptionRepo.GetPrescriptionById(id);
-
-            if (prescription == null)
-            {
-                return NotFound();
-            }
 
             return View(prescription);
         }
 
 
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Approve(int id, string? adminRemarks)
-        {
-            var prescription =
-                _prescriptionRepo.GetPrescriptionById(id);
-
-            if (prescription == null)
-            {
-                return NotFound();
-            }
-
-            prescription.Status = "Approved";
-            prescription.AdminRemarks = adminRemarks;
-
-            _prescriptionRepo.UpdatePrescriptionStatus(
-    id,
-    "Approved",
-    adminRemarks);
-
-            return RedirectToAction(nameof(Review), new { id });
-        }
-
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public IActionResult Reject(int id, string? adminRemarks)
-        {
-            var prescription =
-                _prescriptionRepo.GetPrescriptionById(id);
-
-            if (prescription == null)
-            {
-                return NotFound();
-            }
-
-            prescription.Status = "Rejected";
-            prescription.AdminRemarks = adminRemarks;
-
-            _prescriptionRepo.UpdatePrescriptionStatus(
-                id,
-                "Rejected",adminRemarks);
-
-            return RedirectToAction(nameof(Review), new { id });
-        }
+        // ==============================
+        // ADMIN - MANAGE PRESCRIPTIONS
+        // ==============================
 
         [Authorize(Roles = "Admin")]
         public IActionResult ManagePrescriptions()
         {
-            var prescriptionList =
-                _prescriptionRepo.GetAllPrescriptions();
+            var prescriptions =
+                _prescriptionRepo
+                    .GetAllPrescriptions();
 
-            return View(prescriptionList);
+            return View(prescriptions);
+        }
+
+
+        // ==============================
+        // ADMIN - REVIEW
+        // ==============================
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult Review(int id)
+        {
+            var prescription =
+                _prescriptionRepo
+                    .GetPrescriptionById(id);
+
+
+            if (prescription == null)
+            {
+                return NotFound();
+            }
+
+
+            return View(prescription);
+        }
+
+
+        // ==============================
+        // ADMIN - APPROVE
+        // ==============================
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Approve(
+            int id,
+            string? adminRemarks)
+        {
+            var prescription =
+                _prescriptionRepo
+                    .GetPrescriptionById(id);
+
+
+            if (prescription == null)
+            {
+                return NotFound();
+            }
+
+
+            // Only pending prescription
+            // should be reviewed
+
+            if (prescription.Status != "Pending")
+            {
+                TempData["Error"] =
+                    "This prescription has already been reviewed.";
+
+                return RedirectToAction(
+                    nameof(Review),
+                    new { id });
+            }
+
+
+            _prescriptionRepo
+                .UpdatePrescriptionStatus(
+                    id,
+                    "Approved",
+                    adminRemarks);
+
+
+            /*
+             IMPORTANT:
+
+             Approving a prescription DOES NOT
+             change OrderStatus.
+
+             The order continues normally.
+            */
+
+
+            TempData["Success"] =
+                "Prescription approved successfully. The order will continue normally.";
+
+
+            return RedirectToAction(
+                nameof(Review),
+                new { id });
+        }
+
+
+        // ==============================
+        // ADMIN - REJECT
+        // ==============================
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Reject(
+            int id,
+            string? adminRemarks)
+        {
+            var prescription =
+                _prescriptionRepo
+                    .GetPrescriptionById(id);
+
+
+            if (prescription == null)
+            {
+                return NotFound();
+            }
+
+
+            // Prevent multiple reviews
+
+            if (prescription.Status != "Pending")
+            {
+                TempData["Error"] =
+                    "This prescription has already been reviewed.";
+
+                return RedirectToAction(
+                    nameof(Review),
+                    new { id });
+            }
+
+
+            // STEP 1:
+            // Reject prescription
+
+            _prescriptionRepo
+                .UpdatePrescriptionStatus(
+                    id,
+                    "Rejected",
+                    adminRemarks);
+
+
+            // STEP 2:
+            // Cancel ONLY the related active order
+
+            if (prescription.OrderId.HasValue)
+            {
+                var order =
+                    _orderRepo.GetOrderById(
+                        prescription.OrderId.Value);
+
+
+                if (order != null)
+                {
+                    /*
+                     A delivered order should not
+                     become cancelled afterwards.
+                    */
+
+                    if (order.OrderStatus != "Delivered" &&
+                        order.OrderStatus != "Cancelled")
+                    {
+                        _orderRepo.UpdateOrderStatus(
+                            order.OrderId,
+                            "Cancelled");
+                    }
+                }
+            }
+
+
+            TempData["Success"] =
+                "Prescription rejected. The related active order has been cancelled.";
+
+
+            return RedirectToAction(
+                nameof(Review),
+                new { id });
         }
     }
 }

@@ -13,13 +13,27 @@ namespace EMEDS_Project.Repository
             _context = context;
         }
 
+        //public List<Order> GetAllOrders()
+        //{
+        //    return _context.Orders
+        //        .Include(order => order.OrderItems)
+        //        .OrderByDescending(order => order.OrderDate)
+        //        .ToList();
+        //}
+
+
+
         public List<Order> GetAllOrders()
         {
             return _context.Orders
                 .Include(order => order.OrderItems)
-                .OrderByDescending(order => order.OrderDate)
+                .ThenInclude(orderItem => orderItem.Medicine)
+                .OrderByDescending(
+                    order => order.OrderDate)
                 .ToList();
         }
+
+
 
         public Order? GetOrderById(int orderId)
         {
@@ -27,20 +41,46 @@ namespace EMEDS_Project.Repository
                 .FirstOrDefault(order => order.OrderId == orderId);
         }
 
+        //public List<Order> GetOrdersByUserId(string userId)
+        //{
+        //    return _context.Orders
+        //        .Include(order => order.OrderItems)
+        //        .Where(order => order.UserId == userId)
+        //        .OrderByDescending(order => order.OrderDate)
+        //        .ToList();
+        //}
+
+
+
+
         public List<Order> GetOrdersByUserId(string userId)
         {
             return _context.Orders
                 .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Medicine)
                 .Where(order => order.UserId == userId)
                 .OrderByDescending(order => order.OrderDate)
                 .ToList();
         }
 
+
+
+        //public Order? GetOrderWithItems(int orderId)
+        //{
+        //    return _context.Orders
+        //        .Include(order => order.OrderItems)
+        //        .FirstOrDefault(order => order.OrderId == orderId);
+        //}
+
+
+
         public Order? GetOrderWithItems(int orderId)
         {
             return _context.Orders
                 .Include(order => order.OrderItems)
-                .FirstOrDefault(order => order.OrderId == orderId);
+                .ThenInclude(orderItem => orderItem.Medicine)
+                .FirstOrDefault(
+                    order => order.OrderId == orderId);
         }
 
         public int AddOrder(Order order)

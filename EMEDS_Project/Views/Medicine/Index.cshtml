@@ -1,18 +1,12 @@
 
 @model IEnumerable<EMEDS_Project.Models.Medicine>
-@inject EMEDS_Project.Repository.IPrescriptionRepo PrescriptionRepo
-@inject Microsoft.AspNetCore.Identity.UserManager<EMEDS_Project.Data.ApplicationUser> UserManager
+
 
 @{
     ViewData["Title"] = "Medicines";
 
-    string? currentUserId = null;
-
-    if (!User.IsInRole("Admin"))
-    {
-        currentUserId = UserManager.GetUserId(User);
-    }
 }
+    
 
 <div class="page-header d-flex justify-content-between align-items-start flex-wrap gap-3">
     <div>
@@ -93,12 +87,6 @@ else
 
         @foreach (var medicine in Model)
         {
-            bool needsPrescriptionUpload =
-                medicine.RequiresPrescription &&
-                (currentUserId == null ||
-                 !PrescriptionRepo.HasApprovedPrescriptionForMedicine(
-                     currentUserId,
-                     medicine.MedicineId));
 
             <div class="medicine-card">
 
@@ -198,46 +186,50 @@ else
                     </div>
 
 
-                    <!-- CUSTOMER ACTIONS -->
+               
+
+
+
+
                     @if (!User.IsInRole("Admin"))
                     {
                         <div class="medicine-main-action">
 
-                            @if (needsPrescriptionUpload)
+                            <form asp-controller="Cart"
+                                  asp-action="AddToCart"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="medicineId"
+                                       value="@medicine.MedicineId" />
+
+                                <button type="submit"
+                                        class="btn btn-primary w-100">
+
+                                    Add to Cart
+
+                                </button>
+
+                            </form>
+
+                            @if (medicine.RequiresPrescription)
                             {
-                                <a asp-controller="Prescription"
-                                   asp-action="Upload"
-                                   asp-route-medicineId="@medicine.MedicineId"
-                                   class="btn prescription-btn w-100">
+                                <div class="mt-2 text-center">
 
-                                    Upload Prescription to Buy
+                                    <small class="text-muted">
+                                        Prescription required. You can upload it after placing your order.
+                                    </small>
 
-                                </a>
-                            }
-                            else
-                            {
-                                <form asp-controller="Cart"
-                                      asp-action="AddToCart"
-                                      method="post">
-
-                                    @Html.AntiForgeryToken()
-
-                                    <input type="hidden"
-                                           name="medicineId"
-                                           value="@medicine.MedicineId" />
-
-                                    <button type="submit"
-                                            class="btn btn-primary w-100">
-
-                                        Add to Cart
-
-                                    </button>
-
-                                </form>
+                                </div>
                             }
 
                         </div>
                     }
+
+
+
 
 
                     <!-- ADMIN ACTIONS -->

@@ -2,338 +2,311 @@
 
 @{
     ViewData["Title"] = "Review Prescription";
-
-    string statusClass =
-        Model.Status == "Approved"
-            ? "bg-success-subtle text-success"
-            : Model.Status == "Rejected"
-                ? "bg-danger-subtle text-danger"
-                : "bg-warning-subtle text-warning-emphasis";
-
-    string fileName = System.IO.Path.GetFileName(Model.FilePath);
 }
 
+<div class="container py-4">
 
-<div class="mb-4">
-
-    <a asp-action="ManagePrescriptions"
-       class="text-decoration-none text-muted d-inline-block mb-3">
-        ← Back to Manage Prescriptions
-    </a>
-
-    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
-
-        <div>
-
-            <span class="section-eyebrow">
-                ADMIN REVIEW
-            </span>
-
-            <h2 class="fw-bold mb-1">
-                Review Prescription #@Model.PrescriptionId
-            </h2>
-
-            <p class="text-muted mb-0">
-                Review the submitted prescription and approve or reject it.
-            </p>
-
-        </div>
-
-
-        <span class="badge rounded-pill @statusClass px-3 py-2">
-            @Model.Status
-        </span>
-
+    <div class="mb-3">
+        <a asp-action="ManagePrescriptions"
+           class="text-decoration-none">
+            ← Back to Prescriptions
+        </a>
     </div>
 
-</div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            @TempData["Error"]
+        </div>
+    }
 
 
-<div class="row g-4">
+    <div class="row g-4">
 
-    <!-- LEFT SIDE -->
-    <div class="col-lg-7">
+        <!-- PRESCRIPTION INFORMATION -->
 
-        <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="col-lg-7">
 
-            <div class="card-header bg-white p-4">
+            <div class="card border-0 shadow-sm rounded-4">
 
-                <h5 class="fw-bold mb-1">
-                    Prescription Information
-                </h5>
+                <div class="card-body p-4">
 
-                <small class="text-muted">
-                    Customer prescription details
-                </small>
+                    <span class="section-eyebrow">
+                        ADMIN REVIEW
+                    </span>
 
-            </div>
+                    <h2 class="fw-bold mb-4">
+                        Prescription #@Model.PrescriptionId
+                    </h2>
 
 
-            <div class="card-body p-4">
+                    <div class="row g-3">
 
-                <div class="row g-3">
-
-                    <div class="col-md-6">
-
-                        <div class="prescription-detail-box">
-
-                            <small>
-                                PRESCRIPTION ID
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">
+                                Medicine
                             </small>
 
                             <strong>
-                                #@Model.PrescriptionId
+                                @(Model.Medicine?.MedicineName
+                                    ?? $"Medicine #{Model.MedicineId}")
                             </strong>
-
                         </div>
 
-                    </div>
 
-
-                    <div class="col-md-6">
-
-                        <div class="prescription-detail-box">
-
-                            <small>
-                                MEDICINE
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">
+                                Uploaded On
                             </small>
 
-                            @if (Model.Medicine != null)
+                            <strong>
+                                @Model.UploadDate.ToString("dd MMM yyyy, hh:mm tt")
+                            </strong>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">
+                                Customer
+                            </small>
+
+                            <strong>
+                                @Model.UserId
+                            </strong>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">
+                                Related Order
+                            </small>
+
+                            @if (Model.OrderId.HasValue)
                             {
                                 <strong>
-                                    @Model.Medicine.MedicineName
+                                    #@Model.OrderId
                                 </strong>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Not linked
+                                </span>
+                            }
+                        </div>
 
-                                <span class="d-block small text-muted">
-                                    Medicine #@Model.MedicineId
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block mb-1">
+                                Status
+                            </small>
+
+                            @if (Model.Status == "Approved")
+                            {
+                                <span class="badge bg-success">
+                                    Approved
+                                </span>
+                            }
+                            else if (Model.Status == "Rejected")
+                            {
+                                <span class="badge bg-danger">
+                                    Rejected
                                 </span>
                             }
                             else
                             {
-                                <strong>
-                                    Medicine #@Model.MedicineId
-                                </strong>
+                                <span class="badge bg-warning text-dark">
+                                    Pending
+                                </span>
                             }
-
                         </div>
 
                     </div>
 
 
-                    <div class="col-12">
-
-                        <div class="prescription-detail-box">
-
-                            <small>
-                                CUSTOMER ID
-                            </small>
-
-                            <strong class="text-break">
-                                @Model.UserId
-                            </strong>
-
-                        </div>
-
-                    </div>
+                    <hr class="my-4" />
 
 
-                    <div class="col-md-6">
+                    <div class="mb-3">
 
-                        <div class="prescription-detail-box">
-
-                            <small>
-                                UPLOAD DATE
-                            </small>
-
-                            <strong>
-                                @Model.UploadDate.ToString("dd MMM yyyy")
-                            </strong>
-
-                            <span class="d-block small text-muted">
-                                @Model.UploadDate.ToString("hh:mm tt")
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="col-md-6">
-
-                        <div class="prescription-detail-box">
-
-                            <small>
-                                CURRENT STATUS
-                            </small>
-
-                            <strong>
-                                @Model.Status
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- FILE -->
-                <div class="prescription-file-card mt-4">
-
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-
-                        <div class="d-flex align-items-center gap-3">
-
-                            <div class="prescription-file-icon">
-                                Rx
-                            </div>
-
-                            <div>
-
-                                <strong class="d-block">
-                                    Prescription File
-                                </strong>
-
-                                <small class="text-muted">
-                                    @fileName
-                                </small>
-
-                            </div>
-
-                        </div>
-
+                        <small class="text-muted d-block mb-2">
+                            Prescription File
+                        </small>
 
                         <a href="@Model.FilePath"
                            target="_blank"
                            class="btn btn-outline-primary">
 
-                            Open Prescription
+                            <i class="bi bi-file-earmark-medical me-1"></i>
+                            View Prescription
 
                         </a>
 
                     </div>
 
-                </div>
+
+                    @if (Model.OrderId.HasValue)
+                    {
+                        <a asp-controller="Order"
+                           asp-action="AdminDetails"
+                           asp-route-id="@Model.OrderId"
+                           class="btn btn-outline-secondary">
+
+                            <i class="bi bi-box-seam me-1"></i>
+                            View Related Order
+
+                        </a>
+                    }
 
 
-                @if (!string.IsNullOrWhiteSpace(Model.AdminRemarks))
-                {
-                    <div class="mt-4">
+                    @if (!string.IsNullOrWhiteSpace(Model.AdminRemarks))
+                    {
+                        <div class="alert alert-light border mt-4 mb-0">
 
-                        <label class="form-label fw-semibold">
-                            Previous Admin Remarks
-                        </label>
+                            <strong>Admin Remarks</strong>
 
-                        <div class="bg-light rounded-3 p-3">
-                            @Model.AdminRemarks
+                            <div class="mt-1">
+                                @Model.AdminRemarks
+                            </div>
+
                         </div>
+                    }
 
-                    </div>
-                }
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+
+        <!-- ADMIN ACTION -->
+
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <span class="section-eyebrow">
+                        REVIEW ACTION
+                    </span>
+
+                    <h4 class="fw-bold mb-2">
+                        Review Prescription
+                    </h4>
+
+                    <p class="text-muted">
+                        Approval will not affect the order.
+                        Rejection will cancel the related order.
+                    </p>
 
 
-    <!-- RIGHT SIDE -->
-    <div class="col-lg-5">
+                    @if (Model.Status == "Pending")
+                    {
+                        <!-- APPROVE -->
 
-        <div class="card border-0 shadow-sm rounded-4">
+                        <form asp-action="Approve"
+                              method="post"
+                              class="mb-3">
 
-            <div class="card-header bg-white p-4">
+                            @Html.AntiForgeryToken()
 
-                <h5 class="fw-bold mb-1">
-                    Verification
-                </h5>
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.PrescriptionId" />
 
-                <small class="text-muted">
-                    Approve or reject this prescription
-                </small>
+                            <div class="mb-3">
 
-            </div>
+                                <label class="form-label">
+                                    Remarks
+                                    <span class="text-muted">
+                                        (Optional)
+                                    </span>
+                                </label>
 
+                                <textarea name="adminRemarks"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Add remarks if required..."></textarea>
 
-            <div class="card-body p-4">
+                            </div>
 
-                <div class="mb-4">
+                            <button type="submit"
+                                    class="btn btn-success w-100">
 
-                    <label for="adminRemarks"
-                           class="form-label fw-semibold">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Approve Prescription
 
-                        Admin Remarks
+                            </button>
 
-                    </label>
-
-                    <textarea id="adminRemarks"
-                              class="form-control"
-                              rows="5"
-                              placeholder="Enter remarks for the customer...">@Model.AdminRemarks</textarea>
-
-                    <small class="text-muted">
-                        You can add a reason or note before approving or rejecting.
-                    </small>
-
-                </div>
-
-
-                <!-- APPROVE FORM -->
-                <form asp-action="Approve"
-                      method="post"
-                      class="mb-2"
-                      onsubmit="copyRemarksToApprove()">
-
-                    <!-- matches Approve(int id, ...) -->
-                    <input type="hidden"
-                           name="id"
-                           value="@Model.PrescriptionId" />
-
-                    <!-- matches string? adminRemarks -->
-                    <input type="hidden"
-                           id="approveRemarks"
-                           name="adminRemarks" />
-
-                    <button type="submit"
-                            class="btn btn-success w-100">
-
-                        ✓ Approve Prescription
-
-                    </button>
-
-                </form>
+                        </form>
 
 
-                <!-- REJECT FORM -->
-                <form asp-action="Reject"
-                      method="post"
-                      onsubmit="copyRemarksToReject()">
+                        <!-- REJECT -->
 
-                    <!-- matches Reject(int id, ...) -->
-                    <input type="hidden"
-                           name="id"
-                           value="@Model.PrescriptionId" />
+                        <form asp-action="Reject"
+                              method="post">
 
-                    <!-- matches string? adminRemarks -->
-                    <input type="hidden"
-                           id="rejectRemarks"
-                           name="adminRemarks" />
+                            @Html.AntiForgeryToken()
 
-                    <button type="submit"
-                            class="btn btn-outline-danger w-100">
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.PrescriptionId" />
 
-                        Reject Prescription
+                            <div class="mb-3">
 
-                    </button>
+                                <label class="form-label">
+                                    Rejection Reason
+                                    <span class="text-muted">
+                                        (Optional)
+                                    </span>
+                                </label>
 
-                </form>
+                                <textarea name="adminRemarks"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Reason for rejection..."></textarea>
 
+                            </div>
 
-                <div class="alert prescription-info-alert small mt-4 mb-0">
+                            <button type="submit"
+                                    class="btn btn-danger w-100"
+                                    onclick="return confirm('Reject this prescription? The related order will be cancelled.');">
 
-                    <strong>Current Status:</strong>
-                    @Model.Status
+                                <i class="bi bi-x-circle me-1"></i>
+                                Reject Prescription
+
+                            </button>
+
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-light border mb-0">
+
+                            This prescription has already been
+                            <strong>@Model.Status.ToLower()</strong>.
+
+                            @if (Model.Status == "Rejected")
+                            {
+                                <div class="text-danger mt-2">
+                                    The related order has been cancelled
+                                    if it was still active.
+                                </div>
+                            }
+
+                        </div>
+                    }
 
                 </div>
 
@@ -344,25 +317,3 @@
     </div>
 
 </div>
-
-
-@section Scripts {
-
-    <script>
-
-        function copyRemarksToApprove() {
-
-            document.getElementById("approveRemarks").value =
-                document.getElementById("adminRemarks").value;
-        }
-
-
-        function copyRemarksToReject() {
-
-            document.getElementById("rejectRemarks").value =
-                document.getElementById("adminRemarks").value;
-        }
-
-    </script>
-
-}

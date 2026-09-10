@@ -23,8 +23,18 @@ namespace EMEDS_Project
             builder.Services.AddSession();
 
             // Register Entity Framework Core DbContext
+            // builder.Services.AddDbContext<EmedDbContext>(
+            //     options => options.UseSqlServer(connectionString));
             builder.Services.AddDbContext<EmedDbContext>(
-                options => options.UseSqlServer(connectionString));
+                   options => options.UseSqlServer(
+                   connectionString,
+                   sqlOptions =>
+                   {
+                       sqlOptions.EnableRetryOnFailure(
+                          maxRetryCount: 5,
+                          maxRetryDelay: TimeSpan.FromSeconds(10),
+                          errorNumbersToAdd: null);
+                   }));
 
             // Configure ASP.NET Core Identity
             builder.Services.AddDefaultIdentity<ApplicationUser>(

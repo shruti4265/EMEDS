@@ -1,159 +1,137 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Upload Prescription";
+
     int medicineId = ViewBag.MedicineId;
+    int orderId = ViewBag.OrderId;
 }
 
-<div class="row justify-content-center">
+<div class="container py-4">
 
-    <div class="col-md-9 col-lg-7 col-xl-6">
+    <div class="row justify-content-center">
 
-        <!-- HEADER -->
-        <div class="mb-4">
+        <div class="col-lg-7 col-md-9">
 
-            <a asp-controller="Medicine"
-               asp-action="Index"
-               class="text-decoration-none text-muted d-inline-block mb-3">
-                ← Back to Medicines
-            </a>
+            <div class="card shadow-sm border-0 rounded-4">
 
-            <span class="section-eyebrow d-block">
-                PRESCRIPTION UPLOAD
-            </span>
-
-            <h2 class="fw-bold mb-1">
-                Upload Prescription
-            </h2>
-
-            <p class="text-muted mb-0">
-                Upload a valid prescription for the selected medicine.
-            </p>
-
-        </div>
-
-
-        @if (TempData["Error"] != null)
-        {
-            <div class="alert alert-danger">
-                @TempData["Error"]
-            </div>
-        }
-
-
-        <!-- MAIN CARD -->
-        <div class="card border-0 shadow-sm rounded-4">
-
-            <div class="card-body p-4 p-md-5">
-
-                <!-- SELECTED MEDICINE -->
-                <div class="alert prescription-medicine-alert mb-4">
-
-                    <div class="d-flex align-items-center gap-3">
-
-                        <div class="prescription-table-icon">
-                            Rx
-                        </div>
-
-                        <div>
-                            <small class="d-block text-muted">
-                                SELECTED MEDICINE
-                            </small>
-
-                            <strong>
-                                Medicine #@medicineId
-                            </strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <form asp-controller="Prescription"
-                      asp-action="Upload"
-                      method="post"
-                      enctype="multipart/form-data">
-
-                    <!-- EXACTLY MATCHES Upload(... int medicineId) -->
-                    <input type="hidden"
-                           name="medicineId"
-                           value="@medicineId" />
-
+                <div class="card-body p-4 p-md-5">
 
                     <div class="mb-4">
 
-                        <label class="form-label fw-semibold">
-                            Prescription File
-                        </label>
+                        <span class="section-eyebrow">
+                            PRESCRIPTION
+                        </span>
+
+                        <h2 class="fw-bold mb-2">
+                            Upload Prescription
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Upload a valid prescription for this medicine.
+                            Your order will continue normally while the
+                            prescription is pending review.
+                        </p>
+
+                    </div>
 
 
-                        <div class="prescription-upload-box">
-
-                            <div class="prescription-upload-icon">
-                                ↑
-                            </div>
-
-                            <h5 class="fw-bold mb-2">
-                                Select Prescription
-                            </h5>
-
-                            <p class="text-muted small mb-4">
-                                Upload a clear image or PDF of your prescription.
-                            </p>
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            @TempData["Error"]
+                        </div>
+                    }
 
 
-                            <!-- EXACTLY MATCHES IFormFile prescriptionFile -->
+                    <form asp-controller="Prescription"
+                          asp-action="Upload"
+                          method="post"
+                          enctype="multipart/form-data">
+
+                        @Html.AntiForgeryToken()
+
+
+                        <input type="hidden"
+                               name="medicineId"
+                               value="@medicineId" />
+
+
+                        <input type="hidden"
+                               name="orderId"
+                               value="@orderId" />
+
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Prescription File
+                            </label>
+
                             <input type="file"
                                    name="prescriptionFile"
                                    class="form-control"
                                    accept=".jpg,.jpeg,.png,.pdf"
                                    required />
 
-                        </div>
-
-                    </div>
-
-
-                    <!-- FILE RULES -->
-                    <div class="alert prescription-info-alert mb-4">
-
-                        <strong class="d-block mb-2">
-                            File Requirements
-                        </strong>
-
-                        <div class="small">
-                            <div class="mb-1">
-                                ✓ JPG, JPEG, PNG and PDF files are allowed
+                            <div class="form-text mt-2">
+                                Allowed formats: JPG, JPEG, PNG and PDF.
+                                Maximum file size: 5 MB.
                             </div>
 
-                            <div>
-                                ✓ Maximum file size is 5 MB
-                            </div>
                         </div>
 
-                    </div>
+
+                        <div class="alert alert-light border">
+
+                            <div class="d-flex gap-2">
+
+                                <i class="bi bi-info-circle"></i>
+
+                                <div>
+
+                                    <strong>
+                                        Prescription review does not block your order.
+                                    </strong>
+
+                                    <div class="small text-muted mt-1">
+                                        Your order will continue through the normal
+                                        order process unless the prescription is
+                                        rejected by the admin.
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
 
 
-                    <div class="d-flex gap-2 flex-wrap">
+                        <div class="d-flex gap-2 mt-4">
 
-                        <button type="submit"
-                                class="btn btn-primary px-4">
+                            <button type="submit"
+                                    class="btn btn-primary">
 
-                            Upload Prescription
+                                <i class="bi bi-upload me-1"></i>
+                                Upload Prescription
 
-                        </button>
+                            </button>
 
 
-                        <a asp-controller="Medicine"
-                           asp-action="Index"
-                           class="btn btn-light px-4">
+                            <a asp-controller="Order"
+                               asp-action="Details"
+                               asp-route-id="@orderId"
+                               class="btn btn-outline-secondary">
 
-                            Cancel
+                                Back to Order
 
-                        </a>
+                            </a>
 
-                    </div>
+                        </div>
 
-                </form>
+                    </form>
+
+                </div>
 
             </div>
 

@@ -1,4 +1,5 @@
 ﻿
+
 @model EMEDS_Project.ViewModels.CheckoutViewModel
 
 @{
@@ -57,7 +58,10 @@
 
 
             <form asp-action="PlaceOrder"
-                  method="post">
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
 
 
                 <!-- NAME -->
@@ -179,6 +183,47 @@
                 </div>
 
 
+                <!-- PRESCRIPTION -->
+
+                <div class="checkout-divider"></div>
+
+                <div class="checkout-section-title">
+
+                    <span class="checkout-number">
+                        2
+                    </span>
+
+                    <div>
+                        <h4>Prescription</h4>
+                        <p>
+                            Upload your prescription if your order
+                            contains a prescription-required medicine.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="mb-4">
+
+                    <label for="prescriptionFile"
+                           class="form-label">
+                        Upload Prescription
+                    </label>
+
+                    <input type="file"
+                           id="prescriptionFile"
+                           name="prescriptionFile"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.pdf" />
+
+                    <div class="form-text">
+                        JPG, JPEG, PNG or PDF. Maximum file size: 5 MB.
+                    </div>
+
+                </div>
+
+
                 <!-- PAYMENT -->
 
                 <div class="checkout-divider"></div>
@@ -187,7 +232,7 @@
                 <div class="checkout-section-title payment-heading">
 
                     <span class="checkout-number">
-                        2
+                        3
                     </span>
 
                     <div>
@@ -351,8 +396,8 @@
                     </strong>
 
                     <p>
-                        Your cart is validated for stock and
-                        prescription requirements during checkout.
+                        Prescription-required medicines must have
+                        a prescription uploaded before placing the order.
                     </p>
 
                 </div>
@@ -369,6 +414,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-
-

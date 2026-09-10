@@ -1,428 +1,352 @@
-﻿@model IEnumerable<EMEDS_Project.Models.Prescription>
+﻿
+@model IEnumerable<EMEDS_Project.Models.Prescription>
 
 @{
     ViewData["Title"] = "Manage Prescriptions";
 
-    int total = Model.Count();
-    int pending = Model.Count(x => x.Status == "Pending");
-    int approved = Model.Count(x => x.Status == "Approved");
-    int rejected = Model.Count(x => x.Status == "Rejected");
+    int totalPrescriptions = Model.Count();
+    int pendingPrescriptions = Model.Count(p => p.Status == "Pending");
+    int approvedPrescriptions = Model.Count(p => p.Status == "Approved");
+    int rejectedPrescriptions = Model.Count(p => p.Status == "Rejected");
 }
 
+<div class="container py-4">
 
-<!-- PAGE HEADER -->
-<div class="mb-4">
+    <!-- PAGE HEADER -->
 
-    <span class="section-eyebrow">
-        ADMINISTRATION
-    </span>
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
-    <h2 class="fw-bold mb-1">
-        Manage Prescriptions
-    </h2>
+        <div>
+            <span class="section-eyebrow">
+                ADMINISTRATION
+            </span>
 
-    <p class="text-muted mb-0">
-        Review customer prescriptions and manage verification.
-    </p>
-
-</div>
-
-
-<!-- SUCCESS MESSAGE -->
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-
-        @TempData["Success"]
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-
-    </div>
-}
-
-
-<!-- ERROR MESSAGE -->
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-
-        @TempData["Error"]
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="alert">
-        </button>
-
-    </div>
-}
-
-
-<!-- STATISTICS -->
-<div class="row g-3 mb-4">
-
-
-    <!-- TOTAL -->
-    <div class="col-6 col-lg-3">
-
-        <div class="card border-0 shadow-sm h-100 rounded-4">
-
-            <div class="card-body p-4">
-
-                <small class="text-muted d-block mb-2">
-                    Total Prescriptions
-                </small>
-
-                <h2 class="admin-stat-number fw-bold mb-1">
-                    @total
-                </h2>
-
-                <small class="text-muted">
-                    All submissions
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- PENDING -->
-    <div class="col-6 col-lg-3">
-
-        <div class="card border-0 shadow-sm h-100 rounded-4">
-
-            <div class="card-body p-4">
-
-                <small class="text-muted d-block mb-2">
-                    Pending
-                </small>
-
-                <h2 class="admin-stat-number fw-bold mb-1">
-                    @pending
-                </h2>
-
-                <small class="text-muted">
-                    Awaiting review
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- APPROVED -->
-    <div class="col-6 col-lg-3">
-
-        <div class="card border-0 shadow-sm h-100 rounded-4">
-
-            <div class="card-body p-4">
-
-                <small class="text-muted d-block mb-2">
-                    Approved
-                </small>
-
-                <h2 class="admin-stat-number fw-bold mb-1">
-                    @approved
-                </h2>
-
-                <small class="text-muted">
-                    Verified prescriptions
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- REJECTED -->
-    <div class="col-6 col-lg-3">
-
-        <div class="card border-0 shadow-sm h-100 rounded-4">
-
-            <div class="card-body p-4">
-
-                <small class="text-muted d-block mb-2">
-                    Rejected
-                </small>
-
-                <h2 class="admin-stat-number fw-bold mb-1">
-                    @rejected
-                </h2>
-
-                <small class="text-muted">
-                    Rejected prescriptions
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- PRESCRIPTION LIST -->
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-
-
-    <!-- CARD HEADER -->
-    <div class="card-header bg-white p-4">
-
-        <div class="d-flex justify-content-between align-items-center">
-
-            <div>
-
-                <h5 class="fw-bold mb-1">
-                    Customer Prescriptions
-                </h5>
-
-                <small class="text-muted">
-
-                    @total prescription@(total == 1 ? "" : "s") found
-
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- EMPTY STATE -->
-    @if (!Model.Any())
-    {
-        <div class="card-body text-center py-5">
-
-            <div class="prescription-empty-icon mx-auto mb-3">
-                Rx
-            </div>
-
-            <h5 class="fw-bold mb-2">
-                No Prescriptions Available
-            </h5>
+            <h2 class="fw-bold mb-1">
+                Manage Prescriptions
+            </h2>
 
             <p class="text-muted mb-0">
-                Customer prescriptions will appear here
-                once they are uploaded.
+                Review and manage customer prescriptions.
             </p>
-
         </div>
-    }
 
-    else
+    </div>
+
+
+    <!-- MESSAGES -->
+    @if (TempData["Success"] != null)
     {
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>
+            @TempData["Success"]
+        </div>
+    }
 
-        <!-- RESPONSIVE TABLE -->
-        <div class="table-responsive">
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-exclamation-circle me-2"></i>
+            @TempData["Error"]
+        </div>
+    }
 
-            <table class="table table-hover align-middle mb-0">
 
+    <!-- SUMMARY CARDS -->
 
-                <!-- TABLE HEADER -->
-                <thead class="table-light">
+    <div class="row g-3 mb-4">
 
-                    <tr>
+        <div class="col-md-6 col-xl-3">
 
-                        <th class="ps-4">
-                            ID
-                        </th>
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
-                        <th>
-                            Customer
-                        </th>
+                <div class="card-body">
 
-                        <th>
-                            Medicine
-                        </th>
+                    <small class="text-muted">
+                        Total Prescriptions
+                    </small>
 
-                        <th>
-                            Upload Date
-                        </th>
+                    <h3 class="fw-bold mt-2 mb-0">
+                        @totalPrescriptions
+                    </h3>
 
-                        <th>
-                            Status
-                        </th>
+                </div>
 
-                        <th>
-                            Admin Remarks
-                        </th>
-
-                        <th class="text-end pe-4">
-                            Action
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <!-- TABLE BODY -->
-                <tbody>
-
-                    @foreach (var item in Model.OrderByDescending(x => x.UploadDate))
-                    {
-
-                        string statusClass =
-                            item.Status == "Approved"
-                                ? "bg-success-subtle text-success"
-                                : item.Status == "Rejected"
-                                    ? "bg-danger-subtle text-danger"
-                                    : "bg-warning-subtle text-warning-emphasis";
-
-
-                        <tr>
-
-
-                            <!-- PRESCRIPTION ID -->
-                            <td class="ps-4">
-
-                                <strong class="text-dark">
-
-                                    #@item.PrescriptionId
-
-                                </strong>
-
-                            </td>
-
-
-                            <!-- CUSTOMER -->
-                            <td>
-
-                                <span class="prescription-user-id"
-                                      title="@item.UserId">
-
-                                    @item.UserId
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- MEDICINE -->
-                            <td>
-
-                                @if (item.Medicine != null)
-                                {
-
-                                    <strong class="d-block">
-
-                                        @item.Medicine.MedicineName
-
-                                    </strong>
-
-                                    <small class="text-muted">
-
-                                        Medicine #@item.MedicineId
-
-                                    </small>
-
-                                }
-
-                                else
-                                {
-
-                                    <span>
-
-                                        Medicine #@item.MedicineId
-
-                                    </span>
-
-                                }
-
-                            </td>
-
-
-                            <!-- UPLOAD DATE -->
-                            <td>
-
-                                <span class="d-block">
-
-                                    @item.UploadDate.ToString("dd MMM yyyy")
-
-                                </span>
-
-                                <small class="text-muted">
-
-                                    @item.UploadDate.ToString("hh:mm tt")
-
-                                </small>
-
-                            </td>
-
-
-                            <!-- STATUS -->
-                            <td>
-
-                                <span class="badge rounded-pill @statusClass px-3 py-2">
-
-                                    @item.Status
-
-                                </span>
-
-                            </td>
-
-
-                            <!-- ADMIN REMARKS -->
-                            <td>
-
-                                @if (string.IsNullOrWhiteSpace(item.AdminRemarks))
-                                {
-
-                                    <span class="text-muted">
-                                        —
-                                    </span>
-
-                                }
-
-                                else
-                                {
-
-                                    <span class="prescription-remarks"
-                                          title="@item.AdminRemarks">
-
-                                        @item.AdminRemarks
-
-                                    </span>
-
-                                }
-
-                            </td>
-
-
-                            <!-- ADMIN ACTION -->
-                            <td class="text-end pe-4">
-
-                                <a asp-controller="Prescription"
-                                   asp-action="Review"
-                                   asp-route-id="@item.PrescriptionId"
-                                   class="btn btn-outline-primary btn-sm">
-
-                                    Review
-
-                                </a>
-
-                            </td>
-
-
-                        </tr>
-                    }
-
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 
-    }
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Pending Review
+                    </small>
+
+                    <h3 class="fw-bold mt-2 mb-0">
+                        @pendingPrescriptions
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Approved
+                    </small>
+
+                    <h3 class="fw-bold mt-2 mb-0">
+                        @approvedPrescriptions
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Rejected
+                    </small>
+
+                    <h3 class="fw-bold mt-2 mb-0">
+                        @rejectedPrescriptions
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PRESCRIPTION TABLE -->
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-0">
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-file-earmark-medical fs-1 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        No prescriptions found
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        Customer prescriptions will appear here.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="ps-4">
+                                    ID
+                                </th>
+
+                                <th>
+                                    Order
+                                </th>
+
+                                <th>
+                                    Medicine
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Uploaded
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-end pe-4">
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <!-- PRESCRIPTION ID -->
+
+                                    <td class="ps-4">
+
+                                        <strong>
+                                            #@item.PrescriptionId
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- RELATED ORDER -->
+
+                                    <td>
+
+                                        @if (item.OrderId.HasValue)
+                                        {
+                                            <a asp-controller="Order"
+                                               asp-action="AdminDetails"
+                                               asp-route-id="@item.OrderId"
+                                               class="text-decoration-none fw-semibold">
+
+                                                #@item.OrderId
+
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Not linked
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- MEDICINE -->
+
+                                    <td>
+
+                                        <strong>
+                                            @(item.Medicine?.MedicineName
+                                                ?? $"Medicine #{item.MedicineId}")
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- CUSTOMER -->
+
+                                    <td>
+
+                                        <span class="small">
+                                            @item.UserId
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- UPLOAD DATE -->
+
+                                    <td>
+
+                                        <span>
+                                            @item.UploadDate.ToString("dd MMM yyyy")
+                                        </span>
+
+                                        <small class="text-muted d-block">
+                                            @item.UploadDate.ToString("hh:mm tt")
+                                        </small>
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        @if (item.Status == "Approved")
+                                        {
+                                            <span class="badge bg-success">
+                                                Approved
+                                            </span>
+                                        }
+                                        else if (item.Status == "Rejected")
+                                        {
+                                            <span class="badge bg-danger">
+                                                Rejected
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                Pending
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td class="text-end pe-4">
+
+                                        <a asp-action="Review"
+                                           asp-route-id="@item.PrescriptionId"
+                                           class="btn btn-outline-primary btn-sm">
+
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <i class="bi bi-eye me-1"></i>
+                                                <span>Review</span>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-eye me-1"></i>
+                                                <span>View</span>
+                                            }
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
 
 </div>
