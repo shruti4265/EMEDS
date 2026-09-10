@@ -13,14 +13,7 @@ namespace EMEDS_Project.Repository
             _context = context;
         }
 
-        //public List<Order> GetAllOrders()
-        //{
-        //    return _context.Orders
-        //        .Include(order => order.OrderItems)
-        //        .OrderByDescending(order => order.OrderDate)
-        //        .ToList();
-        //}
-
+       
 
 
         public List<Order> GetAllOrders()
@@ -41,17 +34,7 @@ namespace EMEDS_Project.Repository
                 .FirstOrDefault(order => order.OrderId == orderId);
         }
 
-        //public List<Order> GetOrdersByUserId(string userId)
-        //{
-        //    return _context.Orders
-        //        .Include(order => order.OrderItems)
-        //        .Where(order => order.UserId == userId)
-        //        .OrderByDescending(order => order.OrderDate)
-        //        .ToList();
-        //}
-
-
-
+       
 
         public List<Order> GetOrdersByUserId(string userId)
         {
@@ -65,12 +48,7 @@ namespace EMEDS_Project.Repository
 
 
 
-        //public Order? GetOrderWithItems(int orderId)
-        //{
-        //    return _context.Orders
-        //        .Include(order => order.OrderItems)
-        //        .FirstOrDefault(order => order.OrderId == orderId);
-        //}
+        
 
 
 
